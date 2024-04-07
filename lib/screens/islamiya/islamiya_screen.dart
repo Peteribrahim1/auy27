@@ -29,8 +29,8 @@ class _IslamiyaScreenState extends State<IslamiyaScreen> {
   }
 
   bool _isLoading = false;
-  List<QueryDocumentSnapshot<Map<String, dynamic>>> myList = [];
-  List<QueryDocumentSnapshot<Map<String, dynamic>>> groupDisplay = [];
+  List<QueryDocumentSnapshot<Map<String, dynamic>>> _myList = [];
+  List<QueryDocumentSnapshot<Map<String, dynamic>>> _groupDisplay = [];
   @override
   void initState() {
     // TODO: implement initState
@@ -42,8 +42,8 @@ class _IslamiyaScreenState extends State<IslamiyaScreen> {
   void _fetchData() async {
     setState(() {
       _isLoading = true;
-      myList = [];
-      groupDisplay = [];
+      _myList = [];
+      _groupDisplay = [];
     });
     final snap = await FirebaseFirestore.instance.collection('Islamiya').get();
     print(snap.docs[0]['name']);
@@ -55,9 +55,9 @@ class _IslamiyaScreenState extends State<IslamiyaScreen> {
     print('snap2 ${snap2.length}');
     print('snap ${snap.docs.length}');
     print('snap ${snap2[0]['name']}');
-    myList = snap2.reversed.toList();
-    groupDisplay.addAll(myList);
-    print('my rapid ${myList[0]['name']}');
+    _myList = snap2.reversed.toList();
+    _groupDisplay.addAll(_myList);
+    print('my rapid ${_myList[0]['name']}');
     setState(() {
       _isLoading = false;
     });
@@ -65,10 +65,10 @@ class _IslamiyaScreenState extends State<IslamiyaScreen> {
 
   void searchItem(String query) {
     if (query.isEmpty) {
-      groupDisplay = myList;
+      _groupDisplay = _myList;
       setState(() {});
     } else {
-      groupDisplay = myList
+      _groupDisplay = _myList
           .where((item) => item['name']
               .toString()
               .toLowerCase()
@@ -105,12 +105,12 @@ class _IslamiyaScreenState extends State<IslamiyaScreen> {
                   children: [
                     InkWell(
                         onTap: () {
-                          Navigator.pop(context);
-                          // Navigator.of(context).pushReplacement(
-                          //   MaterialPageRoute(
-                          //     builder: (context) => CategoryScreen(),
-                          //   ),
-                          // );
+                          // Navigator.pop(context);
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => CategoryScreen(),
+                            ),
+                          );
                         },
                         child: SvgPicture.asset(
                             'assets/images/arrowHeadBack.svg')),
@@ -155,7 +155,7 @@ class _IslamiyaScreenState extends State<IslamiyaScreen> {
                   ),
                 ),
               ),
-              myList.length == 0
+              _myList.length == 0
                   ? Padding(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).size.height * 0.40,
@@ -178,9 +178,9 @@ class _IslamiyaScreenState extends State<IslamiyaScreen> {
                             )
                           : ListView.builder(
                               shrinkWrap: true,
-                              itemCount: groupDisplay.length,
+                              itemCount: _groupDisplay.length,
                               itemBuilder: (context, index) {
-                                final data = groupDisplay[index];
+                                final data = _groupDisplay[index];
                                 print(data.reference.id.toString());
                                 return Padding(
                                   padding: const EdgeInsets.all(8.0),

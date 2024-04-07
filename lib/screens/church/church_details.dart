@@ -230,9 +230,10 @@ class _ChurchDetailsState extends State<ChurchDetails> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => MarkPointMapPage(
-                                    ref: widget.ref,
-                                    category: widget.category,
-                                  )),
+                                  ref: widget.ref,
+                                  category: widget.category,
+                                  phone: widget.receive['phone'],
+                                  name: widget.receive['name'])),
                         );
                       },
                       style: ButtonStyle(

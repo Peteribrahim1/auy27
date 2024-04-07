@@ -19,8 +19,12 @@ class ChurchScreen extends StatefulWidget {
 }
 
 class _ChurchScreenState extends State<ChurchScreen> {
+  final TextEditingController searchController = TextEditingController();
+
   bool _isLoading = false;
-  List<QueryDocumentSnapshot<Map<String, dynamic>>> myList = [];
+  List<QueryDocumentSnapshot<Map<String, dynamic>>> _myList = [];
+  List<QueryDocumentSnapshot<Map<String, dynamic>>> _groupDisplay = [];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -39,13 +43,26 @@ class _ChurchScreenState extends State<ChurchScreen> {
         .where((element) =>
             element["uid"] == FirebaseAuth.instance.currentUser?.uid)
         .toList();
-    print('snap2 ${snap2.length}');
-    print('snap ${snap.docs.length}');
-    print('snap ${snap2[0]['name']}');
-    myList = snap2;
+    _myList = snap2.reversed.toList();
+    _groupDisplay.addAll(_myList);
     setState(() {
       _isLoading = false;
     });
+  }
+
+  void searchItem(String query) {
+    if (query.isEmpty) {
+      _groupDisplay = _myList;
+      setState(() {});
+    } else {
+      _groupDisplay = _myList
+          .where((item) => item['name']
+              .toString()
+              .toLowerCase()
+              .contains(query.toString().toLowerCase()))
+          .toList();
+      setState(() {});
+    }
   }
 
   @override
@@ -64,12 +81,12 @@ class _ChurchScreenState extends State<ChurchScreen> {
                   children: [
                     InkWell(
                         onTap: () {
-                          Navigator.pop(context);
-                          // Navigator.of(context).pushReplacement(
-                          //   MaterialPageRoute(
-                          //     builder: (context) => CategoryScreen(),
-                          //   ),
-                          // );
+                          // Navigator.pop(context);
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => CategoryScreen(),
+                            ),
+                          );
                         },
                         child: SvgPicture.asset(
                             'assets/images/arrowHeadBack.svg')),
@@ -84,7 +101,37 @@ class _ChurchScreenState extends State<ChurchScreen> {
                   ],
                 ),
               ),
-              myList.length == 0
+              Padding(
+                padding: const EdgeInsets.only(bottom: 15.0),
+                child: TextField(
+                  controller: searchController,
+                  onChanged: (value) {
+                    searchItem(value);
+                    setState(() {});
+                  },
+                  decoration: InputDecoration(
+                    filled: true,
+                    counterText: "",
+                    fillColor: Colors.white,
+                    prefixIcon: const Icon(
+                      Icons.search,
+                      color: Color.fromRGBO(47, 79, 79, 1),
+                    ),
+                    contentPadding: const EdgeInsets.all(18),
+                    hintText: 'Search',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(
+                          color: Color.fromRGBO(47, 79, 79, 1), width: 1),
+                    ),
+                    // hintStyle: TextStyle(color: Color.fromRGBO(47, 79, 79, 1)),
+                  ),
+                ),
+              ),
+              _myList.length == 0
                   ? Padding(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).size.height * 0.40,
@@ -107,10 +154,9 @@ class _ChurchScreenState extends State<ChurchScreen> {
                             )
                           : ListView.builder(
                               shrinkWrap: true,
-                              itemCount: myList.length,
+                              itemCount: _groupDisplay.length,
                               itemBuilder: (context, index) {
-                                final data = myList[index];
-                                print(data.reference.id.toString());
+                                final data = _groupDisplay[index];
                                 return Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: InkWell(

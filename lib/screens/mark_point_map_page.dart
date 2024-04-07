@@ -38,10 +38,6 @@ class _MarkPointMapPageState extends State<MarkPointMapPage> {
   final Completer<GoogleMapController> _mapController =
       Completer<GoogleMapController>();
 
-  String? getName;
-  String? getPhone;
-  String? getCat;
-
   // static const LatLng _pGooglePlex = LatLng(37.4223, -122.0848);
   // static const LatLng _pApplePark = LatLng(37.3346, -122.0090);
 
@@ -56,7 +52,6 @@ class _MarkPointMapPageState extends State<MarkPointMapPage> {
     super.initState();
     //print("current loc $_currentP");
     getLocationUpdates();
-    _fetchData();
     //     .then(
     //   (_) => {
     //     getPolylinePoints().then((coordinates) => {
@@ -70,32 +65,6 @@ class _MarkPointMapPageState extends State<MarkPointMapPage> {
 
   // 10.2930017
   bool _isLoading = false;
-
-  void _fetchData() async {
-    setState(() {
-      _isLoading = true;
-    });
-    final snap =
-        await FirebaseFirestore.instance.collection(widget.category).get();
-    print(snap.docs[0]['name']);
-
-    final snap2 = snap.docs
-        .where((element) =>
-            element["uid"] == FirebaseAuth.instance.currentUser?.uid)
-        .toList();
-    print('snap2 ${snap2.length}');
-    print('snap ${snap.docs.length}');
-    print('snap ${snap2[0]['name']}');
-    myList = snap2;
-    print('my rapid ${myList[0]['name']}');
-    getName = myList[0]['name'];
-    getPhone = myList[0]['phone'];
-    getCat = myList[0]['denomination'];
-    print('get name $getName');
-    setState(() {
-      _isLoading = false;
-    });
-  }
 
   //save location
   void _saveLocation(
@@ -115,9 +84,9 @@ class _MarkPointMapPageState extends State<MarkPointMapPage> {
     print('save to general');
 /////
     await AuthMethods().saveGeneralCoordinates(
-      name: widget.name ?? 'name',
+      name: widget.name ?? 'setname',
       phone: widget.phone ?? '6566',
-      category: 'name',
+      category: 'cat',
       latitude: _currentP!.latitude,
       longitude: _currentP!.latitude,
     );

@@ -20,19 +20,19 @@ class AddMasjid extends StatefulWidget {
 class _AddMasjidState extends State<AddMasjid> {
   Uint8List? _image;
 
-  // void selectImageFromGallery() async {
-  //   Uint8List img = await pickImage(ImageSource.gallery);
-  //   setState(() {
-  //     _image = img;
-  //   });
-  // }
-  //
-  // void selectImageFromCamera() async {
-  //   Uint8List imgc = await pickImage(ImageSource.camera);
-  //   setState(() {
-  //     _image = imgc;
-  //   });
-  // }
+  void _selectImageFromGallery() async {
+    Uint8List img = await pickImage(ImageSource.gallery);
+    setState(() {
+      _image = img;
+    });
+  }
+
+  void _selectImageFromCamera() async {
+    Uint8List imgc = await pickImage(ImageSource.camera);
+    setState(() {
+      _image = imgc;
+    });
+  }
 
   // void selectImage() async {
   //   Uint8List img = await pickImage(ImageSource.gallery);
@@ -149,33 +149,83 @@ class _AddMasjidState extends State<AddMasjid> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 15),
-            Center(
-              child: _image != null
-                  ? Container(
-                      width: 200,
-                      height: 200,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        image: DecorationImage(
-                          image: MemoryImage(
-                              _image!), // Replace 'background.jpg' with your image asset path
-                          fit: BoxFit.cover,
-                        ),
-                      ))
-                  : InkWell(
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (context) => const CameraModal(),
-                        );
-                      },
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Column(
+                  children: [
+                    InkWell(
+                      onTap: _selectImageFromGallery,
+                      child: Icon(
+                        Icons.camera,
+                        size: 50,
+                        color: const Color.fromRGBO(47, 79, 79, 1),
+                      ),
+                    ),
+                    Text('Gallery'),
+                  ],
+                ),
+                Column(
+                  children: [
+                    InkWell(
+                      onTap: _selectImageFromCamera,
                       child: Icon(
                         Icons.add_a_photo,
                         size: 50,
                         color: const Color.fromRGBO(47, 79, 79, 1),
                       ),
                     ),
+                    Text('Camera'),
+                  ],
+                ),
+              ],
             ),
+            SizedBox(height: 15),
+            Center(
+              child: Container(
+                child: _image != null
+                    ? Container(
+                        width: 200,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          image: DecorationImage(
+                            image: MemoryImage(
+                                _image!), // Replace 'background.jpg' with your image asset path
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      )
+                    : Container(),
+              ),
+            ),
+            // Center(
+            //   child: _image != null
+            //       ? Container(
+            //           width: 200,
+            //           height: 200,
+            //           decoration: BoxDecoration(
+            //             borderRadius: BorderRadius.circular(12),
+            //             image: DecorationImage(
+            //               image: MemoryImage(
+            //                   _image!), // Replace 'background.jpg' with your image asset path
+            //               fit: BoxFit.cover,
+            //             ),
+            //           ))
+            //       : InkWell(
+            //           onTap: () {
+            //             showModalBottomSheet(
+            //               context: context,
+            //               builder: (context) => const CameraModal(),
+            //             );
+            //           },
+            //           child: Icon(
+            //             Icons.add_a_photo,
+            //             size: 50,
+            //             color: const Color.fromRGBO(47, 79, 79, 1),
+            //           ),
+            //         ),
+            // ),
             SizedBox(height: 15),
             TextField(
               maxLength: 25,

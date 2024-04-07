@@ -1,4 +1,5 @@
 import 'package:auy27/provider/search_provider.dart';
+import 'package:auy27/screens/academia/academia_screen.dart';
 import 'package:auy27/screens/login_screen.dart';
 import 'package:auy27/screens/signup_screen.dart';
 import 'package:auy27/screens/splash_screen.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (ctx) => const SplashScreen(),
         LoginScreen.routeName: (ctx) => const LoginScreen(),
+        //  AcademiaScreen.routeName: (ctx) => const AcademiaScreen(category: '',),
       },
       // home: const SplashScreen(),
     );
