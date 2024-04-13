@@ -137,6 +137,7 @@ class AuthMethods {
           'phone': phone,
           'address': address,
           'lga': lga,
+          'latitude': '',
           'id': DateTime.now().microsecondsSinceEpoch.toString(),
           'uid': uid,
           'photoUrl': photoUrl,
@@ -414,12 +415,14 @@ class AuthMethods {
     required String category,
     required double latitude,
     required double longitude,
+    required String address,
   }) async {
     String res = 'Please enter all the fields';
     String? uid = FirebaseAuth.instance.currentUser?.uid;
     try {
       if (name.isNotEmpty &&
           phone.isNotEmpty &&
+          address.isNotEmpty &&
           category.isNotEmpty &&
           latitude != null &&
           longitude != null) {
@@ -430,6 +433,7 @@ class AuthMethods {
           'category': category,
           'latitude': latitude,
           'longitude': longitude,
+          'address': address,
         });
         res = 'success';
       }

@@ -4,6 +4,7 @@ import 'package:auy27/screens/signup_screen.dart';
 import 'package:auy27/screens/tabs_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../home.dart';
 import '../resources/auth_methods.dart';
@@ -21,6 +22,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
+    check_if_already_logged_in();
     requestPermission();
     super.initState();
   }
@@ -39,6 +41,23 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool _isLoading = false;
 
+  SharedPreferences? loginData;
+  bool? newUser;
+
+  void check_if_already_logged_in() async {
+    loginData = await SharedPreferences.getInstance();
+    newUser = (loginData?.getBool('login') ?? true);
+    print(newUser);
+
+    if (newUser == false) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => TabsScreen(),
+        ),
+      );
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -51,6 +70,15 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _isLoading = true;
     });
+
+    String username = _emailController.text;
+    String password = _passwordController.text;
+
+    if (username != '' && password != '') {
+      print('successful');
+      loginData?.setBool('login', false);
+      loginData?.setString('username', username);
+    }
     String res = await AuthMethods().loginUser(
       email: _emailController.text,
       password: _passwordController.text,

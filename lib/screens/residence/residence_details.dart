@@ -39,7 +39,7 @@ class _ResidenceDetailsState extends State<ResidenceDetails> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Details Screen',
+          'Residence Details Screen',
           style: Styles.appBarTextStyle,
         ),
         centerTitle: true,
@@ -164,6 +164,7 @@ class _ResidenceDetailsState extends State<ResidenceDetails> {
                         setState(() {
                           _isLoading = false;
                         });
+
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
                             builder: (context) =>
@@ -194,33 +195,39 @@ class _ResidenceDetailsState extends State<ResidenceDetails> {
                     height: 50,
                     width: 150,
                     child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MarkPointMapPage(
-                                  ref: widget.ref,
-                                  category: widget.category,
-                                  phone: widget.receive['phone'],
-                                  name: widget.receive['name'])),
-                        );
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                          const Color.fromRGBO(47, 79, 79, 1),
-                        ),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MarkPointMapPage(
+                                    ref: widget.ref,
+                                    category: widget.category,
+                                    phone: widget.receive['phone'],
+                                    name: widget.receive['name'],
+                                    address: widget.receive['address'])),
+                          );
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                            const Color.fromRGBO(47, 79, 79, 1),
+                          ),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                           ),
                         ),
-                      ),
-                      child: const Text(
-                        'Mark a Point',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
+                        child: widget.receive['latitude'] == ''
+                            ? Text(
+                                'Mark a Point',
+                                style: TextStyle(color: Colors.white),
+                              )
+                            : Text(
+                                'Location added. Click to modify',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 12),
+                              )),
                   ),
                   SizedBox(
                     height: 50,

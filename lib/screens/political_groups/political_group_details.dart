@@ -196,10 +196,12 @@ class _PoliticalGroupDetailsState extends State<PoliticalGroupDetails> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => MarkPointMapPage(
-                                  ref: widget.ref,
-                                  category: widget.category,
-                                  phone: widget.receive['phone'],
-                                  name: widget.receive['name'])),
+                                    ref: widget.ref,
+                                    category: widget.category,
+                                    phone: widget.receive['phone'],
+                                    name: widget.receive['name'],
+                                    address: widget.receive['address'],
+                                  )),
                         );
                       },
                       style: ButtonStyle(

@@ -1,12 +1,16 @@
 import 'package:auy27/screens/categoy_screens.dart';
 import 'package:auy27/screens/general_map.dart';
 import 'package:auy27/screens/home.dart';
+import 'package:auy27/screens/live_chat.dart';
 import 'package:auy27/screens/search_map.dart';
 import 'package:flutter/material.dart';
 
 import 'help.dart';
 
 class TabsScreen extends StatefulWidget {
+  TabsScreen({Key? key, this.number}) : super(key: key);
+
+  final int? number;
   static const routeName = '/tabscreen';
 
   @override
@@ -25,22 +29,25 @@ class _TabsScreenState extends State<TabsScreen> {
       'page': const GeneralMap(),
     },
     {
-      'page': SearchMap(),
+      'page': LiveChat(),
     },
   ];
   int _selectedPageIndex = 0;
 
-  void _selectPage(int index) {
-    setState(() {
-      _selectedPageIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    _selectedPageIndex = widget.number ?? _selectedPageIndex;
+
+    void _selectPage(int index) {
+      setState(() {
+        _selectedPageIndex = index;
+      });
+    }
+
     return Scaffold(
       body: _pages[_selectedPageIndex]['page'],
       bottomNavigationBar: BottomNavigationBar(
+        key: GlobalKey(),
         onTap: _selectPage,
         backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
         unselectedItemColor: const Color.fromRGBO(123, 141, 158, 1),

@@ -46,6 +46,8 @@ dependencies:
   uuid: ^4.2.1
   geolocator:
   provider:
+  webview_flutter: ^3.0.4
+  shared_preferences:
 
 
 

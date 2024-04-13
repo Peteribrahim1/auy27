@@ -20,12 +20,14 @@ class MarkPointMapPage extends StatefulWidget {
       {super.key,
       required this.ref,
       required this.category,
-      this.name,
-      this.phone});
+      required this.name,
+      required this.phone,
+      required this.address});
   final String ref;
   final String category;
   final String? name;
   final String? phone;
+  final String address;
 
   @override
   State<MarkPointMapPage> createState() => _MarkPointMapPageState();
@@ -81,6 +83,7 @@ class _MarkPointMapPageState extends State<MarkPointMapPage> {
       reference: widget.ref,
       category: widget.category,
     );
+  //  setState(() {});
     print('save to general');
 /////
     await AuthMethods().saveGeneralCoordinates(
@@ -88,7 +91,8 @@ class _MarkPointMapPageState extends State<MarkPointMapPage> {
       phone: widget.phone ?? '6566',
       category: 'cat',
       latitude: _currentP!.latitude,
-      longitude: _currentP!.latitude,
+      longitude: _currentP!.longitude,
+      address: widget.address,
     );
 
     setState(() {
@@ -136,10 +140,10 @@ class _MarkPointMapPageState extends State<MarkPointMapPage> {
                   icon: BitmapDescriptor.defaultMarkerWithHue(
                       BitmapDescriptor.hueGreen),
                   position: _currentP!,
-                  infoWindow: InfoWindow(
-                    title: "Current",
-                    snippet: "location",
-                  ),
+                  // infoWindow: InfoWindow(
+                  //   title: "Current",
+                  //   snippet: "location",
+                  // ),
                 ),
 
                 // const Marker(

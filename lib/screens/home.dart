@@ -1,10 +1,13 @@
+import 'package:auy27/screens/login_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../resources/color_constants.dart';
 import '../resources/custom_text.dart';
 import '../resources/font_constants.dart';
+import '../resources/styles.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -14,6 +17,9 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  SharedPreferences? loginData;
+  String? username;
+
   bool _isLoading = false;
   int pol = 0;
   int resid = 0;
@@ -25,7 +31,15 @@ class _HomeState extends State<Home> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    initial();
     fetchData();
+  }
+
+  void initial() async {
+    loginData = await SharedPreferences.getInstance();
+    setState(() {
+      username = loginData?.getString('username');
+    });
   }
 
   void fetchData() async {
@@ -35,50 +49,50 @@ class _HomeState extends State<Home> {
     final snap_pol =
         await FirebaseFirestore.instance.collection('Political Group').get();
 
-    final snap2_pol = snap_pol.docs
-        .where((element) =>
-            element["uid"] == FirebaseAuth.instance.currentUser?.uid)
-        .toList();
+    final snap2_pol = snap_pol.docs.toList();
+    // .where((element) =>
+    //     element["uid"] == FirebaseAuth.instance.currentUser?.uid)
+    // .toList();
 
     final snap_resi =
         await FirebaseFirestore.instance.collection('Residence').get();
 
-    final snap2_resi = snap_resi.docs
-        .where((element) =>
-            element["uid"] == FirebaseAuth.instance.currentUser?.uid)
-        .toList();
+    final snap2_resi = snap_resi.docs.toList();
+    // .where((element) =>
+    //     element["uid"] == FirebaseAuth.instance.currentUser?.uid)
+    // .toList();
 
     final snap_isla =
         await FirebaseFirestore.instance.collection('Islamiya').get();
 
-    final snap2_isla = snap_isla.docs
-        .where((element) =>
-            element["uid"] == FirebaseAuth.instance.currentUser?.uid)
-        .toList();
+    final snap2_isla = snap_isla.docs.toList();
+    // .where((element) =>
+    //     element["uid"] == FirebaseAuth.instance.currentUser?.uid)
+    // .toList();
 
     final snap_masj =
         await FirebaseFirestore.instance.collection('Masjid').get();
 
-    final snap2_masj = snap_masj.docs
-        .where((element) =>
-            element["uid"] == FirebaseAuth.instance.currentUser?.uid)
-        .toList();
+    final snap2_masj = snap_masj.docs.toList();
+    // .where((element) =>
+    //     element["uid"] == FirebaseAuth.instance.currentUser?.uid)
+    // .toList();
 
     final snap_chur =
         await FirebaseFirestore.instance.collection('Church').get();
 
-    final snap2_chur = snap_chur.docs
-        .where((element) =>
-            element["uid"] == FirebaseAuth.instance.currentUser?.uid)
-        .toList();
+    final snap2_chur = snap_chur.docs.toList();
+    // .where((element) =>
+    //     element["uid"] == FirebaseAuth.instance.currentUser?.uid)
+    // .toList();
 
     final snap_acad =
         await FirebaseFirestore.instance.collection('Academia').get();
 
-    final snap2_acad = snap_acad.docs
-        .where((element) =>
-            element["uid"] == FirebaseAuth.instance.currentUser?.uid)
-        .toList();
+    final snap2_acad = snap_acad.docs.toList();
+    // .where((element) =>
+    //     element["uid"] == FirebaseAuth.instance.currentUser?.uid)
+    // .toList();
 
     pol = snap2_pol.length;
     resid = snap2_resi.length;
@@ -104,18 +118,39 @@ class _HomeState extends State<Home> {
             : Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 15.0),
+                    padding: const EdgeInsets.only(top: 15.0, right: 8),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        const Spacer(),
-                        const CustomText(
+                        const Spacer(
+                          flex: 4,
+                        ),
+                        CustomText(
                           text: 'DASHBOARD',
                           textColor: black,
                           fontSize: 16,
                           fontWeight: mediumFont,
                         ),
-                        const Spacer(),
+                        const Spacer(
+                          flex: 3,
+                        ),
+                        InkWell(
+                            onTap: () {
+                              FirebaseAuth.instance.signOut();
+                              loginData?.setBool('login', true);
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) => LoginScreen(),
+                                ),
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  backgroundColor: Colors.green,
+                                  content: Text('You are logged out!'),
+                                ),
+                              );
+                            },
+                            child: Icon(Icons.power_settings_new)),
                       ],
                     ),
                   ),
@@ -280,7 +315,32 @@ class _HomeState extends State<Home> {
                         ),
                       ],
                     ),
-                  )
+                  ),
+                  // SizedBox(height: 50),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    //  child: Text('signed in as $username'),
+                    child: RichText(
+                      text: TextSpan(
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'signed in as ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              color: Color.fromRGBO(0, 0, 0, 1),
+                            ),
+                          ),
+                          TextSpan(
+                            text: '$username',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: Color.fromRGBO(47, 79, 79, 1),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
       ),

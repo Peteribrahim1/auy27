@@ -34,13 +34,6 @@ class _AcademiaDetailsState extends State<AcademiaDetails> {
   QueryDocumentSnapshot<Map<String, dynamic>>? data;
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    print('my categoriii ${widget.category}');
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -271,7 +264,8 @@ class _AcademiaDetailsState extends State<AcademiaDetails> {
                                   ref: widget.ref,
                                   category: widget.category,
                                   phone: widget.receive['phone'],
-                                  name: widget.receive['name'])),
+                                  name: widget.receive['name'],
+                                  address: widget.receive['address'])),
                         );
                       },
                       style: ButtonStyle(

@@ -6,9 +6,13 @@ import '../utils/utils.dart';
 
 class SaveCurrentDialog extends StatefulWidget {
   const SaveCurrentDialog(
-      {super.key, required this.latitude, required this.longitude});
+      {super.key,
+      required this.latitude,
+      required this.longitude,
+      this.address});
   final double latitude;
   final double longitude;
+  final String? address;
 
   @override
   State<SaveCurrentDialog> createState() => _SaveCurrentDialogState();
@@ -16,6 +20,7 @@ class SaveCurrentDialog extends StatefulWidget {
 
 class _SaveCurrentDialogState extends State<SaveCurrentDialog> {
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _categoryController = TextEditingController();
 
@@ -40,6 +45,7 @@ class _SaveCurrentDialogState extends State<SaveCurrentDialog> {
       category: _categoryController.text,
       latitude: widget.latitude,
       longitude: widget.longitude,
+      address: _addressController.text,
     );
 
     setState(() {
@@ -94,6 +100,10 @@ class _SaveCurrentDialogState extends State<SaveCurrentDialog> {
             TextField(
               controller: _nameController,
               decoration: InputDecoration(hintText: 'Name'),
+            ),
+            TextField(
+              controller: _addressController,
+              decoration: InputDecoration(hintText: 'Address'),
             ),
             TextField(
               controller: _phoneController,

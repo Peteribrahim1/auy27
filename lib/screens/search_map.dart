@@ -224,16 +224,51 @@
 //     ));
 //   }
 // }
+import 'package:auy27/screens/live_chat.dart';
 import 'package:flutter/material.dart';
+
+import '../resources/styles.dart';
 
 class SearchMap extends StatelessWidget {
   const SearchMap({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('Help center coming soon'),
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            Center(
+              child: SizedBox(
+                height: 52,
+                width: 280,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => const LiveChat(),
+                      ),
+                    );
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      const Color.fromRGBO(47, 79, 79, 1),
+                    ),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  child: const Text(
+                    'Proceed to support',
+                    style: Styles.buttonTextStyle,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

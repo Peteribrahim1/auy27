@@ -86,10 +86,16 @@ class _GeneralMapState extends State<GeneralMap> {
           label: myList[i]['name'],
           markerId: MarkerId("_destinationLocation$i"),
           position: LatLng(myList[i]['latitude'], myList[i]['longitude']),
+          infoWindow: InfoWindow(
+            title: myList[i]['address'],
+            snippet: '${myList[i]['phone']}',
+          ),
         ),
       );
       setState(() {});
     }
+
+    //  ${myList[i]['lga']}\n${myList[i]['phone']}}
 
     mark.addLabelMarker(
       LabelMarker(

@@ -255,7 +255,8 @@ class _MasjidDetailsState extends State<MasjidDetails> {
                                   ref: widget.ref,
                                   category: widget.category,
                                   phone: widget.receive['phone'],
-                                  name: widget.receive['name'])),
+                                  name: widget.receive['name'],
+                                  address: widget.receive['address'])),
                         );
                       },
                       style: ButtonStyle(
