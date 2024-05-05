@@ -96,8 +96,12 @@ class _ResidenceScreenState extends State<ResidenceScreen> {
                                   ),
                                 );
                               },
-                              child: SvgPicture.asset(
-                                  'assets/images/arrowHeadBack.svg')),
+                              child: Icon(
+                                Icons.arrow_back,
+                              )
+                              // SvgPicture.asset(
+                              //     'assets/images/arrowHeadBack.svg'),
+                              ),
                           const Spacer(),
                           const CustomText(
                             text: 'Residence',
@@ -151,7 +155,7 @@ class _ResidenceScreenState extends State<ResidenceScreen> {
                             ),
                           )
                         : Container(
-                            height: MediaQuery.of(context).size.height * 0.70,
+                            height: MediaQuery.of(context).size.height * 0.65,
                             width: double.infinity,
                             decoration: const BoxDecoration(
                               color: Colors.white,

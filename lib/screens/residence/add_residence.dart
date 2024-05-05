@@ -57,12 +57,22 @@ class _AddResidenceState extends State<AddResidence> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _ninController = TextEditingController();
+  final TextEditingController _bvnController = TextEditingController();
+  final TextEditingController _voterController = TextEditingController();
+  final TextEditingController _partyController = TextEditingController();
+  final TextEditingController _pollingController = TextEditingController();
 
   @override
   void dispose() {
     _nameController.dispose();
     _phoneController.dispose();
     _addressController.dispose();
+    _ninController.dispose();
+    _bvnController.dispose();
+    _voterController.dispose();
+    _partyController.dispose();
+    _pollingController.dispose();
     super.dispose();
   }
 
@@ -79,6 +89,11 @@ class _AddResidenceState extends State<AddResidence> {
       address: _addressController.text,
       lga: selectedLga.toString(),
       file: _image!,
+      nin: _ninController.text,
+      bvn: _bvnController.text,
+      voter: _voterController.text,
+      party: _partyController.text,
+      polling: _pollingController.text,
     );
 
     setState(() {
@@ -86,6 +101,11 @@ class _AddResidenceState extends State<AddResidence> {
       _nameController.text = '';
       _phoneController.text = '';
       _addressController.text = '';
+      _ninController.text = '';
+      _bvnController.text = '';
+      _voterController.text = '';
+      _partyController.text = '';
+      _pollingController.text = '';
       selectedLga = null;
     });
 
@@ -112,6 +132,9 @@ class _AddResidenceState extends State<AddResidence> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.white, //change your color here
+        ),
         title: const Text(
           'Add Residence',
           style: Styles.appBarTextStyle,
@@ -225,6 +248,138 @@ class _AddResidenceState extends State<AddResidence> {
               ),
             ),
             const SizedBox(height: 15),
+            TextField(
+              // maxLength: 11,
+              controller: _ninController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                prefixIcon: const Icon(
+                  Icons.drive_file_rename_outline,
+                  color: Color.fromRGBO(47, 79, 79, 1),
+                ),
+                contentPadding: const EdgeInsets.all(18),
+                hintText: 'nin',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                      color: Color.fromRGBO(47, 79, 79, 1), width: 1),
+                ),
+                hintStyle: Styles.hintTextStyle,
+              ),
+            ),
+            const SizedBox(height: 15),
+            TextField(
+              //  maxLength: 11,
+              controller: _bvnController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                prefixIcon: const Icon(
+                  Icons.drive_file_rename_outline,
+                  color: Color.fromRGBO(47, 79, 79, 1),
+                ),
+                contentPadding: const EdgeInsets.all(18),
+                hintText: 'bvn',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                      color: Color.fromRGBO(47, 79, 79, 1), width: 1),
+                ),
+                hintStyle: Styles.hintTextStyle,
+              ),
+            ),
+            const SizedBox(height: 15),
+            TextField(
+              //maxLength: 19,
+
+              // counterText: "",
+              controller: _voterController,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                prefixIcon: const Icon(
+                  Icons.drive_file_rename_outline,
+                  color: Color.fromRGBO(47, 79, 79, 1),
+                ),
+                contentPadding: const EdgeInsets.all(18),
+                hintText: 'voter card number',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                      color: Color.fromRGBO(47, 79, 79, 1), width: 1),
+                ),
+                hintStyle: Styles.hintTextStyle,
+              ),
+            ),
+            const SizedBox(height: 15),
+            TextField(
+              //maxLength: 19,
+
+              // counterText: "",
+              controller: _partyController,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                prefixIcon: const Icon(
+                  Icons.drive_file_rename_outline,
+                  color: Color.fromRGBO(47, 79, 79, 1),
+                ),
+                contentPadding: const EdgeInsets.all(18),
+                hintText: 'party',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                      color: Color.fromRGBO(47, 79, 79, 1), width: 1),
+                ),
+                hintStyle: Styles.hintTextStyle,
+              ),
+            ),
+            const SizedBox(height: 15),
+            TextField(
+              //maxLength: 19,
+
+              // counterText: "",
+              controller: _pollingController,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                prefixIcon: const Icon(
+                  Icons.drive_file_rename_outline,
+                  color: Color.fromRGBO(47, 79, 79, 1),
+                ),
+                contentPadding: const EdgeInsets.all(18),
+                hintText: 'polling unit',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                      color: Color.fromRGBO(47, 79, 79, 1), width: 1),
+                ),
+                hintStyle: Styles.hintTextStyle,
+              ),
+            ),
+            const SizedBox(height: 15),
+
             TextField(
               controller: _addressController,
               decoration: InputDecoration(

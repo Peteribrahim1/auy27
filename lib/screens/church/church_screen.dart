@@ -1,4 +1,5 @@
 import 'package:auy27/screens/church/add_church.dart';
+import 'package:auy27/screens/tabs_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -86,14 +87,18 @@ class _ChurchScreenState extends State<ChurchScreen> {
                           InkWell(
                               onTap: () {
                                 // Navigator.pop(context);
-                                Navigator.of(context).pushReplacement(
+                                Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => CategoryScreen(),
+                                    builder: (context) => TabsScreen(number: 1),
                                   ),
                                 );
                               },
-                              child: SvgPicture.asset(
-                                  'assets/images/arrowHeadBack.svg')),
+                              child: Icon(
+                                Icons.arrow_back,
+                              )
+                              // SvgPicture.asset(
+                              //     'assets/images/arrowHeadBack.svg'),
+                              ),
                           const Spacer(),
                           const CustomText(
                             text: 'Church',
@@ -147,7 +152,7 @@ class _ChurchScreenState extends State<ChurchScreen> {
                             ),
                           )
                         : Container(
-                            height: MediaQuery.of(context).size.height * 0.70,
+                            height: MediaQuery.of(context).size.height * 0.65,
                             width: double.infinity,
                             decoration: const BoxDecoration(
                               color: Colors.white,

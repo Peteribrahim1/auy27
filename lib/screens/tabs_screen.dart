@@ -3,6 +3,7 @@ import 'package:auy27/screens/general_map.dart';
 import 'package:auy27/screens/home.dart';
 import 'package:auy27/screens/live_chat.dart';
 import 'package:auy27/screens/search_map.dart';
+import 'package:auy27/screens/todo_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'help.dart';
@@ -29,19 +30,27 @@ class _TabsScreenState extends State<TabsScreen> {
       'page': const GeneralMap(),
     },
     {
+      'page': const TodoScreen(),
+    },
+    {
       'page': LiveChat(),
     },
   ];
-  int _selectedPageIndex = 0;
+  int _selectedPageIndex = TabsScreen().number ?? 0;
 
   @override
   Widget build(BuildContext context) {
-    _selectedPageIndex = widget.number ?? _selectedPageIndex;
+    // setState(() {
+    //   _selectedPageIndex = widget.number ?? _selectedPageIndex;
+    // });
+
+    print('try this${widget.number}');
 
     void _selectPage(int index) {
       setState(() {
         _selectedPageIndex = index;
       });
+      print('hey ${_selectedPageIndex}');
     }
 
     return Scaffold(
@@ -58,22 +67,28 @@ class _TabsScreenState extends State<TabsScreen> {
         items: const [
           BottomNavigationBarItem(
             backgroundColor: Colors.white,
-            icon: Icon(Icons.home, color: Colors.black),
+            icon: Icon(Icons.home, color: Color.fromRGBO(47, 79, 79, 1)),
             label: 'Home',
           ),
           BottomNavigationBarItem(
             backgroundColor: Colors.white,
-            icon: Icon(Icons.category_outlined, color: Colors.black),
+            icon: Icon(Icons.category_outlined,
+                color: Color.fromRGBO(47, 79, 79, 1)),
             label: 'Category',
           ),
           BottomNavigationBarItem(
             backgroundColor: Colors.white,
-            icon: Icon(Icons.location_on, color: Colors.black),
+            icon: Icon(Icons.location_on, color: Color.fromRGBO(47, 79, 79, 1)),
             label: 'Map',
           ),
           BottomNavigationBarItem(
             backgroundColor: Colors.white,
-            icon: Icon(Icons.help, color: Colors.black),
+            icon: Icon(Icons.list_alt, color: Color.fromRGBO(47, 79, 79, 1)),
+            label: 'Todo',
+          ),
+          BottomNavigationBarItem(
+            backgroundColor: Colors.white,
+            icon: Icon(Icons.help, color: Color.fromRGBO(47, 79, 79, 1)),
             label: 'Help',
           ),
         ],

@@ -70,6 +70,9 @@ class _AddMasjidState extends State<AddMasjid> {
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _denominationController = TextEditingController();
   final TextEditingController _membersController = TextEditingController();
+  final TextEditingController _ninController = TextEditingController();
+  final TextEditingController _bvnController = TextEditingController();
+  final TextEditingController _voterController = TextEditingController();
 
   @override
   void dispose() {
@@ -79,6 +82,9 @@ class _AddMasjidState extends State<AddMasjid> {
     _addressController.dispose();
     _denominationController.dispose();
     _membersController.dispose();
+    _ninController.dispose();
+    _bvnController.dispose();
+    _voterController.dispose();
     super.dispose();
   }
 
@@ -99,6 +105,9 @@ class _AddMasjidState extends State<AddMasjid> {
       file: _image!,
       nameRep: _nameOfRepController.text,
       members: _membersController.text,
+      nin: _ninController.text,
+      bvn: _bvnController.text,
+      voter: _voterController.text,
     );
 
     setState(() {
@@ -109,6 +118,9 @@ class _AddMasjidState extends State<AddMasjid> {
       _addressController.text = '';
       _denominationController.text = '';
       _membersController.text = '';
+      _ninController.text = '';
+      _bvnController.text = '';
+      _voterController.text = '';
       selectedLga = null;
       selectedLga = null;
     });
@@ -136,6 +148,9 @@ class _AddMasjidState extends State<AddMasjid> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.white, //change your color here
+        ),
         title: const Text(
           'Add Masjid',
           style: Styles.appBarTextStyle,
@@ -300,7 +315,79 @@ class _AddMasjidState extends State<AddMasjid> {
                 hintStyle: Styles.hintTextStyle,
               ),
             ),
+            const SizedBox(height: 20),
+            TextField(
+              controller: _ninController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                prefixIcon: const Icon(
+                  Icons.drive_file_rename_outline,
+                  color: Color.fromRGBO(47, 79, 79, 1),
+                ),
+                contentPadding: const EdgeInsets.all(18),
+                hintText: 'nin',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                      color: Color.fromRGBO(47, 79, 79, 1), width: 1),
+                ),
+                hintStyle: Styles.hintTextStyle,
+              ),
+            ),
+            const SizedBox(height: 20),
+            TextField(
+              controller: _bvnController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                prefixIcon: const Icon(
+                  Icons.drive_file_rename_outline,
+                  color: Color.fromRGBO(47, 79, 79, 1),
+                ),
+                contentPadding: const EdgeInsets.all(18),
+                hintText: 'bvn',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                      color: Color.fromRGBO(47, 79, 79, 1), width: 1),
+                ),
+                hintStyle: Styles.hintTextStyle,
+              ),
+            ),
             const SizedBox(height: 15),
+            TextField(
+              controller: _voterController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                prefixIcon: const Icon(
+                  Icons.drive_file_rename_outline,
+                  color: Color.fromRGBO(47, 79, 79, 1),
+                ),
+                contentPadding: const EdgeInsets.all(18),
+                hintText: 'voter card number',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                      color: Color.fromRGBO(47, 79, 79, 1), width: 1),
+                ),
+                hintStyle: Styles.hintTextStyle,
+              ),
+            ),
+            const SizedBox(height: 20),
             TextField(
               controller: _addressController,
               decoration: InputDecoration(
@@ -335,7 +422,7 @@ class _AddMasjidState extends State<AddMasjid> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'section',
+                hintText: 'sect',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),

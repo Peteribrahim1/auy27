@@ -49,31 +49,30 @@ class _AddAcademiaState extends State<AddAcademia> {
   void initState() {
     super.initState();
 
-    this.institution.add(
-        {"id": 1, "name": "1. Gombe State College of Legal Studies, Nafada"});
     this
         .institution
-        .add({"id": 2, "name": "2. Gombe State College of Education, Billiri"});
+        .add({"id": 1, "name": "Gombe State College of Legal Studies, Nafada"});
+    this
+        .institution
+        .add({"id": 2, "name": "Gombe State College of Education, Billiri"});
     this.institution.add(
-        {"id": 3, "name": "3. Federal College of Education(Technical), Gombe"});
+        {"id": 3, "name": "Federal College of Education(Technical), Gombe"});
     this.institution.add({
       "id": 4,
-      "name": "4. Federal College of Horticultural Technology, Dadin Kowa"
+      "name": "Federal College of Horticultural Technology, Dadin Kowa"
     });
-    this.institution.add(
-        {"id": 5, "name": "5. Gombe State College of Nursing and Midwifery"});
-    this.institution.add({
-      "id": 6,
-      "name":
-          "6. Gombe State College of Health Sciences and Technology, Kaltungo"
-    });
-    this.institution.add({"id": 7, "name": "7. Federal Polytechnic, Kaltungo"});
     this
         .institution
-        .add({"id": 8, "name": "8. Gombe State Polytechnic Bajoga"});
-    this.institution.add({"id": 9, "name": "9. Federal University Kashere"});
-    this.institution.add({"id": 10, "name": "10. Gombe State University"});
-    this.institution.add({"id": 11, "name": "11. North-Eastern University"});
+        .add({"id": 5, "name": "Gombe State College of Nursing and Midwifery"});
+    this.institution.add({
+      "id": 6,
+      "name": "Gombe State College of Health Sciences and Technology, Kaltungo"
+    });
+    this.institution.add({"id": 7, "name": "Federal Polytechnic, Kaltungo"});
+    this.institution.add({"id": 8, "name": "Gombe State Polytechnic Bajoga"});
+    this.institution.add({"id": 9, "name": "Federal University Kashere"});
+    this.institution.add({"id": 10, "name": "Gombe State University"});
+    this.institution.add({"id": 11, "name": "North-Eastern University"});
 
     this.Lga.add({"id": 1, "name": "Akko"});
     this.Lga.add({"id": 2, "name": "Balanga"});
@@ -206,7 +205,7 @@ class _AddAcademiaState extends State<AddAcademia> {
   }
 
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _nameOfRepController = TextEditingController();
+  // final TextEditingController _nameOfRepController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _denominationController = TextEditingController();
@@ -215,13 +214,16 @@ class _AddAcademiaState extends State<AddAcademia> {
   final TextEditingController _rankController = TextEditingController();
   final TextEditingController _wardController = TextEditingController();
   final TextEditingController _pollingController = TextEditingController();
+  final TextEditingController _ninController = TextEditingController();
+  final TextEditingController _bvnController = TextEditingController();
+  final TextEditingController _voterController = TextEditingController();
   final TextEditingController _qualificationController =
       TextEditingController();
 
   @override
   void dispose() {
     _nameController.dispose();
-    _nameOfRepController.dispose();
+    // _nameOfRepController.dispose();
     _phoneController.dispose();
     _addressController.dispose();
     _denominationController.dispose();
@@ -231,6 +233,9 @@ class _AddAcademiaState extends State<AddAcademia> {
     _wardController.dispose();
     _pollingController.dispose();
     _qualificationController.dispose();
+    _ninController.dispose();
+    _bvnController.dispose();
+    _voterController.dispose();
     super.dispose();
   }
 
@@ -252,12 +257,21 @@ class _AddAcademiaState extends State<AddAcademia> {
       ward: selectedWard.toString(),
       polling_unit: _pollingController.text,
       qualification: _qualificationController.text,
+      //  rep: _nameOfRepController.text,
+      nin: _ninController.text,
+      bvn: _bvnController.text,
+      voter: _voterController.text,
     );
 
     setState(() {
       _isLoading = false;
       _nameController.text = '';
-      _nameOfRepController.text = '';
+      _ninController.text = '';
+      _bvnController.text = '';
+      _voterController.text = '';
+      _pollingController.text = '';
+      _qualificationController.text = '';
+      //  _nameOfRepController.text = '';
       _phoneController.text = '';
       _addressController.text = '';
       _denominationController.text = '';
@@ -290,6 +304,9 @@ class _AddAcademiaState extends State<AddAcademia> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.white, //change your color here
+        ),
         title: const Text(
           'Add Academia',
           style: Styles.appBarTextStyle,
@@ -388,7 +405,7 @@ class _AddAcademiaState extends State<AddAcademia> {
               paddingLeft: 0,
               paddingRight: 0,
               (onChangedVal) {
-                var fid = this.lgaId = onChangedVal;
+                var fid = this.insId = onChangedVal;
                 print('selected institution: $onChangedVal');
 
                 // this.Ward = this
@@ -402,13 +419,13 @@ class _AddAcademiaState extends State<AddAcademia> {
                 // this.wardId = null;
                 setState(() {});
 
-                for (var element in this.Lga) {
+                for (var element in this.institution) {
                   if (element['id'] == int.parse(fid)) {
-                    this.selectedLga = element['name'];
+                    this.selectedIns = element['name'];
                   }
                 }
                 setState(() {
-                  print(this.selectedLga);
+                  print(this.selectedIns);
                 });
               },
               (onValidateVal) {
@@ -433,6 +450,78 @@ class _AddAcademiaState extends State<AddAcademia> {
                 ),
                 contentPadding: const EdgeInsets.all(18),
                 hintText: 'phone',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                      color: Color.fromRGBO(47, 79, 79, 1), width: 1),
+                ),
+                hintStyle: Styles.hintTextStyle,
+              ),
+            ),
+            const SizedBox(height: 15),
+            TextField(
+              controller: _ninController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                prefixIcon: const Icon(
+                  Icons.drive_file_rename_outline,
+                  color: Color.fromRGBO(47, 79, 79, 1),
+                ),
+                contentPadding: const EdgeInsets.all(18),
+                hintText: 'nin',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                      color: Color.fromRGBO(47, 79, 79, 1), width: 1),
+                ),
+                hintStyle: Styles.hintTextStyle,
+              ),
+            ),
+            const SizedBox(height: 15),
+            TextField(
+              controller: _bvnController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                prefixIcon: const Icon(
+                  Icons.drive_file_rename_outline,
+                  color: Color.fromRGBO(47, 79, 79, 1),
+                ),
+                contentPadding: const EdgeInsets.all(18),
+                hintText: 'bvn',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                      color: Color.fromRGBO(47, 79, 79, 1), width: 1),
+                ),
+                hintStyle: Styles.hintTextStyle,
+              ),
+            ),
+            const SizedBox(height: 15),
+            TextField(
+              controller: _voterController,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                prefixIcon: const Icon(
+                  Icons.drive_file_rename_outline,
+                  color: Color.fromRGBO(47, 79, 79, 1),
+                ),
+                contentPadding: const EdgeInsets.all(18),
+                hintText: 'voter card number',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),

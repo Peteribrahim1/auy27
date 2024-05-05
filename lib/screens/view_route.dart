@@ -170,16 +170,16 @@ class _ViewRouteState extends State<ViewRoute> {
     );
   }
 
-  Future<void> _cameraToPosition(LatLng pos) async {
-    final GoogleMapController controller = await _mapController.future;
-    CameraPosition _newCameraPosition = CameraPosition(
-      target: pos,
-      zoom: 13,
-    );
-    await controller.animateCamera(
-      CameraUpdate.newCameraPosition(_newCameraPosition),
-    );
-  }
+  // Future<void> _cameraToPosition(LatLng pos) async {
+  //   final GoogleMapController controller = await _mapController.future;
+  //   CameraPosition _newCameraPosition = CameraPosition(
+  //     target: pos,
+  //     zoom: 13,
+  //   );
+  //   await controller.animateCamera(
+  //     CameraUpdate.newCameraPosition(_newCameraPosition),
+  //   );
+  // }
 
   Future<void> getLocationUpdates() async {
     bool _serviceEnabled;
@@ -207,7 +207,7 @@ class _ViewRouteState extends State<ViewRoute> {
         setState(() {
           _currentP =
               LatLng(currentLocation.latitude!, currentLocation.longitude!);
-          _cameraToPosition(_currentP!);
+          // _cameraToPosition(_currentP!);
           print("my current location is $_currentP");
           print(_currentP?.longitude);
         });

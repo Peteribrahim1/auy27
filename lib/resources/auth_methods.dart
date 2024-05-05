@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 //import 'dart:html';
 import 'package:auy27/resources/storage_methods.dart';
@@ -76,8 +77,13 @@ class AuthMethods {
       required String phone,
       required String address,
       required String members,
-      required String state,
       required String lga,
+      required String ward,
+      required String polling_unit,
+      required String party,
+      required String nin,
+      required String bvn,
+      required String voter,
       required Uint8List file}) async {
     String res = 'Please enter all the fields';
     String? uid = FirebaseAuth.instance.currentUser?.uid;
@@ -86,9 +92,14 @@ class AuthMethods {
           phone.isNotEmpty &&
           address.isNotEmpty &&
           members.isNotEmpty &&
+          polling_unit.isNotEmpty &&
+          party.isNotEmpty &&
+          nin.isNotEmpty &&
+          bvn.isNotEmpty &&
+          voter.isNotEmpty &&
           file != null &&
-          state != null &&
-          lga != null) {
+          lga != null &&
+          ward != null) {
         String photoUrl = await StorageMethods()
             .uploadImageToStorage('political_group_images', file, false);
         //add to database
@@ -97,8 +108,13 @@ class AuthMethods {
           'phone': phone,
           'address': address,
           'members': members,
-          'state': state,
           'lga': lga,
+          'ward': ward,
+          'polling_unit': polling_unit,
+          'party': party,
+          'nin': nin,
+          'bvn': bvn,
+          'voter': voter,
           'id': DateTime.now().microsecondsSinceEpoch.toString(),
           'uid': uid,
           'photoUrl': photoUrl,
@@ -119,23 +135,39 @@ class AuthMethods {
       required String phone,
       required String address,
       required String lga,
-      //  required String lga,
+      required String nin,
+      required String bvn,
+      required String voter,
+      required String party,
+      required String polling,
       required Uint8List file}) async {
+    // print(file == null);
     String res = 'Please enter all the fields';
     String? uid = FirebaseAuth.instance.currentUser?.uid;
     try {
       if (name.isNotEmpty &&
           phone.isNotEmpty &&
           address.isNotEmpty &&
+          nin.isNotEmpty &&
+          bvn.isNotEmpty &&
+          voter.isNotEmpty &&
+          party.isNotEmpty &&
+          polling.isNotEmpty &&
           file != null &&
           lga != null) {
         String photoUrl = await StorageMethods()
             .uploadImageToStorage('residence_images', file, false);
+        print(photoUrl);
         //add to database
         await _firestore.collection('Residence').add({
           'name': name,
           'phone': phone,
           'address': address,
+          'nin': nin,
+          'bvn': bvn,
+          'voter': voter,
+          'party': party,
+          'polling': polling,
           'lga': lga,
           'latitude': '',
           'id': DateTime.now().microsecondsSinceEpoch.toString(),
@@ -154,16 +186,21 @@ class AuthMethods {
   }
 
   //save islamiya
-  Future<String> saveIslamiya(
-      {required String name,
-      required String nameRep,
-      required String phone,
-      required String address,
-      required String members,
-      required String denomination,
-      required String state,
-      required String lga,
-      required Uint8List file}) async {
+  Future<String> saveIslamiya({
+    required String name,
+    required String nameRep,
+    required String phone,
+    required String address,
+    required String members,
+    required String denomination,
+    required String state,
+    required String lga,
+    required String nin,
+    required String bvn,
+    required String voter,
+    required Uint8List file,
+    File? file2,
+  }) async {
     String res = 'Please enter all the fields';
     String? uid = FirebaseAuth.instance.currentUser?.uid;
     try {
@@ -173,6 +210,9 @@ class AuthMethods {
           address.isNotEmpty &&
           members.isNotEmpty &&
           denomination.isNotEmpty &&
+          nin.isNotEmpty &&
+          bvn.isNotEmpty &&
+          voter.isNotEmpty &&
           file != null &&
           state != null &&
           lga != null) {
@@ -186,6 +226,9 @@ class AuthMethods {
           'address': address,
           'members': members,
           'denomination': denomination,
+          'nin': nin,
+          'bvn': bvn,
+          'voter': voter,
           'state': state,
           'lga': lga,
           'id': DateTime.now().microsecondsSinceEpoch.toString(),
@@ -213,6 +256,9 @@ class AuthMethods {
       required String denomination,
       required String state,
       required String lga,
+      required String nin,
+      required String bvn,
+      required String voter,
       required Uint8List file}) async {
     String res = 'Please enter all the fields';
     String? uid = FirebaseAuth.instance.currentUser?.uid;
@@ -223,6 +269,9 @@ class AuthMethods {
           address.isNotEmpty &&
           members.isNotEmpty &&
           denomination.isNotEmpty &&
+          nin.isNotEmpty &&
+          bvn.isNotEmpty &&
+          voter.isNotEmpty &&
           file != null &&
           state != null &&
           lga != null) {
@@ -236,6 +285,9 @@ class AuthMethods {
           'address': address,
           'members': members,
           'denomination': denomination,
+          'nin': nin,
+          'bvn': bvn,
+          'voter': voter,
           'state': state,
           'lga': lga,
           'id': DateTime.now().microsecondsSinceEpoch.toString(),
@@ -263,6 +315,9 @@ class AuthMethods {
       required String denomination,
       required String state,
       required String lga,
+      required String nin,
+      required String bvn,
+      required String voter,
       required Uint8List file}) async {
     String res = 'Please enter all the fields';
     String? uid = FirebaseAuth.instance.currentUser?.uid;
@@ -273,6 +328,9 @@ class AuthMethods {
           address.isNotEmpty &&
           members.isNotEmpty &&
           denomination.isNotEmpty &&
+          nin.isNotEmpty &&
+          bvn.isNotEmpty &&
+          voter.isNotEmpty &&
           file != null &&
           state != null &&
           lga != null) {
@@ -288,6 +346,9 @@ class AuthMethods {
           'denomination': denomination,
           'state': state,
           'lga': lga,
+          'nin': nin,
+          'bvn': bvn,
+          'voter': voter,
           'id': DateTime.now().microsecondsSinceEpoch.toString(),
           'uid': uid,
           'photoUrl': photoUrl,
@@ -306,6 +367,10 @@ class AuthMethods {
   //save academia
   Future<String> saveAcademia(
       {required String name,
+      // required String rep,
+      required String nin,
+      required String bvn,
+      required String voter,
       required String institution,
       required String phone,
       required String address,
@@ -319,13 +384,18 @@ class AuthMethods {
     String? uid = FirebaseAuth.instance.currentUser?.uid;
     try {
       if (name.isNotEmpty &&
-          institution.isNotEmpty &&
+          //    rep.isNotEmpty &&
+          nin.isNotEmpty &&
+          bvn.isNotEmpty &&
+          voter.isNotEmpty &&
+          // institution.isNotEmpty &&
           phone.isNotEmpty &&
           address.isNotEmpty &&
           rank.isNotEmpty &&
           polling_unit.isNotEmpty &&
           qualification.isNotEmpty &&
           file != null &&
+          institution != null &&
           ward != null &&
           lga != null) {
         String photoUrl = await StorageMethods()
@@ -333,6 +403,10 @@ class AuthMethods {
         //add to database
         await _firestore.collection('Academia').add({
           'name': name,
+          'nin': nin,
+          'bvn': bvn,
+          'voter': voter,
+          //  'rep': rep,
           'institution': institution,
           'phone': phone,
           'address': address,
@@ -340,7 +414,6 @@ class AuthMethods {
           'ward': ward,
           'polling_unit': polling_unit,
           'qualification': qualification,
-          //    'state': state,
           'lga': lga,
           'id': DateTime.now().microsecondsSinceEpoch.toString(),
           'uid': uid,

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:auy27/screens/general_list.dart';
 import 'package:auy27/screens/save_current_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -72,7 +73,7 @@ class _GeneralMapState extends State<GeneralMap> {
         await FirebaseFirestore.instance.collection('General Map').get();
     myList = snap.docs;
     for (int i = 0; i < myList.length; i++) {
-      print('myy laaaaaaatitude ${myList[i]['latitude']}');
+      //    print('myy laaaaaaatitude ${myList[i]['latitude']}');
 
       // Marker secondMarker = Marker(
       //   markerId: MarkerId("_destinationLocation$i"),
@@ -164,6 +165,21 @@ class _GeneralMapState extends State<GeneralMap> {
         ),
         centerTitle: true,
         backgroundColor: const Color.fromRGBO(47, 79, 79, 1),
+        leading: InkWell(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => GeneralList(),
+                ),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'View List',
+                style: TextStyle(color: Colors.white),
+              ),
+            )),
       ),
       body: _currentP == null
           ? const Center(

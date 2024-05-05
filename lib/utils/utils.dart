@@ -18,3 +18,13 @@ pickImage(ImageSource source) async {
   }
   print('No image selected');
 }
+
+// pickImage2(ImageSource source) async {
+//   final ImagePicker _imagePicker = ImagePicker();
+//   XFile? _file = await _imagePicker.pickImage(source: source);
+//   if (_file != null) {
+//     final files = await File(_file);
+//     return await File(_file.path);
+//   }
+//   print('No image selected');
+// }

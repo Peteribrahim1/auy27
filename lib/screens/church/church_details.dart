@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:auy27/screens/church/church_screen.dart';
 import 'package:auy27/screens/mark_point_map_page.dart';
 import 'package:auy27/screens/view_route.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -38,6 +39,9 @@ class _ChurchDetailsState extends State<ChurchDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.white, //change your color here
+        ),
         title: const Text(
           'Church Details Screen',
           style: Styles.appBarTextStyle,
@@ -50,172 +54,232 @@ class _ChurchDetailsState extends State<ChurchDetails> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: widget.receive['photoUrl'] != null
-                    ? Container(
-                        width: double.infinity,
+            Container(
+              color: Colors.white,
+              height: MediaQuery.of(context).size.height * 0.70,
+              width: double.infinity,
+              child: ListView(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: CachedNetworkImage(
+                        imageUrl: widget.receive['photoUrl'],
                         height: 200,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          image: DecorationImage(
-                            image: NetworkImage(widget.receive['photoUrl']),
-                            fit: BoxFit.cover,
-                          ),
+                        width: double.infinity,
+                        key: UniqueKey(),
+                        fit: BoxFit.cover,
+                        maxHeightDiskCache: 200,
+                        placeholder: (context, url) =>
+                            CircularProgressIndicator(
+                          color: Color.fromRGBO(47, 79, 79, 1),
                         ),
-                      )
-                    : Icon(Icons.add_a_photo_outlined)),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CustomText(
-                  text: 'Name',
-                  textColor: black,
-                  fontWeight: mediumFont,
-                ),
-                CustomText(
-                  text: widget.receive['name'],
-                  textColor: const Color.fromRGBO(47, 79, 79, 1),
-                  fontWeight: mediumFont,
-                ),
-              ],
-            ),
-            const Divider(color: Colors.grey),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CustomText(
-                  text: 'Name of Representatives',
-                  textColor: black,
-                  fontWeight: mediumFont,
-                ),
-                CustomText(
-                  text: widget.receive['name_rep'],
-                  textColor: const Color.fromRGBO(47, 79, 79, 1),
-                  fontWeight: mediumFont,
-                ),
-              ],
-            ),
-            const Divider(color: Colors.grey),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CustomText(
-                  text: 'Address',
-                  textColor: black,
-                  fontWeight: mediumFont,
-                ),
-                CustomText(
-                  text: widget.receive['address'],
-                  textColor: const Color.fromRGBO(47, 79, 79, 1),
-                  fontWeight: mediumFont,
-                ),
-              ],
-            ),
-            const Divider(color: Colors.grey),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CustomText(
-                  text: 'Phone',
-                  textColor: black,
-                  fontWeight: mediumFont,
-                ),
-                CustomText(
-                  text: widget.receive['phone'],
-                  textColor: const Color.fromRGBO(47, 79, 79, 1),
-                  fontWeight: mediumFont,
-                ),
-              ],
-            ),
-            const Divider(color: Colors.grey),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CustomText(
-                  text: 'Members',
-                  textColor: black,
-                  fontWeight: mediumFont,
-                ),
-                CustomText(
-                  text: widget.receive['members'],
-                  textColor: const Color.fromRGBO(47, 79, 79, 1),
-                  fontWeight: mediumFont,
-                ),
-              ],
-            ),
-            const Divider(color: Colors.grey),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CustomText(
-                  text: 'Denomination',
-                  textColor: black,
-                  fontWeight: mediumFont,
-                ),
-                CustomText(
-                  text: widget.receive['denomination'],
-                  textColor: const Color.fromRGBO(47, 79, 79, 1),
-                  fontWeight: mediumFont,
-                ),
-              ],
-            ),
-            const Divider(color: Colors.grey),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CustomText(
-                  text: 'LGA',
-                  textColor: black,
-                  fontWeight: mediumFont,
-                ),
-                CustomText(
-                  text: widget.receive['lga'],
-                  textColor: const Color.fromRGBO(47, 79, 79, 1),
-                  fontWeight: mediumFont,
-                ),
-              ],
-            ),
-            const Divider(color: Colors.grey),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Column(
-                  children: [
-                    InkWell(
-                      onTap: () async {
-                        setState(() {
-                          _isLoading = true;
-                        });
-                        await FirebaseFirestore.instance
-                            .collection('Church')
-                            .doc(widget.ref)
-                            .delete();
-                        setState(() {
-                          _isLoading = false;
-                        });
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                ChurchScreen(category: 'Church'),
-                          ),
-                        );
-                      },
-                      child: _isLoading
-                          ? CircularProgressIndicator()
-                          : Icon(
-                              Icons.delete,
-                              color: Colors.red,
-                              size: 40,
-                            ),
+                      ),
                     ),
-                    Text('Delete'),
-                  ],
-                ),
-              ],
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomText(
+                        text: 'Name',
+                        textColor: black,
+                        fontWeight: mediumFont,
+                      ),
+                      CustomText(
+                        text: widget.receive['name'],
+                        textColor: const Color.fromRGBO(47, 79, 79, 1),
+                        fontWeight: mediumFont,
+                      ),
+                    ],
+                  ),
+                  const Divider(color: Colors.grey),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomText(
+                        text: 'Name of Representatives',
+                        textColor: black,
+                        fontWeight: mediumFont,
+                      ),
+                      CustomText(
+                        text: widget.receive['name_rep'],
+                        textColor: const Color.fromRGBO(47, 79, 79, 1),
+                        fontWeight: mediumFont,
+                      ),
+                    ],
+                  ),
+                  const Divider(color: Colors.grey),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomText(
+                        text: 'Address',
+                        textColor: black,
+                        fontWeight: mediumFont,
+                      ),
+                      CustomText(
+                        text: widget.receive['address'],
+                        textColor: const Color.fromRGBO(47, 79, 79, 1),
+                        fontWeight: mediumFont,
+                      ),
+                    ],
+                  ),
+                  const Divider(color: Colors.grey),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomText(
+                        text: 'Phone',
+                        textColor: black,
+                        fontWeight: mediumFont,
+                      ),
+                      CustomText(
+                        text: widget.receive['phone'],
+                        textColor: const Color.fromRGBO(47, 79, 79, 1),
+                        fontWeight: mediumFont,
+                      ),
+                    ],
+                  ),
+                  const Divider(color: Colors.grey),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomText(
+                        text: 'NIN',
+                        textColor: black,
+                        fontWeight: mediumFont,
+                      ),
+                      CustomText(
+                        text: widget.receive['nin'],
+                        textColor: const Color.fromRGBO(47, 79, 79, 1),
+                        fontWeight: mediumFont,
+                      ),
+                    ],
+                  ),
+                  const Divider(color: Colors.grey),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomText(
+                        text: 'BVN',
+                        textColor: black,
+                        fontWeight: mediumFont,
+                      ),
+                      CustomText(
+                        text: widget.receive['bvn'],
+                        textColor: const Color.fromRGBO(47, 79, 79, 1),
+                        fontWeight: mediumFont,
+                      ),
+                    ],
+                  ),
+                  const Divider(color: Colors.grey),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomText(
+                        text: 'Voter Card',
+                        textColor: black,
+                        fontWeight: mediumFont,
+                      ),
+                      CustomText(
+                        text: widget.receive['voter'],
+                        textColor: const Color.fromRGBO(47, 79, 79, 1),
+                        fontWeight: mediumFont,
+                      ),
+                    ],
+                  ),
+                  const Divider(color: Colors.grey),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomText(
+                        text: 'Members',
+                        textColor: black,
+                        fontWeight: mediumFont,
+                      ),
+                      CustomText(
+                        text: widget.receive['members'],
+                        textColor: const Color.fromRGBO(47, 79, 79, 1),
+                        fontWeight: mediumFont,
+                      ),
+                    ],
+                  ),
+                  const Divider(color: Colors.grey),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomText(
+                        text: 'Denomination',
+                        textColor: black,
+                        fontWeight: mediumFont,
+                      ),
+                      CustomText(
+                        text: widget.receive['denomination'],
+                        textColor: const Color.fromRGBO(47, 79, 79, 1),
+                        fontWeight: mediumFont,
+                      ),
+                    ],
+                  ),
+                  const Divider(color: Colors.grey),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomText(
+                        text: 'LGA',
+                        textColor: black,
+                        fontWeight: mediumFont,
+                      ),
+                      CustomText(
+                        text: widget.receive['lga'],
+                        textColor: const Color.fromRGBO(47, 79, 79, 1),
+                        fontWeight: mediumFont,
+                      ),
+                    ],
+                  ),
+                  const Divider(color: Colors.grey),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Column(
+                        children: [
+                          InkWell(
+                            onTap: () async {
+                              setState(() {
+                                _isLoading = true;
+                              });
+                              await FirebaseFirestore.instance
+                                  .collection('Church')
+                                  .doc(widget.ref)
+                                  .delete();
+                              setState(() {
+                                _isLoading = false;
+                              });
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      ChurchScreen(category: 'Church'),
+                                ),
+                              );
+                            },
+                            child: _isLoading
+                                ? CircularProgressIndicator()
+                                : Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                    size: 40,
+                                  ),
+                          ),
+                          Text('Delete'),
+                        ],
+                      ),
+                    ],
+                  ),
+                  //   const SizedBox(height: 50),
+                ],
+              ),
             ),
-            //   const SizedBox(height: 50),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 15.0),
               child: Row(
