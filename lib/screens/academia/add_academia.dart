@@ -205,10 +205,8 @@ class _AddAcademiaState extends State<AddAcademia> {
   }
 
   final TextEditingController _nameController = TextEditingController();
-  // final TextEditingController _nameOfRepController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _denominationController = TextEditingController();
   final TextEditingController _membersController = TextEditingController();
   final TextEditingController _institutionController = TextEditingController();
   final TextEditingController _rankController = TextEditingController();
@@ -223,10 +221,8 @@ class _AddAcademiaState extends State<AddAcademia> {
   @override
   void dispose() {
     _nameController.dispose();
-    // _nameOfRepController.dispose();
     _phoneController.dispose();
     _addressController.dispose();
-    _denominationController.dispose();
     _membersController.dispose();
     _institutionController.dispose();
     _rankController.dispose();
@@ -257,7 +253,6 @@ class _AddAcademiaState extends State<AddAcademia> {
       ward: selectedWard.toString(),
       polling_unit: _pollingController.text,
       qualification: _qualificationController.text,
-      //  rep: _nameOfRepController.text,
       nin: _ninController.text,
       bvn: _bvnController.text,
       voter: _voterController.text,
@@ -271,10 +266,8 @@ class _AddAcademiaState extends State<AddAcademia> {
       _voterController.text = '';
       _pollingController.text = '';
       _qualificationController.text = '';
-      //  _nameOfRepController.text = '';
       _phoneController.text = '';
       _addressController.text = '';
-      _denominationController.text = '';
       _membersController.text = '';
       selectedLga = null;
       selectedWard = null;
@@ -383,7 +376,7 @@ class _AddAcademiaState extends State<AddAcademia> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'name',
+                hintText: 'name*',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -398,7 +391,7 @@ class _AddAcademiaState extends State<AddAcademia> {
             const SizedBox(height: 20),
             FormHelper.dropDownWidget(
               context,
-              'select institution',
+              'select institution*',
               this.insId,
               this.institution,
               contentPadding: 16,
@@ -449,7 +442,7 @@ class _AddAcademiaState extends State<AddAcademia> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'phone',
+                hintText: 'phone*',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -545,7 +538,7 @@ class _AddAcademiaState extends State<AddAcademia> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'rank',
+                hintText: 'rank*',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -569,7 +562,7 @@ class _AddAcademiaState extends State<AddAcademia> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'qualification',
+                hintText: 'qualification*',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -584,7 +577,7 @@ class _AddAcademiaState extends State<AddAcademia> {
             const SizedBox(height: 15),
             FormHelper.dropDownWidget(
               context,
-              'select lga',
+              'select lga*',
               this.lgaId,
               this.Lga,
               contentPadding: 16,
@@ -626,7 +619,7 @@ class _AddAcademiaState extends State<AddAcademia> {
             const SizedBox(height: 15),
             FormHelper.dropDownWidget(
               context,
-              'select ward',
+              'select ward*',
               this.wardId,
               this.Ward,
               contentPadding: 16,
@@ -666,7 +659,7 @@ class _AddAcademiaState extends State<AddAcademia> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'address',
+                hintText: 'address*',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -690,7 +683,7 @@ class _AddAcademiaState extends State<AddAcademia> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'polling unit',
+                hintText: 'polling unit*',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -708,7 +701,27 @@ class _AddAcademiaState extends State<AddAcademia> {
                 height: 52,
                 width: 280,
                 child: ElevatedButton(
-                  onPressed: _saveData,
+                  onPressed: () async {
+                    if (_nameController.text.isNotEmpty &&
+                        _phoneController.text.isNotEmpty &&
+                        _addressController.text.isNotEmpty &&
+                        _qualificationController.text.isNotEmpty &&
+                        _pollingController.text.isNotEmpty &&
+                        _rankController.text.isNotEmpty &&
+                        _image != null &&
+                        selectedLga.toString() != null &&
+                        selectedWard.toString() != null &&
+                        selectedIns.toString() != null) {
+                      _saveData();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          backgroundColor: Colors.red,
+                          content: Text('Required fields cannot be empty!'),
+                        ),
+                      );
+                    }
+                  },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
                       const Color.fromRGBO(47, 79, 79, 1),

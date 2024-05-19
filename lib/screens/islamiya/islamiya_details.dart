@@ -267,12 +267,12 @@ class _IslamiyaDetailsState extends State<IslamiyaDetails> {
                               setState(() {
                                 _isLoading = false;
                               });
-                              // Navigator.of(context).pushReplacement(
-                              //   MaterialPageRoute(
-                              //     builder: (context) =>
-                              //         IslamiyaScreen(category: 'Islamiya'),
-                              //   ),
-                              // );
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      IslamiyaScreen(category: 'Islamiya'),
+                                ),
+                              );
                               Navigator.pop(context);
                             },
                             child: _isLoading

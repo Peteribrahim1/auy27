@@ -265,7 +265,7 @@ class _IslamiyaScreenState extends State<IslamiyaScreen> {
                           ),
                         ),
                         child: const Text(
-                          'New Group',
+                          'Add New Record',
                           style: TextStyle(color: Colors.white),
                         ),
                       ),

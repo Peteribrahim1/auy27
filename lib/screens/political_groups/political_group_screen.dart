@@ -251,7 +251,7 @@ class _PoliticalGroupScreenState extends State<PoliticalGroupScreen> {
                           ),
                         ),
                         child: const Text(
-                          'New Group',
+                          'Add New Record',
                           style: TextStyle(color: Colors.white),
                         ),
                       ),

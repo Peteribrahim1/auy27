@@ -89,7 +89,6 @@ class _AddIslamiyaState extends State<AddIslamiya> {
       phone: _phoneController.text,
       address: _addressController.text,
       denomination: _denominationController.text,
-      state: selectedLga.toString(),
       lga: selectedLga.toString(),
       file: _image!,
       nameRep: _nameOfRepController.text,
@@ -216,7 +215,7 @@ class _AddIslamiyaState extends State<AddIslamiya> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'name of Islamiya',
+                hintText: 'name of Islamiya*',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -241,7 +240,7 @@ class _AddIslamiyaState extends State<AddIslamiya> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'name of representative',
+                hintText: 'name of representative*',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -265,7 +264,7 @@ class _AddIslamiyaState extends State<AddIslamiya> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'phone',
+                hintText: 'phone*',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -360,7 +359,7 @@ class _AddIslamiyaState extends State<AddIslamiya> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'address',
+                hintText: 'address*',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -384,7 +383,7 @@ class _AddIslamiyaState extends State<AddIslamiya> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'sect',
+                hintText: 'sect*',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -408,7 +407,7 @@ class _AddIslamiyaState extends State<AddIslamiya> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'number of members',
+                hintText: 'number of members*',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -423,7 +422,7 @@ class _AddIslamiyaState extends State<AddIslamiya> {
             const SizedBox(height: 15),
             FormHelper.dropDownWidget(
               context,
-              'select lga',
+              'select lga*',
               this.lgaId,
               this.Lga,
               contentPadding: 16,
@@ -459,7 +458,25 @@ class _AddIslamiyaState extends State<AddIslamiya> {
                 height: 52,
                 width: 280,
                 child: ElevatedButton(
-                  onPressed: _saveData,
+                  onPressed: () async {
+                    if (_nameController.text.isNotEmpty &&
+                        _phoneController.text.isNotEmpty &&
+                        _addressController.text.isNotEmpty &&
+                        _membersController.text.isNotEmpty &&
+                        _nameOfRepController.text.isNotEmpty &&
+                        _denominationController.text.isNotEmpty &&
+                        _image != null &&
+                        selectedLga.toString() != null) {
+                      _saveData();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          backgroundColor: Colors.red,
+                          content: Text('Required fields cannot be empty!'),
+                        ),
+                      );
+                    }
+                  },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
                       const Color.fromRGBO(47, 79, 79, 1),

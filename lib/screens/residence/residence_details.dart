@@ -131,6 +131,22 @@ class _ResidenceDetailsState extends State<ResidenceDetails> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CustomText(
+                        text: 'Status',
+                        textColor: black,
+                        fontWeight: mediumFont,
+                      ),
+                      CustomText(
+                        text: widget.receive['status'],
+                        textColor: const Color.fromRGBO(47, 79, 79, 1),
+                        fontWeight: mediumFont,
+                      ),
+                    ],
+                  ),
+                  const Divider(color: Colors.grey),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomText(
                         text: 'LGA',
                         textColor: black,
                         fontWeight: mediumFont,
@@ -207,22 +223,22 @@ class _ResidenceDetailsState extends State<ResidenceDetails> {
                     ],
                   ),
                   const Divider(color: Colors.grey),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CustomText(
-                        text: 'Polling Unit',
-                        textColor: black,
-                        fontWeight: mediumFont,
-                      ),
-                      CustomText(
-                        text: widget.receive['polling'],
-                        textColor: const Color.fromRGBO(47, 79, 79, 1),
-                        fontWeight: mediumFont,
-                      ),
-                    ],
-                  ),
-                  const Divider(color: Colors.grey),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     CustomText(
+                  //       text: 'Polling Unit',
+                  //       textColor: black,
+                  //       fontWeight: mediumFont,
+                  //     ),
+                  //     CustomText(
+                  //       text: widget.receive['polling'],
+                  //       textColor: const Color.fromRGBO(47, 79, 79, 1),
+                  //       fontWeight: mediumFont,
+                  //     ),
+                  //   ],
+                  // ),
+                  // const Divider(color: Colors.grey),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [

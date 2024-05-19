@@ -41,7 +41,7 @@ class _AcademiaScreenState extends State<AcademiaScreen> {
       _isLoading = true;
     });
     final snap = await FirebaseFirestore.instance.collection('Academia').get();
-    //   print(snap.docs[0]['name']);
+    // print('count this ${snap.docs[1]['lga']}');
 
     final snap2 = snap.docs.toList();
     // .where((element) =>
@@ -216,7 +216,7 @@ class _AcademiaScreenState extends State<AcademiaScreen> {
                                                         data['qualification'],
                                                       ),
                                                       trailing: Text(
-                                                        'Institution: ${data['institution']}',
+                                                        'Rank: ${data['rank']}',
                                                       ),
                                                     ),
                                                     const Divider(
@@ -252,7 +252,7 @@ class _AcademiaScreenState extends State<AcademiaScreen> {
                           ),
                         ),
                         child: const Text(
-                          'New Group',
+                          'Add New Record',
                           style: TextStyle(color: Colors.white),
                         ),
                       ),

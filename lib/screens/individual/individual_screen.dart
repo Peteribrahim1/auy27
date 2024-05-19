@@ -1,35 +1,37 @@
-import 'package:auy27/screens/church/add_church.dart';
+import 'package:auy27/screens/individual/add_individual.dart';
+import 'package:auy27/screens/individual/individual_details.dart';
 import 'package:auy27/screens/tabs_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-
 import '../../resources/color_constants.dart';
 import '../../resources/custom_text.dart';
 import '../../resources/font_constants.dart';
-import '../categoy_screens.dart';
-import 'church_details.dart';
 
-class ChurchScreen extends StatefulWidget {
-  const ChurchScreen({super.key, required this.category});
+class IndividualScreen extends StatefulWidget {
+  const IndividualScreen({super.key, required this.category});
   final String category;
 
   @override
-  State<ChurchScreen> createState() => _ChurchScreenState();
+  State<IndividualScreen> createState() => _IndividualScreenState();
 }
 
-class _ChurchScreenState extends State<ChurchScreen> {
+class _IndividualScreenState extends State<IndividualScreen> {
   final TextEditingController searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
 
   bool _isLoading = false;
   List<QueryDocumentSnapshot<Map<String, dynamic>>> _myList = [];
   List<QueryDocumentSnapshot<Map<String, dynamic>>> _groupDisplay = [];
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    //   print('my categoriii ${widget.category}');
     _fetchData();
   }
 
@@ -37,13 +39,10 @@ class _ChurchScreenState extends State<ChurchScreen> {
     setState(() {
       _isLoading = true;
     });
-    final snap = await FirebaseFirestore.instance.collection('Church').get();
-    // print(snap.docs[0]['name']);
+    final snap =
+        await FirebaseFirestore.instance.collection('Individual').get();
 
     final snap2 = snap.docs.toList();
-    // .where((element) =>
-    //     element["uid"] == FirebaseAuth.instance.currentUser?.uid)
-    // .toList();
     _myList = snap2.reversed.toList();
     _groupDisplay.addAll(_myList);
     setState(() {
@@ -86,7 +85,6 @@ class _ChurchScreenState extends State<ChurchScreen> {
                         children: [
                           InkWell(
                               onTap: () {
-                                // Navigator.pop(context);
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) => TabsScreen(number: 1),
@@ -95,13 +93,10 @@ class _ChurchScreenState extends State<ChurchScreen> {
                               },
                               child: Icon(
                                 Icons.arrow_back,
-                              )
-                              // SvgPicture.asset(
-                              //     'assets/images/arrowHeadBack.svg'),
-                              ),
+                              )),
                           const Spacer(),
                           const CustomText(
-                            text: 'Church',
+                            text: 'Individual',
                             textColor: black,
                             fontSize: 16,
                             fontWeight: mediumFont,
@@ -171,12 +166,12 @@ class _ChurchScreenState extends State<ChurchScreen> {
                                       return Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: InkWell(
-                                          onTap: () {
-                                            Navigator.push(
+                                          onTap: () async {
+                                            await Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      ChurchDetails(
+                                                      IndividualDetails(
                                                         ref: data.reference.id,
                                                         receive: data,
                                                         id: data['id'],
@@ -202,7 +197,7 @@ class _ChurchScreenState extends State<ChurchScreen> {
                                                     data['address'],
                                                   ),
                                                   trailing: Text(
-                                                    'members ${data['members']}',
+                                                    'phone ${data['phone']}',
                                                   ),
                                                 ),
                                                 const Divider(
@@ -223,7 +218,7 @@ class _ChurchScreenState extends State<ChurchScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const AddChurch()),
+                                builder: (context) => const AddIndividual()),
                           );
                         },
                         style: ButtonStyle(

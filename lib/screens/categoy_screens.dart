@@ -1,4 +1,5 @@
 import 'package:auy27/screens/church/church_screen.dart';
+import 'package:auy27/screens/individual/individual_screen.dart';
 import 'package:auy27/screens/islamiya/islamiya_screen.dart';
 import 'package:auy27/screens/political_groups/political_group_screen.dart';
 import 'package:auy27/screens/residence/residence_screen.dart';
@@ -200,6 +201,34 @@ class CategoryScreen extends StatelessWidget {
                     child: const ListTile(
                       title: CustomText(
                         text: 'Residence',
+                        textColor: white,
+                        fontSize: 16,
+                        fontWeight: mediumFont,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const IndividualScreen(
+                              category: 'Individual',
+                            )),
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: const Color.fromRGBO(47, 79, 79, 1),
+                    ),
+                    child: const ListTile(
+                      title: CustomText(
+                        text: 'Individual',
                         textColor: white,
                         fontSize: 16,
                         fontWeight: mediumFont,

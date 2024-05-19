@@ -41,7 +41,6 @@ class _ResidenceScreenState extends State<ResidenceScreen> {
     });
     final snap =
         await FirebaseFirestore.instance.collection(widget.category).get();
-    print(snap.docs[0]['name']);
 
     final snap2 = snap.docs.toList();
     // .where((element) =>
@@ -226,7 +225,7 @@ class _ResidenceScreenState extends State<ResidenceScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const AddResidence()),
+                                builder: (context) => AddResidence()),
                           );
                         },
                         style: ButtonStyle(
@@ -241,7 +240,7 @@ class _ResidenceScreenState extends State<ResidenceScreen> {
                           ),
                         ),
                         child: const Text(
-                          'New Group',
+                          'Add New Record',
                           style: TextStyle(color: Colors.white),
                         ),
                       ),

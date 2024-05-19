@@ -188,6 +188,7 @@ class _AddPoliticalGroupState extends State<AddPoliticalGroup> {
   final TextEditingController _ninController = TextEditingController();
   final TextEditingController _bvnController = TextEditingController();
   final TextEditingController _voterController = TextEditingController();
+  final TextEditingController _statusController = TextEditingController();
 
   @override
   void dispose() {
@@ -200,6 +201,7 @@ class _AddPoliticalGroupState extends State<AddPoliticalGroup> {
     _ninController.dispose();
     _bvnController.dispose();
     _voterController.dispose();
+    _statusController.dispose();
     super.dispose();
   }
 
@@ -223,6 +225,7 @@ class _AddPoliticalGroupState extends State<AddPoliticalGroup> {
       nin: _ninController.text,
       bvn: _bvnController.text,
       voter: _voterController.text,
+      status: _statusController.text,
     );
 
     setState(() {
@@ -236,6 +239,7 @@ class _AddPoliticalGroupState extends State<AddPoliticalGroup> {
       _voterController.text = '';
       _partyController.text = '';
       _pollingController.text = '';
+      _statusController.text = '';
       selectedLga = null;
       selectedLga = null;
     });
@@ -342,7 +346,7 @@ class _AddPoliticalGroupState extends State<AddPoliticalGroup> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'name',
+                hintText: 'name*',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -366,7 +370,7 @@ class _AddPoliticalGroupState extends State<AddPoliticalGroup> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'phone',
+                hintText: 'phone*',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -452,6 +456,33 @@ class _AddPoliticalGroupState extends State<AddPoliticalGroup> {
             ),
             const SizedBox(height: 15),
             TextField(
+              //maxLength: 19,
+
+              // counterText: "",
+              controller: _statusController,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                prefixIcon: const Icon(
+                  Icons.drive_file_rename_outline,
+                  color: Color.fromRGBO(47, 79, 79, 1),
+                ),
+                contentPadding: const EdgeInsets.all(18),
+                hintText: 'status*',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                      color: Color.fromRGBO(47, 79, 79, 1), width: 1),
+                ),
+                hintStyle: Styles.hintTextStyle,
+              ),
+            ),
+            const SizedBox(height: 15),
+            TextField(
               controller: _addressController,
               decoration: InputDecoration(
                 filled: true,
@@ -461,7 +492,7 @@ class _AddPoliticalGroupState extends State<AddPoliticalGroup> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'address',
+                hintText: 'address*',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -485,7 +516,7 @@ class _AddPoliticalGroupState extends State<AddPoliticalGroup> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'number of members',
+                hintText: 'number of members*',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -541,7 +572,7 @@ class _AddPoliticalGroupState extends State<AddPoliticalGroup> {
             // ),
             FormHelper.dropDownWidget(
               context,
-              'select lga',
+              'select lga*',
               this.lgaId,
               this.Lga,
               contentPadding: 16,
@@ -583,7 +614,7 @@ class _AddPoliticalGroupState extends State<AddPoliticalGroup> {
             const SizedBox(height: 15),
             FormHelper.dropDownWidget(
               context,
-              'select ward',
+              'select ward*',
               this.wardId,
               this.Ward,
               contentPadding: 16,
@@ -624,7 +655,7 @@ class _AddPoliticalGroupState extends State<AddPoliticalGroup> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'polling unit',
+                hintText: 'polling unit*',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -649,7 +680,7 @@ class _AddPoliticalGroupState extends State<AddPoliticalGroup> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'political party',
+                hintText: 'political party*',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -667,7 +698,27 @@ class _AddPoliticalGroupState extends State<AddPoliticalGroup> {
                 height: 52,
                 width: 280,
                 child: ElevatedButton(
-                  onPressed: _saveData,
+                  onPressed: () async {
+                    if (_nameController.text.isNotEmpty &&
+                        _phoneController.text.isNotEmpty &&
+                        _addressController.text.isNotEmpty &&
+                        _membersController.text.isNotEmpty &&
+                        _pollingController.text.isNotEmpty &&
+                        _partyController.text.isNotEmpty &&
+                        _statusController.text.isNotEmpty &&
+                        _image != null &&
+                        selectedLga.toString() != null &&
+                        selectedWard.toString() != null) {
+                      _saveData();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          backgroundColor: Colors.red,
+                          content: Text('Required fields cannot be empty!'),
+                        ),
+                      );
+                    }
+                  },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
                       const Color.fromRGBO(47, 79, 79, 1),

@@ -244,7 +244,7 @@ class _MasjidScreenState extends State<MasjidScreen> {
                           ),
                         ),
                         child: const Text(
-                          'New Group',
+                          'Add New Record',
                           style: TextStyle(color: Colors.white),
                         ),
                       ),

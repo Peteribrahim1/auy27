@@ -165,21 +165,22 @@ class _GeneralMapState extends State<GeneralMap> {
         ),
         centerTitle: true,
         backgroundColor: const Color.fromRGBO(47, 79, 79, 1),
-        leading: InkWell(
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => GeneralList(),
-                ),
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'View List',
-                style: TextStyle(color: Colors.white),
-              ),
-            )),
+        // leading: InkWell(
+        //   onTap: () {
+        //     Navigator.of(context).push(
+        //       MaterialPageRoute(
+        //         builder: (context) => GeneralList(),
+        //       ),
+        //     );
+        //   },
+        //   child: Padding(
+        //     padding: const EdgeInsets.all(8.0),
+        //     child: Text(
+        //       'View List',
+        //       style: TextStyle(color: Colors.white),
+        //     ),
+        //   ),
+        // ),
       ),
       body: _currentP == null
           ? const Center(

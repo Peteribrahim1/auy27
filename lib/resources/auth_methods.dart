@@ -81,9 +81,10 @@ class AuthMethods {
       required String ward,
       required String polling_unit,
       required String party,
-      required String nin,
-      required String bvn,
-      required String voter,
+      required String status,
+      String? nin,
+      String? bvn,
+      String? voter,
       required Uint8List file}) async {
     String res = 'Please enter all the fields';
     String? uid = FirebaseAuth.instance.currentUser?.uid;
@@ -93,10 +94,11 @@ class AuthMethods {
           address.isNotEmpty &&
           members.isNotEmpty &&
           polling_unit.isNotEmpty &&
+          status.isNotEmpty &&
           party.isNotEmpty &&
-          nin.isNotEmpty &&
-          bvn.isNotEmpty &&
-          voter.isNotEmpty &&
+          // nin.isNotEmpty &&
+          // bvn.isNotEmpty &&
+          // voter.isNotEmpty &&
           file != null &&
           lga != null &&
           ward != null) {
@@ -112,6 +114,7 @@ class AuthMethods {
           'ward': ward,
           'polling_unit': polling_unit,
           'party': party,
+          'status': status,
           'nin': nin,
           'bvn': bvn,
           'voter': voter,
@@ -120,6 +123,8 @@ class AuthMethods {
           'photoUrl': photoUrl,
         });
         res = 'success';
+      } else {
+        res = 'Please enter all the fields';
       }
     } on FirebaseAuthException catch (err) {
       print(err.code);
@@ -135,11 +140,13 @@ class AuthMethods {
       required String phone,
       required String address,
       required String lga,
-      required String nin,
-      required String bvn,
-      required String voter,
+      String? nin,
+      String? bvn,
+      String? voter,
       required String party,
-      required String polling,
+      //   required String polling,
+      required String status,
+      required String polls,
       required Uint8List file}) async {
     // print(file == null);
     String res = 'Please enter all the fields';
@@ -148,11 +155,10 @@ class AuthMethods {
       if (name.isNotEmpty &&
           phone.isNotEmpty &&
           address.isNotEmpty &&
-          nin.isNotEmpty &&
-          bvn.isNotEmpty &&
-          voter.isNotEmpty &&
           party.isNotEmpty &&
-          polling.isNotEmpty &&
+          //  polling.isNotEmpty &&
+          status.isNotEmpty &&
+          polls.isNotEmpty &&
           file != null &&
           lga != null) {
         String photoUrl = await StorageMethods()
@@ -167,7 +173,9 @@ class AuthMethods {
           'bvn': bvn,
           'voter': voter,
           'party': party,
-          'polling': polling,
+          //  'polling': polling,
+          'status': status,
+          'polls': polls,
           'lga': lga,
           'latitude': '',
           'id': DateTime.now().microsecondsSinceEpoch.toString(),
@@ -193,11 +201,10 @@ class AuthMethods {
     required String address,
     required String members,
     required String denomination,
-    required String state,
     required String lga,
-    required String nin,
-    required String bvn,
-    required String voter,
+    String? nin,
+    String? bvn,
+    String? voter,
     required Uint8List file,
     File? file2,
   }) async {
@@ -210,11 +217,7 @@ class AuthMethods {
           address.isNotEmpty &&
           members.isNotEmpty &&
           denomination.isNotEmpty &&
-          nin.isNotEmpty &&
-          bvn.isNotEmpty &&
-          voter.isNotEmpty &&
           file != null &&
-          state != null &&
           lga != null) {
         String photoUrl = await StorageMethods()
             .uploadImageToStorage('islamiya_images', file, false);
@@ -229,8 +232,58 @@ class AuthMethods {
           'nin': nin,
           'bvn': bvn,
           'voter': voter,
-          'state': state,
           'lga': lga,
+          'id': DateTime.now().microsecondsSinceEpoch.toString(),
+          'uid': uid,
+          'photoUrl': photoUrl,
+        });
+        res = 'success';
+      }
+    } on FirebaseAuthException catch (err) {
+      print(err.code);
+    } catch (err) {
+      res = err.toString();
+      print(err);
+    }
+    return res;
+  }
+
+  //save individual
+  Future<String> saveIndividual({
+    required String name,
+    required String phone,
+    required String address,
+    required String status,
+    required String lga,
+    required String ward,
+    String? nin,
+    String? bvn,
+    String? voter,
+    required Uint8List file,
+  }) async {
+    String res = 'Please enter all the fields';
+    String? uid = FirebaseAuth.instance.currentUser?.uid;
+    try {
+      if (name.isNotEmpty &&
+          phone.isNotEmpty &&
+          address.isNotEmpty &&
+          status.isNotEmpty &&
+          file != null &&
+          lga != null &&
+          ward != null) {
+        String photoUrl = await StorageMethods()
+            .uploadImageToStorage('individual_images', file, false);
+        //add to database
+        await _firestore.collection('Individual').add({
+          'name': name,
+          'phone': phone,
+          'address': address,
+          'status': status,
+          'nin': nin,
+          'bvn': bvn,
+          'voter': voter,
+          'lga': lga,
+          'ward': ward,
           'id': DateTime.now().microsecondsSinceEpoch.toString(),
           'uid': uid,
           'photoUrl': photoUrl,
@@ -254,11 +307,10 @@ class AuthMethods {
       required String address,
       required String members,
       required String denomination,
-      required String state,
       required String lga,
-      required String nin,
-      required String bvn,
-      required String voter,
+      String? nin,
+      String? bvn,
+      String? voter,
       required Uint8List file}) async {
     String res = 'Please enter all the fields';
     String? uid = FirebaseAuth.instance.currentUser?.uid;
@@ -269,11 +321,7 @@ class AuthMethods {
           address.isNotEmpty &&
           members.isNotEmpty &&
           denomination.isNotEmpty &&
-          nin.isNotEmpty &&
-          bvn.isNotEmpty &&
-          voter.isNotEmpty &&
           file != null &&
-          state != null &&
           lga != null) {
         String photoUrl = await StorageMethods()
             .uploadImageToStorage('Masjid_images', file, false);
@@ -288,7 +336,6 @@ class AuthMethods {
           'nin': nin,
           'bvn': bvn,
           'voter': voter,
-          'state': state,
           'lga': lga,
           'id': DateTime.now().microsecondsSinceEpoch.toString(),
           'uid': uid,
@@ -313,11 +360,10 @@ class AuthMethods {
       required String address,
       required String members,
       required String denomination,
-      required String state,
       required String lga,
-      required String nin,
-      required String bvn,
-      required String voter,
+      String? nin,
+      String? bvn,
+      String? voter,
       required Uint8List file}) async {
     String res = 'Please enter all the fields';
     String? uid = FirebaseAuth.instance.currentUser?.uid;
@@ -328,11 +374,7 @@ class AuthMethods {
           address.isNotEmpty &&
           members.isNotEmpty &&
           denomination.isNotEmpty &&
-          nin.isNotEmpty &&
-          bvn.isNotEmpty &&
-          voter.isNotEmpty &&
           file != null &&
-          state != null &&
           lga != null) {
         String photoUrl = await StorageMethods()
             .uploadImageToStorage('Church_images', file, false);
@@ -344,7 +386,6 @@ class AuthMethods {
           'address': address,
           'members': members,
           'denomination': denomination,
-          'state': state,
           'lga': lga,
           'nin': nin,
           'bvn': bvn,
@@ -367,10 +408,9 @@ class AuthMethods {
   //save academia
   Future<String> saveAcademia(
       {required String name,
-      // required String rep,
-      required String nin,
-      required String bvn,
-      required String voter,
+      String? nin,
+      String? bvn,
+      String? voter,
       required String institution,
       required String phone,
       required String address,
@@ -384,11 +424,6 @@ class AuthMethods {
     String? uid = FirebaseAuth.instance.currentUser?.uid;
     try {
       if (name.isNotEmpty &&
-          //    rep.isNotEmpty &&
-          nin.isNotEmpty &&
-          bvn.isNotEmpty &&
-          voter.isNotEmpty &&
-          // institution.isNotEmpty &&
           phone.isNotEmpty &&
           address.isNotEmpty &&
           rank.isNotEmpty &&
@@ -406,7 +441,6 @@ class AuthMethods {
           'nin': nin,
           'bvn': bvn,
           'voter': voter,
-          //  'rep': rep,
           'institution': institution,
           'phone': phone,
           'address': address,

@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:auy27/screens/polling_modal.dart';
 import 'package:auy27/screens/residence/residence_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,8 +11,8 @@ import '../../resources/styles.dart';
 import '../../utils/utils.dart';
 
 class AddResidence extends StatefulWidget {
-  const AddResidence({super.key});
-
+  AddResidence({super.key, this.poll});
+  String? poll;
   @override
   State<AddResidence> createState() => _AddResidenceState();
 }
@@ -41,6 +42,7 @@ class _AddResidenceState extends State<AddResidence> {
   @override
   void initState() {
     super.initState();
+    //  print('testing pollsss${widget.poll}');
     this.Lga.add({"id": 1, "name": "Akko"});
     this.Lga.add({"id": 2, "name": "Balanga"});
     this.Lga.add({"id": 3, "name": "Billiri"});
@@ -61,7 +63,8 @@ class _AddResidenceState extends State<AddResidence> {
   final TextEditingController _bvnController = TextEditingController();
   final TextEditingController _voterController = TextEditingController();
   final TextEditingController _partyController = TextEditingController();
-  final TextEditingController _pollingController = TextEditingController();
+  // final TextEditingController _pollingController = TextEditingController();
+  final TextEditingController _statusController = TextEditingController();
 
   @override
   void dispose() {
@@ -72,7 +75,8 @@ class _AddResidenceState extends State<AddResidence> {
     _bvnController.dispose();
     _voterController.dispose();
     _partyController.dispose();
-    _pollingController.dispose();
+    //  _pollingController.dispose();
+    _statusController.dispose();
     super.dispose();
   }
 
@@ -93,7 +97,9 @@ class _AddResidenceState extends State<AddResidence> {
       bvn: _bvnController.text,
       voter: _voterController.text,
       party: _partyController.text,
-      polling: _pollingController.text,
+      //  polling: _pollingController.text,
+      status: _statusController.text,
+      polls: widget.poll.toString(),
     );
 
     setState(() {
@@ -105,7 +111,8 @@ class _AddResidenceState extends State<AddResidence> {
       _bvnController.text = '';
       _voterController.text = '';
       _partyController.text = '';
-      _pollingController.text = '';
+      //  _pollingController.text = '';
+      _statusController.text = '';
       selectedLga = null;
     });
 
@@ -211,7 +218,7 @@ class _AddResidenceState extends State<AddResidence> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'name',
+                hintText: 'name*',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -235,7 +242,7 @@ class _AddResidenceState extends State<AddResidence> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'phone',
+                hintText: 'phone*',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -339,7 +346,7 @@ class _AddResidenceState extends State<AddResidence> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'party',
+                hintText: 'party*',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -351,12 +358,39 @@ class _AddResidenceState extends State<AddResidence> {
                 hintStyle: Styles.hintTextStyle,
               ),
             ),
+            // const SizedBox(height: 15),
+            // TextField(
+            //   //maxLength: 19,
+            //
+            //   // counterText: "",
+            //   controller: _pollingController,
+            //   keyboardType: TextInputType.text,
+            //   decoration: InputDecoration(
+            //     filled: true,
+            //     fillColor: Colors.white,
+            //     prefixIcon: const Icon(
+            //       Icons.drive_file_rename_outline,
+            //       color: Color.fromRGBO(47, 79, 79, 1),
+            //     ),
+            //     contentPadding: const EdgeInsets.all(18),
+            //     hintText: 'polling unit*',
+            //     border: OutlineInputBorder(
+            //       borderRadius: BorderRadius.circular(15),
+            //     ),
+            //     enabledBorder: OutlineInputBorder(
+            //       borderRadius: BorderRadius.circular(15),
+            //       borderSide: const BorderSide(
+            //           color: Color.fromRGBO(47, 79, 79, 1), width: 1),
+            //     ),
+            //     hintStyle: Styles.hintTextStyle,
+            //   ),
+            // ),
             const SizedBox(height: 15),
             TextField(
               //maxLength: 19,
 
               // counterText: "",
-              controller: _pollingController,
+              controller: _statusController,
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
                 filled: true,
@@ -366,7 +400,7 @@ class _AddResidenceState extends State<AddResidence> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'polling unit',
+                hintText: 'status*',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -379,7 +413,6 @@ class _AddResidenceState extends State<AddResidence> {
               ),
             ),
             const SizedBox(height: 15),
-
             TextField(
               controller: _addressController,
               decoration: InputDecoration(
@@ -390,7 +423,7 @@ class _AddResidenceState extends State<AddResidence> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'address',
+                hintText: 'address*',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -405,7 +438,7 @@ class _AddResidenceState extends State<AddResidence> {
             const SizedBox(height: 15),
             FormHelper.dropDownWidget(
               context,
-              'select lga',
+              'select lga*',
               this.LgaId,
               this.Lga,
               contentPadding: 16,
@@ -444,45 +477,59 @@ class _AddResidenceState extends State<AddResidence> {
               borderColor: Color.fromRGBO(20, 10, 38, 1),
               borderRadius: 15,
             ),
-            // const SizedBox(height: 15),
-            // FormHelper.dropDownWidget(
-            //   context,
-            //   'select lga',
-            //   this.lgaId,
-            //   this.LGA,
-            //   contentPadding: 16,
-            //   paddingLeft: 0,
-            //   paddingRight: 0,
-            //   (onChangedVal) {
-            //     var id = this.lgaId = onChangedVal;
-            //
-            //     print('selected department $onChangedVal');
-            //     setState(() {});
-            //
-            //     for (var element in this.LGA) {
-            //       if (element['ID'] == int.parse(id)) {
-            //         this.selectedLga = element['Name'];
-            //       }
-            //     }
-            //     setState(() {
-            //       print(this.selectedLga);
-            //     });
-            //   },
-            //   (onValidate) {
-            //     return null;
-            //   },
-            //   borderColor: Color.fromRGBO(20, 10, 38, 1),
-            //   borderRadius: 15,
-            //   optionValue: 'ID',
-            //   optionLabel: 'Name',
-            // ),
+            InkWell(
+              onTap: () async {
+                widget.poll = await showModalBottomSheet(
+                  context: context,
+                  builder: (context) => const PollingModal(),
+                );
+                setState(() {});
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(top: 15),
+                child: Container(
+                  width: double.infinity,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.all(Radius.circular(
+                            15.0) //                 <--- border radius here
+                        ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Text(widget.poll == null
+                        ? 'polling unit'
+                        : widget.poll.toString()),
+                  ),
+                ),
+              ),
+            ),
             const SizedBox(height: 35),
             Center(
               child: SizedBox(
                 height: 52,
                 width: 280,
                 child: ElevatedButton(
-                  onPressed: _saveData,
+                  onPressed: () async {
+                    if (_nameController.text.isNotEmpty &&
+                        _phoneController.text.isNotEmpty &&
+                        _addressController.text.isNotEmpty &&
+                        //  _pollingController.text.isNotEmpty &&
+                        _partyController.text.isNotEmpty &&
+                        _statusController.text.isNotEmpty &&
+                        _image != null &&
+                        selectedLga.toString() != null) {
+                      _saveData();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          backgroundColor: Colors.red,
+                          content: Text('Required fields cannot be empty!'),
+                        ),
+                      );
+                    }
+                  },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
                       const Color.fromRGBO(47, 79, 79, 1),
