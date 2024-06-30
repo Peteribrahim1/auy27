@@ -23,7 +23,6 @@ class CategoryScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             children: [
-              //   const SizedBox(height: 50),
               Padding(
                 padding: const EdgeInsets.only(
                     top: 20, bottom: 30, left: 10, right: 10),

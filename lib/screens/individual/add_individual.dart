@@ -7,9 +7,11 @@ import 'package:snippet_coder_utils/FormHelper.dart';
 import '../../resources/auth_methods.dart';
 import '../../resources/styles.dart';
 import '../../utils/utils.dart';
+import '../polling_modal.dart';
 
 class AddIndividual extends StatefulWidget {
-  const AddIndividual({super.key});
+  AddIndividual({super.key});
+  String? poll;
 
   @override
   State<AddIndividual> createState() => _AddIndividualState();
@@ -214,6 +216,7 @@ class _AddIndividualState extends State<AddIndividual> {
       bvn: _bvnController.text,
       voter: _voterController.text,
       status: _statusController.text,
+      polls: widget.poll.toString(),
     );
 
     setState(() {
@@ -561,6 +564,34 @@ class _AddIndividualState extends State<AddIndividual> {
               borderRadius: 15,
               optionValue: 'ID',
               optionLabel: 'Name',
+            ),
+            InkWell(
+              onTap: () async {
+                widget.poll = await showModalBottomSheet(
+                  context: context,
+                  builder: (context) => const PollingModal(),
+                );
+                setState(() {});
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(top: 15),
+                child: Container(
+                  width: double.infinity,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.all(Radius.circular(
+                            15.0) //                 <--- border radius here
+                        ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Text(widget.poll == null
+                        ? 'polling unit'
+                        : widget.poll.toString()),
+                  ),
+                ),
+              ),
             ),
             const SizedBox(height: 35),
             Center(

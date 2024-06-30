@@ -79,9 +79,10 @@ class AuthMethods {
       required String members,
       required String lga,
       required String ward,
-      required String polling_unit,
+      //  required String polling_unit,
       required String party,
       required String status,
+      required String polls,
       String? nin,
       String? bvn,
       String? voter,
@@ -93,8 +94,9 @@ class AuthMethods {
           phone.isNotEmpty &&
           address.isNotEmpty &&
           members.isNotEmpty &&
-          polling_unit.isNotEmpty &&
+          //  polling_unit.isNotEmpty &&
           status.isNotEmpty &&
+          polls.isNotEmpty &&
           party.isNotEmpty &&
           // nin.isNotEmpty &&
           // bvn.isNotEmpty &&
@@ -112,9 +114,10 @@ class AuthMethods {
           'members': members,
           'lga': lga,
           'ward': ward,
-          'polling_unit': polling_unit,
+          //  'polling_unit': polling_unit,
           'party': party,
           'status': status,
+          'polls': polls,
           'nin': nin,
           'bvn': bvn,
           'voter': voter,
@@ -202,6 +205,7 @@ class AuthMethods {
     required String members,
     required String denomination,
     required String lga,
+    required String polls,
     String? nin,
     String? bvn,
     String? voter,
@@ -217,6 +221,7 @@ class AuthMethods {
           address.isNotEmpty &&
           members.isNotEmpty &&
           denomination.isNotEmpty &&
+          polls.isNotEmpty &&
           file != null &&
           lga != null) {
         String photoUrl = await StorageMethods()
@@ -229,6 +234,7 @@ class AuthMethods {
           'address': address,
           'members': members,
           'denomination': denomination,
+          'polls': polls,
           'nin': nin,
           'bvn': bvn,
           'voter': voter,
@@ -256,6 +262,7 @@ class AuthMethods {
     required String status,
     required String lga,
     required String ward,
+    required String polls,
     String? nin,
     String? bvn,
     String? voter,
@@ -268,6 +275,7 @@ class AuthMethods {
           phone.isNotEmpty &&
           address.isNotEmpty &&
           status.isNotEmpty &&
+          polls.isNotEmpty &&
           file != null &&
           lga != null &&
           ward != null) {
@@ -279,6 +287,7 @@ class AuthMethods {
           'phone': phone,
           'address': address,
           'status': status,
+          'polls': polls,
           'nin': nin,
           'bvn': bvn,
           'voter': voter,
@@ -308,6 +317,7 @@ class AuthMethods {
       required String members,
       required String denomination,
       required String lga,
+      required String polls,
       String? nin,
       String? bvn,
       String? voter,
@@ -321,6 +331,7 @@ class AuthMethods {
           address.isNotEmpty &&
           members.isNotEmpty &&
           denomination.isNotEmpty &&
+          polls.isNotEmpty &&
           file != null &&
           lga != null) {
         String photoUrl = await StorageMethods()
@@ -333,6 +344,7 @@ class AuthMethods {
           'address': address,
           'members': members,
           'denomination': denomination,
+          'polls': polls,
           'nin': nin,
           'bvn': bvn,
           'voter': voter,
@@ -361,6 +373,7 @@ class AuthMethods {
       required String members,
       required String denomination,
       required String lga,
+      required String polls,
       String? nin,
       String? bvn,
       String? voter,
@@ -374,6 +387,7 @@ class AuthMethods {
           address.isNotEmpty &&
           members.isNotEmpty &&
           denomination.isNotEmpty &&
+          polls.isNotEmpty &&
           file != null &&
           lga != null) {
         String photoUrl = await StorageMethods()
@@ -386,6 +400,7 @@ class AuthMethods {
           'address': address,
           'members': members,
           'denomination': denomination,
+          'polls': polls,
           'lga': lga,
           'nin': nin,
           'bvn': bvn,
@@ -416,7 +431,8 @@ class AuthMethods {
       required String address,
       required String rank,
       required String ward,
-      required String polling_unit,
+      required String polls,
+      // required String polling_unit,
       required String qualification,
       required String lga,
       required Uint8List file}) async {
@@ -427,7 +443,8 @@ class AuthMethods {
           phone.isNotEmpty &&
           address.isNotEmpty &&
           rank.isNotEmpty &&
-          polling_unit.isNotEmpty &&
+          polls.isNotEmpty &&
+          //  polling_unit.isNotEmpty &&
           qualification.isNotEmpty &&
           file != null &&
           institution != null &&
@@ -446,7 +463,8 @@ class AuthMethods {
           'address': address,
           'rank': rank,
           'ward': ward,
-          'polling_unit': polling_unit,
+          'polls': polls,
+          //  'polling_unit': polling_unit,
           'qualification': qualification,
           'lga': lga,
           'id': DateTime.now().microsecondsSinceEpoch.toString(),

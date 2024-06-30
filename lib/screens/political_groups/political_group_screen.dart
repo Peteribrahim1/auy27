@@ -235,8 +235,7 @@ class _PoliticalGroupScreenState extends State<PoliticalGroupScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    const AddPoliticalGroup()),
+                                builder: (context) => AddPoliticalGroup()),
                           );
                         },
                         style: ButtonStyle(

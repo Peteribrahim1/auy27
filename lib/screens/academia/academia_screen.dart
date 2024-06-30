@@ -41,7 +41,6 @@ class _AcademiaScreenState extends State<AcademiaScreen> {
       _isLoading = true;
     });
     final snap = await FirebaseFirestore.instance.collection('Academia').get();
-    // print('count this ${snap.docs[1]['lga']}');
 
     final snap2 = snap.docs.toList();
     // .where((element) =>
@@ -237,7 +236,7 @@ class _AcademiaScreenState extends State<AcademiaScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const AddAcademia()),
+                                builder: (context) => AddAcademia()),
                           );
                         },
                         style: ButtonStyle(

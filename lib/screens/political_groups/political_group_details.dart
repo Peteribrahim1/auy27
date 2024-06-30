@@ -253,22 +253,22 @@ class _PoliticalGroupDetailsState extends State<PoliticalGroupDetails> {
                     ],
                   ),
                   const Divider(color: Colors.grey),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CustomText(
-                        text: 'Polling Unit',
-                        textColor: black,
-                        fontWeight: mediumFont,
-                      ),
-                      CustomText(
-                        text: widget.receive['polling_unit'],
-                        textColor: const Color.fromRGBO(47, 79, 79, 1),
-                        fontWeight: mediumFont,
-                      ),
-                    ],
-                  ),
-                  const Divider(color: Colors.grey),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     CustomText(
+                  //       text: 'Polling Unit',
+                  //       textColor: black,
+                  //       fontWeight: mediumFont,
+                  //     ),
+                  //     CustomText(
+                  //       text: widget.receive['polling_unit'],
+                  //       textColor: const Color.fromRGBO(47, 79, 79, 1),
+                  //       fontWeight: mediumFont,
+                  //     ),
+                  //   ],
+                  // ),
+                  // const Divider(color: Colors.grey),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [

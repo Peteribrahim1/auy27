@@ -229,7 +229,7 @@ class _MasjidScreenState extends State<MasjidScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const AddMasjid()),
+                                builder: (context) => AddMasjid()),
                           );
                         },
                         style: ButtonStyle(

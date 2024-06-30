@@ -7,10 +7,12 @@ import 'package:snippet_coder_utils/FormHelper.dart';
 import '../../resources/auth_methods.dart';
 import '../../resources/styles.dart';
 import '../../utils/utils.dart';
+import '../polling_modal.dart';
 import 'academia_screen.dart';
 
 class AddAcademia extends StatefulWidget {
-  const AddAcademia({super.key});
+  AddAcademia({super.key});
+  String? poll;
 
   @override
   State<AddAcademia> createState() => _AddAcademiaState();
@@ -211,7 +213,7 @@ class _AddAcademiaState extends State<AddAcademia> {
   final TextEditingController _institutionController = TextEditingController();
   final TextEditingController _rankController = TextEditingController();
   final TextEditingController _wardController = TextEditingController();
-  final TextEditingController _pollingController = TextEditingController();
+//  final TextEditingController _pollingController = TextEditingController();
   final TextEditingController _ninController = TextEditingController();
   final TextEditingController _bvnController = TextEditingController();
   final TextEditingController _voterController = TextEditingController();
@@ -227,7 +229,7 @@ class _AddAcademiaState extends State<AddAcademia> {
     _institutionController.dispose();
     _rankController.dispose();
     _wardController.dispose();
-    _pollingController.dispose();
+    //   _pollingController.dispose();
     _qualificationController.dispose();
     _ninController.dispose();
     _bvnController.dispose();
@@ -251,11 +253,11 @@ class _AddAcademiaState extends State<AddAcademia> {
       institution: selectedIns.toString(),
       rank: _rankController.text,
       ward: selectedWard.toString(),
-      polling_unit: _pollingController.text,
+      //  polling_unit: _pollingController.text,
       qualification: _qualificationController.text,
       nin: _ninController.text,
       bvn: _bvnController.text,
-      voter: _voterController.text,
+      voter: _voterController.text, polls: widget.poll.toString(),
     );
 
     setState(() {
@@ -264,7 +266,7 @@ class _AddAcademiaState extends State<AddAcademia> {
       _ninController.text = '';
       _bvnController.text = '';
       _voterController.text = '';
-      _pollingController.text = '';
+      // _pollingController.text = '';
       _qualificationController.text = '';
       _phoneController.text = '';
       _addressController.text = '';
@@ -672,27 +674,55 @@ class _AddAcademiaState extends State<AddAcademia> {
               ),
             ),
             const SizedBox(height: 15),
-            TextField(
-              controller: _pollingController,
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                prefixIcon: const Icon(
-                  Icons.drive_file_rename_outline_outlined,
-                  color: Color.fromRGBO(47, 79, 79, 1),
+            // TextField(
+            //   controller: _pollingController,
+            //   keyboardType: TextInputType.text,
+            //   decoration: InputDecoration(
+            //     filled: true,
+            //     fillColor: Colors.white,
+            //     prefixIcon: const Icon(
+            //       Icons.drive_file_rename_outline_outlined,
+            //       color: Color.fromRGBO(47, 79, 79, 1),
+            //     ),
+            //     contentPadding: const EdgeInsets.all(18),
+            //     hintText: 'polling unit*',
+            //     border: OutlineInputBorder(
+            //       borderRadius: BorderRadius.circular(15),
+            //     ),
+            //     enabledBorder: OutlineInputBorder(
+            //       borderRadius: BorderRadius.circular(15),
+            //       borderSide: const BorderSide(
+            //           color: Color.fromRGBO(20, 10, 38, 1), width: 1),
+            //     ),
+            //     hintStyle: Styles.hintTextStyle,
+            //   ),
+            // ),
+            InkWell(
+              onTap: () async {
+                widget.poll = await showModalBottomSheet(
+                  context: context,
+                  builder: (context) => const PollingModal(),
+                );
+                setState(() {});
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(top: 15),
+                child: Container(
+                  width: double.infinity,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.all(Radius.circular(
+                            15.0) //                 <--- border radius here
+                        ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Text(widget.poll == null
+                        ? 'polling unit'
+                        : widget.poll.toString()),
+                  ),
                 ),
-                contentPadding: const EdgeInsets.all(18),
-                hintText: 'polling unit*',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: const BorderSide(
-                      color: Color.fromRGBO(20, 10, 38, 1), width: 1),
-                ),
-                hintStyle: Styles.hintTextStyle,
               ),
             ),
             const SizedBox(height: 35),
@@ -706,7 +736,7 @@ class _AddAcademiaState extends State<AddAcademia> {
                         _phoneController.text.isNotEmpty &&
                         _addressController.text.isNotEmpty &&
                         _qualificationController.text.isNotEmpty &&
-                        _pollingController.text.isNotEmpty &&
+                        // _pollingController.text.isNotEmpty &&
                         _rankController.text.isNotEmpty &&
                         _image != null &&
                         selectedLga.toString() != null &&

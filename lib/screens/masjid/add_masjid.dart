@@ -8,10 +8,12 @@ import '../../resources/auth_methods.dart';
 import '../../resources/styles.dart';
 import '../../utils/utils.dart';
 import '../camera_modal.dart';
+import '../polling_modal.dart';
 import 'masjid_screen.dart';
 
 class AddMasjid extends StatefulWidget {
-  const AddMasjid({super.key});
+  AddMasjid({super.key});
+  String? poll;
 
   @override
   State<AddMasjid> createState() => _AddMasjidState();
@@ -107,6 +109,7 @@ class _AddMasjidState extends State<AddMasjid> {
       nin: _ninController.text,
       bvn: _bvnController.text,
       voter: _voterController.text,
+      polls: widget.poll.toString(),
     );
 
     setState(() {
@@ -499,7 +502,34 @@ class _AddMasjidState extends State<AddMasjid> {
               borderColor: Color.fromRGBO(20, 10, 38, 1),
               borderRadius: 15,
             ),
-            const SizedBox(height: 15),
+            InkWell(
+              onTap: () async {
+                widget.poll = await showModalBottomSheet(
+                  context: context,
+                  builder: (context) => const PollingModal(),
+                );
+                setState(() {});
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(top: 15),
+                child: Container(
+                  width: double.infinity,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.all(Radius.circular(
+                            15.0) //                 <--- border radius here
+                        ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Text(widget.poll == null
+                        ? 'polling unit'
+                        : widget.poll.toString()),
+                  ),
+                ),
+              ),
+            ),
             const SizedBox(height: 35),
             Center(
               child: SizedBox(

@@ -9,9 +9,11 @@ import 'package:snippet_coder_utils/FormHelper.dart';
 import '../../resources/auth_methods.dart';
 import '../../resources/styles.dart';
 import '../../utils/utils.dart';
+import '../polling_modal.dart';
 
 class AddPoliticalGroup extends StatefulWidget {
-  const AddPoliticalGroup({super.key});
+  AddPoliticalGroup({super.key, this.poll});
+  String? poll;
 
   @override
   State<AddPoliticalGroup> createState() => _AddPoliticalGroupState();
@@ -220,12 +222,13 @@ class _AddPoliticalGroupState extends State<AddPoliticalGroup> {
       lga: selectedLga.toString(),
       file: _image!,
       ward: selectedWard.toString(),
-      polling_unit: _pollingController.text,
+      // polling_unit: _pollingController.text,
       party: _partyController.text,
       nin: _ninController.text,
       bvn: _bvnController.text,
       voter: _voterController.text,
       status: _statusController.text,
+      polls: widget.poll.toString(),
     );
 
     setState(() {
@@ -529,47 +532,6 @@ class _AddPoliticalGroupState extends State<AddPoliticalGroup> {
               ),
             ),
             const SizedBox(height: 15),
-            // FormHelper.dropDownWidget(
-            //   context,
-            //   'select lga',
-            //   this.lgaId,
-            //   this.Lga,
-            //   contentPadding: 16,
-            //   paddingLeft: 0,
-            //   paddingRight: 0,
-            //   (onChangedVal) {
-            //     var fid = this.lgaId = onChangedVal;
-            //     print('selected faculty: $onChangedVal');
-            //
-            //     // this.LGA = this
-            //     //     .LGAMasters
-            //     //     .where(
-            //     //       (departmentItem) =>
-            //     //           departmentItem["ParentId"].toString() ==
-            //     //           onChangedVal.toString(),
-            //     //     )
-            //     //     .toList();
-            //     // this.lgaId = null;
-            //     setState(() {});
-            //
-            //     for (var element in this.Lga) {
-            //       if (element['id'] == int.parse(fid)) {
-            //         this.selectedLga = element['name'];
-            //       }
-            //     }
-            //     setState(() {
-            //       print(this.selectedLga);
-            //     });
-            //   },
-            //   (onValidateVal) {
-            //     if (onValidateVal == null) {
-            //       return 'Please select faculty';
-            //     }
-            //     return null;
-            //   },
-            //   borderColor: Color.fromRGBO(20, 10, 38, 1),
-            //   borderRadius: 15,
-            // ),
             FormHelper.dropDownWidget(
               context,
               'select lga*',
@@ -690,6 +652,34 @@ class _AddPoliticalGroupState extends State<AddPoliticalGroup> {
                       color: Color.fromRGBO(47, 79, 79, 1), width: 1),
                 ),
                 hintStyle: Styles.hintTextStyle,
+              ),
+            ),
+            InkWell(
+              onTap: () async {
+                widget.poll = await showModalBottomSheet(
+                  context: context,
+                  builder: (context) => const PollingModal(),
+                );
+                setState(() {});
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(top: 15),
+                child: Container(
+                  width: double.infinity,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.all(Radius.circular(
+                            15.0) //                 <--- border radius here
+                        ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Text(widget.poll == null
+                        ? 'polling unit'
+                        : widget.poll.toString()),
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: 35),

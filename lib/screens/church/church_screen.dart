@@ -223,7 +223,7 @@ class _ChurchScreenState extends State<ChurchScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const AddChurch()),
+                                builder: (context) => AddChurch()),
                           );
                         },
                         style: ButtonStyle(

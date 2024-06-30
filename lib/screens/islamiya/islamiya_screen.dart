@@ -250,7 +250,7 @@ class _IslamiyaScreenState extends State<IslamiyaScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const AddIslamiya()),
+                                builder: (context) => AddIslamiya()),
                           );
                         },
                         style: ButtonStyle(

@@ -1,3 +1,4 @@
+import 'package:auy27/report/sort_by_lga.dart';
 import 'package:auy27/screens/login_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -467,6 +468,16 @@ class _HomeState extends State<Home> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
+                        // InkWell(
+                        //   onTap: () {
+                        //     Navigator.of(context).push(
+                        //       MaterialPageRoute(
+                        //         builder: (context) => ReportLGA(),
+                        //       ),
+                        //     );
+                        //   },
+                        //   child: Icon(Icons.report),
+                        // ),
                         const Spacer(
                           flex: 4,
                         ),

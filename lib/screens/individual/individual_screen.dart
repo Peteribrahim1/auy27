@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../../resources/color_constants.dart';
 import '../../resources/custom_text.dart';
 import '../../resources/font_constants.dart';
+import '../../resources/styles.dart';
 
 class IndividualScreen extends StatefulWidget {
   const IndividualScreen({super.key, required this.category});
@@ -17,10 +18,12 @@ class IndividualScreen extends StatefulWidget {
 
 class _IndividualScreenState extends State<IndividualScreen> {
   final TextEditingController searchController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   void dispose() {
     searchController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -167,18 +170,211 @@ class _IndividualScreenState extends State<IndividualScreen> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: InkWell(
                                           onTap: () async {
-                                            await Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      IndividualDetails(
-                                                        ref: data.reference.id,
-                                                        receive: data,
-                                                        id: data['id'],
-                                                        category:
-                                                            widget.category,
-                                                      )),
+                                            await showModalBottomSheet(
+                                              context: context,
+                                              builder: (context) =>
+                                                  SingleChildScrollView(
+                                                padding:
+                                                    const EdgeInsets.all(20),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        InkWell(
+                                                            onTap: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            },
+                                                            child: const Icon(
+                                                                Icons
+                                                                    .arrow_back)),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(height: 15),
+                                                    const Center(
+                                                      child: Text(
+                                                        'Admin Panel',
+                                                        style: Styles
+                                                            .headerTextStyle,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 25),
+                                                    const Text(
+                                                      'Only Admin Can View This Page',
+                                                      style:
+                                                          Styles.fieldTextStyle,
+                                                    ),
+                                                    const SizedBox(height: 5),
+                                                    TextField(
+                                                      obscureText: true,
+                                                      keyboardType:
+                                                          TextInputType.number,
+                                                      controller:
+                                                          _passwordController,
+                                                      decoration:
+                                                          InputDecoration(
+                                                        filled: true,
+                                                        fillColor: Colors.white,
+                                                        prefixIcon: const Icon(
+                                                          Icons.password,
+                                                        ),
+                                                        contentPadding:
+                                                            const EdgeInsets
+                                                                .all(18),
+                                                        hintText:
+                                                            'admin access code',
+                                                        border:
+                                                            OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(15),
+                                                        ),
+                                                        enabledBorder: OutlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        15),
+                                                            borderSide:
+                                                                const BorderSide(
+                                                                    color: Color
+                                                                        .fromRGBO(
+                                                                            20,
+                                                                            10,
+                                                                            38,
+                                                                            1),
+                                                                    width: 1)),
+                                                        hintStyle: Styles
+                                                            .hintTextStyle,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 35),
+                                                    Center(
+                                                      child: SizedBox(
+                                                        height: 52,
+                                                        width: 280,
+                                                        child: ElevatedButton(
+                                                          onPressed: () {
+                                                            if (_passwordController
+                                                                .text
+                                                                .isNotEmpty) {
+                                                              if (_passwordController
+                                                                      .text ==
+                                                                  '1234') {
+                                                                setState(() {
+                                                                  _passwordController
+                                                                      .text = '';
+                                                                });
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pushReplacement(
+                                                                  MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            IndividualDetails(
+                                                                      ref: data
+                                                                          .reference
+                                                                          .id,
+                                                                      receive:
+                                                                          data,
+                                                                      id: data[
+                                                                          'id'],
+                                                                      category:
+                                                                          widget
+                                                                              .category,
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              } else {
+                                                                setState(() {
+                                                                  _passwordController
+                                                                      .text = '';
+                                                                });
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                  const SnackBar(
+                                                                    backgroundColor:
+                                                                        Colors
+                                                                            .red,
+                                                                    content: Text(
+                                                                        'Incorrect admin access code!'),
+                                                                  ),
+                                                                );
+                                                              }
+                                                            } else {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                              ScaffoldMessenger
+                                                                      .of(context)
+                                                                  .showSnackBar(
+                                                                const SnackBar(
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .red,
+                                                                  content: Text(
+                                                                      'Please enter the access code!'),
+                                                                ),
+                                                              );
+                                                            }
+                                                          },
+                                                          style: ButtonStyle(
+                                                              backgroundColor:
+                                                                  MaterialStateProperty
+                                                                      .all(
+                                                                const Color
+                                                                    .fromRGBO(
+                                                                    47,
+                                                                    79,
+                                                                    79,
+                                                                    1),
+                                                              ),
+                                                              shape: MaterialStateProperty.all<
+                                                                      RoundedRectangleBorder>(
+                                                                  RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                              ))),
+                                                          child: _isLoading
+                                                              ? const Center(
+                                                                  child:
+                                                                      CircularProgressIndicator(
+                                                                    color: Colors
+                                                                        .white,
+                                                                  ),
+                                                                )
+                                                              : const Text(
+                                                                  'Login',
+                                                                  style: Styles
+                                                                      .buttonTextStyle,
+                                                                ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
                                             );
+                                            // await Navigator.push(
+                                            //   context,
+                                            //   MaterialPageRoute(
+                                            //     builder: (context) =>
+                                            //         IndividualDetails(
+                                            //       ref: data.reference.id,
+                                            //       receive: data,
+                                            //       id: data['id'],
+                                            //       category: widget.category,
+                                            //     ),
+                                            //   ),
+                                            // );
                                           },
                                           child: Container(
                                             decoration: BoxDecoration(
@@ -193,15 +389,15 @@ class _IndividualScreenState extends State<IndividualScreen> {
                                                   title: Text(
                                                     data['name'],
                                                   ),
-                                                  subtitle: Text(
-                                                    data['address'],
-                                                  ),
-                                                  trailing: Text(
-                                                    'phone ${data['phone']}',
-                                                  ),
+                                                  // subtitle: Text(
+                                                  //   data['address'],
+                                                  // ),
+                                                  // trailing: Text(
+                                                  //   'phone ${data['phone']}',
+                                                  // ),
                                                 ),
-                                                const Divider(
-                                                    color: Colors.grey),
+                                                // const Divider(
+                                                //     color: Colors.grey),
                                               ],
                                             ),
                                           ),
@@ -218,7 +414,7 @@ class _IndividualScreenState extends State<IndividualScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const AddIndividual()),
+                                builder: (context) => AddIndividual()),
                           );
                         },
                         style: ButtonStyle(
