@@ -41,20 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: Color.fromRGBO(47, 79, 79, 1),
       body: SafeArea(
         child: Center(
-          child:
-              //     Container(
-              //   width: 200,
-              //   height: 200,
-              //   decoration: BoxDecoration(
-              //     image: DecorationImage(
-              //       image: AssetImage('assets/images/auy.jpeg'), // Path to your image
-              //       fit: BoxFit.cover, // Adjust this according to your needs
-              //     ),
-              //     borderRadius: BorderRadius.circular(20),
-              //   ),
-              // )
-
-              CircleAvatar(
+          child: CircleAvatar(
             backgroundImage: AssetImage('assets/images/auy.jpeg'),
             radius: 100,
           ),
@@ -63,5 +50,3 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
-//0xfff2f2f2
-//Color.fromRGBO(47, 79, 79, 1),

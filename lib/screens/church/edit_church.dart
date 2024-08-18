@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -7,17 +8,19 @@ import '../../resources/auth_methods.dart';
 import '../../resources/styles.dart';
 import '../../utils/utils.dart';
 import '../polling_modal.dart';
-import 'academia_screen.dart';
+import 'church_screen.dart';
 
-class AddAcademia extends StatefulWidget {
-  AddAcademia({super.key});
+class EditChurch extends StatefulWidget {
+  EditChurch({super.key, required this.data, required this.fire_id});
   String? poll;
+  final QueryDocumentSnapshot<Map<String, dynamic>> data;
+  final String fire_id;
 
   @override
-  State<AddAcademia> createState() => _AddAcademiaState();
+  State<EditChurch> createState() => _EditChurchState();
 }
 
-class _AddAcademiaState extends State<AddAcademia> {
+class _EditChurchState extends State<EditChurch> {
   Uint8List? _image;
 
   void _selectImageFromGallery() async {
@@ -35,46 +38,19 @@ class _AddAcademiaState extends State<AddAcademia> {
   }
 
   List<dynamic> Lga = [];
-  List<dynamic> institution = [];
   List<dynamic> WardMasters = [];
   List<dynamic> Ward = [];
 
   String? lgaId;
+  String? selectedLga;
   String? wardId;
   String? selectedWard;
-  String? selectedLga;
   String? insId;
   String? selectedIns;
 
   @override
   void initState() {
     super.initState();
-
-    this
-        .institution
-        .add({"id": 1, "name": "Gombe State College of Legal Studies, Nafada"});
-    this
-        .institution
-        .add({"id": 2, "name": "Gombe State College of Education, Billiri"});
-    this.institution.add(
-        {"id": 3, "name": "Federal College of Education(Technical), Gombe"});
-    this.institution.add({
-      "id": 4,
-      "name": "Federal College of Horticultural Technology, Dadin Kowa"
-    });
-    this
-        .institution
-        .add({"id": 5, "name": "Gombe State College of Nursing and Midwifery"});
-    this.institution.add({
-      "id": 6,
-      "name": "Gombe State College of Health Sciences and Technology, Kaltungo"
-    });
-    this.institution.add({"id": 7, "name": "Federal Polytechnic, Kaltungo"});
-    this.institution.add({"id": 8, "name": "Gombe State Polytechnic Bajoga"});
-    this.institution.add({"id": 9, "name": "Federal University Kashere"});
-    this.institution.add({"id": 10, "name": "Gombe State University"});
-    this.institution.add({"id": 11, "name": "North-Eastern University"});
-
     this.Lga.add({"id": 1, "name": "Akko"});
     this.Lga.add({"id": 2, "name": "Balanga"});
     this.Lga.add({"id": 3, "name": "Billiri"});
@@ -85,7 +61,7 @@ class _AddAcademiaState extends State<AddAcademia> {
     this.Lga.add({"id": 8, "name": "Kwami"});
     this.Lga.add({"id": 9, "name": "Nafada"});
     this.Lga.add({"id": 10, "name": "Shongom"});
-    this.Lga.add({"id": 11, "name": "Yamaltu-Deba"});
+    this.Lga.add({"id": 11, "name": "Yamaltu"});
 
     this.WardMasters = [
       {"ID": 1, "Name": "AKKO", "ParentId": 1},
@@ -203,34 +179,41 @@ class _AddAcademiaState extends State<AddAcademia> {
       {"ID": 10, "Name": "NONO / KUNWAL / W. BIRDEKA", "ParentId": 11},
       {"ID": 11, "Name": "ZAMBUK / KWALI", "ParentId": 11},
     ];
+    _nameController.text = widget.data['name'];
+    _nameOfRepController.text = widget.data['name_rep'];
+    _phoneController.text = widget.data['phone'];
+    _ninController.text = widget.data['nin'];
+    _bvnController.text = widget.data['bvn'];
+    _voterController.text = widget.data['voter'];
+    _addressController.text = widget.data['address'];
+    _denominationController.text = widget.data['denomination'];
+    _membersController.text = widget.data['members'];
+    selectedLga = widget.data['lga'];
+    selectedWard = widget.data['ward'];
+    widget.poll = widget.data['polls'];
+    setState(() {});
   }
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _membersController = TextEditingController();
-  final TextEditingController _institutionController = TextEditingController();
-  final TextEditingController _rankController = TextEditingController();
-  final TextEditingController _wardController = TextEditingController();
   final TextEditingController _ninController = TextEditingController();
   final TextEditingController _bvnController = TextEditingController();
   final TextEditingController _voterController = TextEditingController();
-  final TextEditingController _qualificationController =
-      TextEditingController();
+  final TextEditingController _statusController = TextEditingController();
+  final TextEditingController _denominationController = TextEditingController();
+  final TextEditingController _membersController = TextEditingController();
+  final TextEditingController _nameOfRepController = TextEditingController();
 
   @override
   void dispose() {
     _nameController.dispose();
     _phoneController.dispose();
     _addressController.dispose();
-    _membersController.dispose();
-    _institutionController.dispose();
-    _rankController.dispose();
-    _wardController.dispose();
-    _qualificationController.dispose();
     _ninController.dispose();
     _bvnController.dispose();
     _voterController.dispose();
+    _statusController.dispose();
     super.dispose();
   }
 
@@ -241,35 +224,36 @@ class _AddAcademiaState extends State<AddAcademia> {
       _isLoading = true;
     });
 
-    String res = await AuthMethods().saveAcademia(
+    String res = await AuthMethods().editChurch(
       name: _nameController.text,
       phone: _phoneController.text,
       address: _addressController.text,
+      denomination: _denominationController.text,
       lga: selectedLga.toString(),
-      file: _image,
-      institution: selectedIns.toString(),
-      rank: _rankController.text,
       ward: selectedWard.toString(),
-      qualification: _qualificationController.text,
+      file: _image,
+      nameRep: _nameOfRepController.text,
+      members: _membersController.text,
       nin: _ninController.text,
       bvn: _bvnController.text,
       voter: _voterController.text,
       polls: widget.poll.toString(),
+      firebaseid: widget.fire_id,
     );
 
     setState(() {
       _isLoading = false;
       _nameController.text = '';
+      _nameOfRepController.text = '';
+      _phoneController.text = '';
+      _addressController.text = '';
+      _denominationController.text = '';
+      _membersController.text = '';
       _ninController.text = '';
       _bvnController.text = '';
       _voterController.text = '';
-      // _pollingController.text = '';
-      _qualificationController.text = '';
-      _phoneController.text = '';
-      _addressController.text = '';
-      _membersController.text = '';
       selectedLga = null;
-      selectedWard = null;
+      selectedLga = null;
     });
 
     if (res != 'success') {
@@ -284,10 +268,9 @@ class _AddAcademiaState extends State<AddAcademia> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const AcademiaScreen(
-            category: 'Academia',
-          ),
-        ),
+            builder: (context) => const ChurchScreen(
+                  category: 'Church',
+                )),
       );
     }
   }
@@ -300,7 +283,7 @@ class _AddAcademiaState extends State<AddAcademia> {
           color: Colors.white, //change your color here
         ),
         title: const Text(
-          'Add Academia',
+          'Edit Church',
           style: Styles.appBarTextStyle,
         ),
         centerTitle: true,
@@ -375,7 +358,7 @@ class _AddAcademiaState extends State<AddAcademia> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'name*',
+                hintText: 'name of church*',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -388,46 +371,29 @@ class _AddAcademiaState extends State<AddAcademia> {
               ),
             ),
             const SizedBox(height: 20),
-            FormHelper.dropDownWidget(
-              context,
-              'select institution',
-              this.insId,
-              this.institution,
-              contentPadding: 16,
-              paddingLeft: 0,
-              paddingRight: 0,
-              (onChangedVal) {
-                var fid = this.insId = onChangedVal;
-                print('selected institution: $onChangedVal');
-
-                // this.Ward = this
-                //     .WardMasters
-                //     .where(
-                //       (departmentItem) =>
-                //           departmentItem["ParentId"].toString() ==
-                //           onChangedVal.toString(),
-                //     )
-                //     .toList();
-                // this.wardId = null;
-                setState(() {});
-
-                for (var element in this.institution) {
-                  if (element['id'] == int.parse(fid)) {
-                    this.selectedIns = element['name'];
-                  }
-                }
-                setState(() {
-                  print(this.selectedIns);
-                });
-              },
-              (onValidateVal) {
-                if (onValidateVal == null) {
-                  return 'Please select institution';
-                }
-                return null;
-              },
-              borderColor: Color.fromRGBO(20, 10, 38, 1),
-              borderRadius: 15,
+            TextField(
+              maxLength: 25,
+              controller: _nameOfRepController,
+              decoration: InputDecoration(
+                filled: true,
+                counterText: "",
+                fillColor: Colors.white,
+                prefixIcon: const Icon(
+                  Icons.drive_file_rename_outline,
+                  color: Color.fromRGBO(47, 79, 79, 1),
+                ),
+                contentPadding: const EdgeInsets.all(18),
+                hintText: 'name of representative',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                      color: Color.fromRGBO(47, 79, 79, 1), width: 1),
+                ),
+                hintStyle: Styles.hintTextStyle,
+              ),
             ),
             const SizedBox(height: 20),
             TextField(
@@ -453,7 +419,7 @@ class _AddAcademiaState extends State<AddAcademia> {
                 hintStyle: Styles.hintTextStyle,
               ),
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 20),
             TextField(
               controller: _ninController,
               keyboardType: TextInputType.number,
@@ -477,7 +443,7 @@ class _AddAcademiaState extends State<AddAcademia> {
                 hintStyle: Styles.hintTextStyle,
               ),
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 20),
             TextField(
               controller: _bvnController,
               keyboardType: TextInputType.number,
@@ -504,7 +470,7 @@ class _AddAcademiaState extends State<AddAcademia> {
             const SizedBox(height: 15),
             TextField(
               controller: _voterController,
-              keyboardType: TextInputType.text,
+              keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
@@ -525,55 +491,7 @@ class _AddAcademiaState extends State<AddAcademia> {
                 hintStyle: Styles.hintTextStyle,
               ),
             ),
-            const SizedBox(height: 15),
-            TextField(
-              controller: _rankController,
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                prefixIcon: const Icon(
-                  Icons.drive_file_rename_outline_outlined,
-                  color: Color.fromRGBO(47, 79, 79, 1),
-                ),
-                contentPadding: const EdgeInsets.all(18),
-                hintText: 'rank',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: const BorderSide(
-                      color: Color.fromRGBO(20, 10, 38, 1), width: 1),
-                ),
-                hintStyle: Styles.hintTextStyle,
-              ),
-            ),
-            const SizedBox(height: 15),
-            TextField(
-              controller: _qualificationController,
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                prefixIcon: const Icon(
-                  Icons.drive_file_rename_outline_outlined,
-                  color: Color.fromRGBO(47, 79, 79, 1),
-                ),
-                contentPadding: const EdgeInsets.all(18),
-                hintText: 'qualification',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: const BorderSide(
-                      color: Color.fromRGBO(20, 10, 38, 1), width: 1),
-                ),
-                hintStyle: Styles.hintTextStyle,
-              ),
-            ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 20),
             TextField(
               controller: _addressController,
               decoration: InputDecoration(
@@ -597,6 +515,54 @@ class _AddAcademiaState extends State<AddAcademia> {
               ),
             ),
             const SizedBox(height: 15),
+            TextField(
+              controller: _denominationController,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                prefixIcon: const Icon(
+                  Icons.drive_file_rename_outline_outlined,
+                  color: Color.fromRGBO(47, 79, 79, 1),
+                ),
+                contentPadding: const EdgeInsets.all(18),
+                hintText: 'denomination',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                      color: Color.fromRGBO(20, 10, 38, 1), width: 1),
+                ),
+                hintStyle: Styles.hintTextStyle,
+              ),
+            ),
+            const SizedBox(height: 20),
+            TextField(
+              controller: _membersController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                prefixIcon: const Icon(
+                  Icons.drive_file_rename_outline_outlined,
+                  color: Color.fromRGBO(47, 79, 79, 1),
+                ),
+                contentPadding: const EdgeInsets.all(18),
+                hintText: 'number of members',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                      color: Color.fromRGBO(20, 10, 38, 1), width: 1),
+                ),
+                hintStyle: Styles.hintTextStyle,
+              ),
+            ),
+            const SizedBox(height: 15),
             FormHelper.dropDownWidget(
               context,
               'select lga',
@@ -607,7 +573,7 @@ class _AddAcademiaState extends State<AddAcademia> {
               paddingRight: 0,
               (onChangedVal) {
                 var fid = this.lgaId = onChangedVal;
-                print('selected faculty: $onChangedVal');
+                //  print('selected faculty: $onChangedVal');
 
                 this.Ward = this
                     .WardMasters
@@ -659,7 +625,7 @@ class _AddAcademiaState extends State<AddAcademia> {
                   }
                 }
                 setState(() {
-                  print(this.selectedWard);
+                  //  print(this.selectedWard);
                 });
               },
               (onValidate) {
@@ -670,7 +636,6 @@ class _AddAcademiaState extends State<AddAcademia> {
               optionValue: 'ID',
               optionLabel: 'Name',
             ),
-            // const SizedBox(height: 15),
             InkWell(
               onTap: () async {
                 widget.poll = await showModalBottomSheet(
@@ -709,13 +674,10 @@ class _AddAcademiaState extends State<AddAcademia> {
                     if (_nameController.text.isNotEmpty
                         // _phoneController.text.isNotEmpty &&
                         // _addressController.text.isNotEmpty &&
-                        // _qualificationController.text.isNotEmpty &&
-                        // _pollingController.text.isNotEmpty &&
-                        //_rankController.text.isNotEmpty &&
+                        // _statusController.text.isNotEmpty &&
                         //  _image != null
                         // selectedLga.toString() != null &&
-                        // selectedWard.toString() != null &&
-                        // selectedIns.toString() != null
+                        // selectedWard.toString() != null
                         ) {
                       _saveData();
                     } else {
@@ -744,7 +706,7 @@ class _AddAcademiaState extends State<AddAcademia> {
                           ),
                         )
                       : const Text(
-                          'Submit',
+                          'Update',
                           style: Styles.buttonTextStyle,
                         ),
                 ),

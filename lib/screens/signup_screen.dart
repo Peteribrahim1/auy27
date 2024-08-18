@@ -1,6 +1,5 @@
 import 'package:auy27/resources/styles.dart';
 import 'package:flutter/material.dart';
-
 import '../resources/auth_methods.dart';
 import '../utils/utils.dart';
 import '../widgets/textfield_widget.dart';
@@ -70,11 +69,6 @@ class _SignupScreenState extends State<SignupScreen> {
               children: [
                 const SizedBox(height: 50),
 
-                // SizedBox(
-                //   height: 50,
-                //   width: 50,
-                //   child: Image.asset('assets/images/gsulogo.jpeg'),
-                // ),
                 const SizedBox(
                   height: 50,
                   width: 50,

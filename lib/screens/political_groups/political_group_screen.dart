@@ -2,14 +2,12 @@ import 'package:auy27/screens/political_groups/add_political_group.dart';
 import 'package:auy27/screens/political_groups/political_group_details.dart';
 import 'package:auy27/screens/tabs_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../../resources/color_constants.dart';
 import '../../resources/custom_text.dart';
 import '../../resources/font_constants.dart';
-import '../categoy_screens.dart';
 
 class PoliticalGroupScreen extends StatefulWidget {
   const PoliticalGroupScreen({super.key, required this.category});
@@ -71,7 +69,7 @@ class _PoliticalGroupScreenState extends State<PoliticalGroupScreen> {
       body: SafeArea(
         child: _isLoading
             ? Center(
-                child: CircularProgressIndicator(),
+                child: CupertinoActivityIndicator(),
               )
             : SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -85,7 +83,6 @@ class _PoliticalGroupScreenState extends State<PoliticalGroupScreen> {
                         children: [
                           InkWell(
                               onTap: () {
-                                // Navigator.pop(context);
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) => TabsScreen(number: 1),
@@ -176,25 +173,25 @@ class _PoliticalGroupScreenState extends State<PoliticalGroupScreen> {
                                         itemCount: _groupDisplay.length,
                                         itemBuilder: (context, index) {
                                           final data = _groupDisplay[index];
-                                          print(data.reference.id.toString());
-                                          print(_myList.length);
-                                          // print(data.id);
+                                          // print(data.reference.id.toString());
+                                          // print(_myList.length);
+                                          // // print(data.id);
                                           return Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: InkWell(
-                                              onTap: () {
-                                                Navigator.push(
+                                              onTap: () async {
+                                                await Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          PoliticalGroupDetails(
-                                                            ref: data
-                                                                .reference.id,
-                                                            receive: data,
-                                                            id: data['id'],
-                                                            category:
-                                                                widget.category,
-                                                          )),
+                                                    builder: (context) =>
+                                                        PoliticalGroupDetails(
+                                                      ref: data.reference.id,
+                                                      receive: data,
+                                                      id: data['id'],
+                                                      category: widget.category,
+                                                      fire_id: data.id,
+                                                    ),
+                                                  ),
                                                 );
                                               },
                                               child: Container(
@@ -204,22 +201,10 @@ class _PoliticalGroupScreenState extends State<PoliticalGroupScreen> {
                                                   color: const Color.fromRGBO(
                                                       249, 249, 249, 1),
                                                 ),
-                                                child: Column(
-                                                  children: [
-                                                    ListTile(
-                                                      title: Text(
-                                                        data['name'],
-                                                      ),
-                                                      subtitle: Text(
-                                                        data['address'],
-                                                      ),
-                                                      trailing: Text(
-                                                        'members ${data['members']}',
-                                                      ),
-                                                    ),
-                                                    const Divider(
-                                                        color: Colors.grey),
-                                                  ],
+                                                child: ListTile(
+                                                  title: Text(
+                                                    data['name'],
+                                                  ),
                                                 ),
                                               ),
                                             ),

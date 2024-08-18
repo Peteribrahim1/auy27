@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:auy27/screens/political_groups/political_group_screen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
@@ -220,9 +220,8 @@ class _AddPoliticalGroupState extends State<AddPoliticalGroup> {
       address: _addressController.text,
       members: _membersController.text,
       lga: selectedLga.toString(),
-      file: _image!,
+      file: _image,
       ward: selectedWard.toString(),
-      // polling_unit: _pollingController.text,
       party: _partyController.text,
       nin: _ninController.text,
       bvn: _bvnController.text,
@@ -373,7 +372,7 @@ class _AddPoliticalGroupState extends State<AddPoliticalGroup> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'phone*',
+                hintText: 'phone',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -472,7 +471,7 @@ class _AddPoliticalGroupState extends State<AddPoliticalGroup> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'status*',
+                hintText: 'status',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -495,7 +494,7 @@ class _AddPoliticalGroupState extends State<AddPoliticalGroup> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'address*',
+                hintText: 'address',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -519,7 +518,7 @@ class _AddPoliticalGroupState extends State<AddPoliticalGroup> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'number of members*',
+                hintText: 'number of members',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -534,7 +533,7 @@ class _AddPoliticalGroupState extends State<AddPoliticalGroup> {
             const SizedBox(height: 15),
             FormHelper.dropDownWidget(
               context,
-              'select lga*',
+              'select lga',
               this.lgaId,
               this.Lga,
               contentPadding: 16,
@@ -576,7 +575,7 @@ class _AddPoliticalGroupState extends State<AddPoliticalGroup> {
             const SizedBox(height: 15),
             FormHelper.dropDownWidget(
               context,
-              'select ward*',
+              'select ward',
               this.wardId,
               this.Ward,
               contentPadding: 16,
@@ -605,55 +604,7 @@ class _AddPoliticalGroupState extends State<AddPoliticalGroup> {
               optionValue: 'ID',
               optionLabel: 'Name',
             ),
-            const SizedBox(height: 15),
-            TextField(
-              controller: _pollingController,
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                prefixIcon: const Icon(
-                  Icons.drive_file_rename_outline_outlined,
-                  color: Color.fromRGBO(47, 79, 79, 1),
-                ),
-                contentPadding: const EdgeInsets.all(18),
-                hintText: 'polling unit*',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: const BorderSide(
-                      color: Color.fromRGBO(20, 10, 38, 1), width: 1),
-                ),
-                hintStyle: Styles.hintTextStyle,
-              ),
-            ),
-            const SizedBox(height: 15),
-            TextField(
-              maxLength: 25,
-              controller: _partyController,
-              decoration: InputDecoration(
-                filled: true,
-                counterText: "",
-                fillColor: Colors.white,
-                prefixIcon: const Icon(
-                  Icons.drive_file_rename_outline,
-                  color: Color.fromRGBO(47, 79, 79, 1),
-                ),
-                contentPadding: const EdgeInsets.all(18),
-                hintText: 'political party*',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: const BorderSide(
-                      color: Color.fromRGBO(47, 79, 79, 1), width: 1),
-                ),
-                hintStyle: Styles.hintTextStyle,
-              ),
-            ),
+            // const SizedBox(height: 15),
             InkWell(
               onTap: () async {
                 widget.poll = await showModalBottomSheet(
@@ -689,16 +640,17 @@ class _AddPoliticalGroupState extends State<AddPoliticalGroup> {
                 width: 280,
                 child: ElevatedButton(
                   onPressed: () async {
-                    if (_nameController.text.isNotEmpty &&
-                        _phoneController.text.isNotEmpty &&
-                        _addressController.text.isNotEmpty &&
-                        _membersController.text.isNotEmpty &&
-                        _pollingController.text.isNotEmpty &&
-                        _partyController.text.isNotEmpty &&
-                        _statusController.text.isNotEmpty &&
-                        _image != null &&
-                        selectedLga.toString() != null &&
-                        selectedWard.toString() != null) {
+                    if (_nameController.text.isNotEmpty
+                        // _phoneController.text.isNotEmpty &&
+                        // _addressController.text.isNotEmpty &&
+                        // _membersController.text.isNotEmpty &&
+                        // _pollingController.text.isNotEmpty &&
+                        // _partyController.text.isNotEmpty &&
+                        // _statusController.text.isNotEmpty &&
+                        // _image != null
+                        // selectedLga.toString() != null &&
+                        // selectedWard.toString() != null
+                        ) {
                       _saveData();
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -721,7 +673,7 @@ class _AddPoliticalGroupState extends State<AddPoliticalGroup> {
                   ),
                   child: _isLoading
                       ? const Center(
-                          child: CircularProgressIndicator(
+                          child: CupertinoActivityIndicator(
                             color: Colors.white,
                           ),
                         )

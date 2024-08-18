@@ -1,12 +1,9 @@
 import 'package:auy27/resources/styles.dart';
-import 'package:auy27/screens/categoy_screens.dart';
 import 'package:auy27/screens/signup_screen.dart';
 import 'package:auy27/screens/tabs_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../home.dart';
 import '../resources/auth_methods.dart';
 import '../utils/utils.dart';
 import '../widgets/textfield_widget.dart';
@@ -110,18 +107,6 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 const SizedBox(height: 50),
 
-                // Container(
-                //   decoration: const BoxDecoration(
-                //     image: DecorationImage(
-                //       image: AssetImage('assets/images/auy.jpeg'),
-                //       fit: BoxFit.cover,
-                //     ),
-                //     borderRadius: BorderRadius.all(
-                //       Radius.circular(12),
-                //     ),
-                //   ),
-                //   child: Text(''),
-                // ),
                 const SizedBox(
                   height: 50,
                   width: 50,
@@ -241,8 +226,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                 ),
-
-                // const SizedBox(height: 100),
               ],
             ),
           ),

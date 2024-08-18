@@ -4,7 +4,6 @@ import 'package:auy27/screens/islamiya/islamiya_screen.dart';
 import 'package:auy27/screens/political_groups/political_group_screen.dart';
 import 'package:auy27/screens/residence/residence_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../resources/color_constants.dart';
 import '../resources/custom_text.dart';

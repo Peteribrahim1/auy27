@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../resources/auth_methods.dart';
 import '../resources/styles.dart';
 import '../utils/utils.dart';

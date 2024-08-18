@@ -1,14 +1,12 @@
-import 'package:auy27/report/sort_by_lga.dart';
 import 'package:auy27/screens/login_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../resources/color_constants.dart';
 import '../resources/custom_text.dart';
 import '../resources/font_constants.dart';
-import '../resources/styles.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -60,397 +58,94 @@ class _HomeState extends State<Home> {
     setState(() {
       _isLoading = true;
     });
-    final snap_pol =
-        await FirebaseFirestore.instance.collection('Political Group').get();
 
-    final snap2_pol = snap_pol.docs.toList();
-    // .where((element) =>
-    //     element["uid"] == FirebaseAuth.instance.currentUser?.uid)
-    // .toList();
-
-    final snap_resi =
-        await FirebaseFirestore.instance.collection('Residence').get();
-
-    final snap2_resi = snap_resi.docs.toList();
-
-    final snap_isla =
-        await FirebaseFirestore.instance.collection('Islamiya').get();
-
-    final snap2_isla = snap_isla.docs.toList();
-
-    final snap_masj =
-        await FirebaseFirestore.instance.collection('Masjid').get();
-
-    final snap2_masj = snap_masj.docs.toList();
-
-    final snap_chur =
-        await FirebaseFirestore.instance.collection('Church').get();
-
-    final snap2_chur = snap_chur.docs.toList();
-
-    final snap_acad =
-        await FirebaseFirestore.instance.collection('Academia').get();
-
-    final snap2_acad = snap_acad.docs.toList();
-
-    final snap_indi =
-        await FirebaseFirestore.instance.collection('Individual').get();
-
-    final snap2_indi = snap_indi.docs.toList();
-
-    pol = snap2_pol.length;
-    resid = snap2_resi.length;
-    isla = snap2_isla.length;
-    masj = snap2_masj.length;
-    acad = snap2_acad.length;
-    chur = snap2_chur.length;
-    individ = snap2_indi.length;
-
-    //////// academia
-    final aca = await FirebaseFirestore.instance.collection('Academia').get();
-
-    final aca_akko =
-        aca.docs.where((element) => element["lga"] == 'Akko').toList();
-    // print('here is one Akko ${aca_akko.length}');
-
-    final aca_balanga =
-        aca.docs.where((element) => element["lga"] == 'Balanga').toList();
-
-    final aca_br =
-        aca.docs.where((element) => element["lga"] == 'Billiri').toList();
-
-    final aca_dukku =
-        aca.docs.where((element) => element["lga"] == 'Dukku').toList();
-
-    final aca_fun =
-        aca.docs.where((element) => element["lga"] == 'Funakaye').toList();
-
-    final aca_gom =
-        aca.docs.where((element) => element["lga"] == 'Gombe').toList();
-
-    final aca_kt =
-        aca.docs.where((element) => element["lga"] == 'Kaltungo').toList();
-
-    final aca_kwami =
-        aca.docs.where((element) => element["lga"] == 'Kwami').toList();
-
-    final aca_naf =
-        aca.docs.where((element) => element["lga"] == 'Nafada').toList();
-
-    final aca_shongom =
-        aca.docs.where((element) => element["lga"] == 'Shongom').toList();
-
-    final aca_yam =
-        aca.docs.where((element) => element["lga"] == 'Yamaltu').toList();
-
-    //////// church
-    final ch = await FirebaseFirestore.instance.collection('Church').get();
-
-    final ch_akko =
-        ch.docs.where((element) => element["lga"] == 'Akko').toList();
-
-    final ch_balanga =
-        ch.docs.where((element) => element["lga"] == 'Balanga').toList();
-
-    final ch_br =
-        ch.docs.where((element) => element["lga"] == 'Billiri').toList();
-
-    final ch_dukku =
-        ch.docs.where((element) => element["lga"] == 'Dukku').toList();
-
-    final ch_fun =
-        ch.docs.where((element) => element["lga"] == 'Funakaye').toList();
-
-    final ch_gom =
-        ch.docs.where((element) => element["lga"] == 'Gombe').toList();
-
-    final ch_kt =
-        ch.docs.where((element) => element["lga"] == 'Kaltungo').toList();
-
-    final ch_kwami =
-        ch.docs.where((element) => element["lga"] == 'Kwami').toList();
-
-    final ch_naf =
-        ch.docs.where((element) => element["lga"] == 'Nafada').toList();
-
-    final ch_shongom =
-        ch.docs.where((element) => element["lga"] == 'Shongom').toList();
-
-    final ch_yam =
-        ch.docs.where((element) => element["lga"] == 'Yamaltu').toList();
-
-    //////// islamiya
-    final isl = await FirebaseFirestore.instance.collection('Islamiya').get();
-
-    final isl_akko =
-        isl.docs.where((element) => element["lga"] == 'Akko').toList();
-
-    final isl_balanga =
-        isl.docs.where((element) => element["lga"] == 'Balanga').toList();
-
-    final isl_br =
-        isl.docs.where((element) => element["lga"] == 'Billiri').toList();
-
-    final isl_dukku =
-        isl.docs.where((element) => element["lga"] == 'Dukku').toList();
-
-    final isl_fun =
-        isl.docs.where((element) => element["lga"] == 'Funakaye').toList();
-
-    final isl_gom =
-        isl.docs.where((element) => element["lga"] == 'Gombe').toList();
-
-    final isl_kt =
-        isl.docs.where((element) => element["lga"] == 'Kaltungo').toList();
-
-    final isl_kwami =
-        isl.docs.where((element) => element["lga"] == 'Kwami').toList();
-
-    final isl_naf =
-        isl.docs.where((element) => element["lga"] == 'Nafada').toList();
-
-    final isl_shongom =
-        isl.docs.where((element) => element["lga"] == 'Shongom').toList();
-
-    final isl_yam =
-        isl.docs.where((element) => element["lga"] == 'Yamaltu').toList();
-
-    //////// mas
-    final mas = await FirebaseFirestore.instance.collection('Masjid').get();
-
-    final mas_akko =
-        mas.docs.where((element) => element["lga"] == 'Akko').toList();
-
-    final mas_balanga =
-        mas.docs.where((element) => element["lga"] == 'Balanga').toList();
-
-    final mas_br =
-        mas.docs.where((element) => element["lga"] == 'Billiri').toList();
-
-    final mas_dukku =
-        mas.docs.where((element) => element["lga"] == 'Dukku').toList();
-
-    final mas_fun =
-        mas.docs.where((element) => element["lga"] == 'Funakaye').toList();
-
-    final mas_gom =
-        mas.docs.where((element) => element["lga"] == 'Gombe').toList();
-
-    final mas_kt =
-        mas.docs.where((element) => element["lga"] == 'Kaltungo').toList();
-
-    final mas_kwami =
-        mas.docs.where((element) => element["lga"] == 'Kwami').toList();
-
-    final mas_naf =
-        mas.docs.where((element) => element["lga"] == 'Nafada').toList();
-
-    final mas_shongom =
-        mas.docs.where((element) => element["lga"] == 'Shongom').toList();
-
-    final mas_yam =
-        mas.docs.where((element) => element["lga"] == 'Yamaltu').toList();
-
-    //////// political
-    final po =
-        await FirebaseFirestore.instance.collection('Political Group').get();
-
-    final po_akko =
-        po.docs.where((element) => element["lga"] == 'Akko').toList();
-
-    final po_balanga =
-        po.docs.where((element) => element["lga"] == 'Balanga').toList();
-
-    final po_br =
-        po.docs.where((element) => element["lga"] == 'Billiri').toList();
-
-    final po_dukku =
-        po.docs.where((element) => element["lga"] == 'Dukku').toList();
-
-    final po_fun =
-        po.docs.where((element) => element["lga"] == 'Funakaye').toList();
-
-    final po_gom =
-        po.docs.where((element) => element["lga"] == 'Gombe').toList();
-
-    final po_kt =
-        po.docs.where((element) => element["lga"] == 'Kaltungo').toList();
-
-    final po_kwami =
-        po.docs.where((element) => element["lga"] == 'Kwami').toList();
-
-    final po_naf =
-        po.docs.where((element) => element["lga"] == 'Nafada').toList();
-
-    final po_shongom =
-        po.docs.where((element) => element["lga"] == 'Shongom').toList();
-
-    final po_yam =
-        po.docs.where((element) => element["lga"] == 'Yamaltu').toList();
-
-    //////// residence
-    final re = await FirebaseFirestore.instance.collection('Residence').get();
-
-    final re_akko =
-        re.docs.where((element) => element["lga"] == 'Akko').toList();
-
-    final re_balanga =
-        re.docs.where((element) => element["lga"] == 'Balanga').toList();
-
-    final re_br =
-        re.docs.where((element) => element["lga"] == 'Billiri').toList();
-
-    final re_dukku =
-        re.docs.where((element) => element["lga"] == 'Dukku').toList();
-
-    final re_fun =
-        re.docs.where((element) => element["lga"] == 'Funakaye').toList();
-
-    final re_gom =
-        re.docs.where((element) => element["lga"] == 'Gombe').toList();
-
-    final re_kt =
-        re.docs.where((element) => element["lga"] == 'Kaltungo').toList();
-
-    final re_kwami =
-        re.docs.where((element) => element["lga"] == 'Kwami').toList();
-
-    final re_naf =
-        re.docs.where((element) => element["lga"] == 'Nafada').toList();
-
-    final re_shongom =
-        re.docs.where((element) => element["lga"] == 'Shongom').toList();
-
-    final re_yam =
-        re.docs.where((element) => element["lga"] == 'Yamaltu').toList();
-
-    //////// individual
-    final ind = await FirebaseFirestore.instance.collection('Individual').get();
-
-    final ind_akko =
-        ind.docs.where((element) => element["lga"] == 'Akko').toList();
-
-    final ind_balanga =
-        ind.docs.where((element) => element["lga"] == 'Balanga').toList();
-
-    final ind_br =
-        ind.docs.where((element) => element["lga"] == 'Billiri').toList();
-
-    final ind_dukku =
-        ind.docs.where((element) => element["lga"] == 'Dukku').toList();
-
-    final ind_fun =
-        ind.docs.where((element) => element["lga"] == 'Funakaye').toList();
-
-    final ind_gom =
-        ind.docs.where((element) => element["lga"] == 'Gombe').toList();
-
-    final ind_kt =
-        ind.docs.where((element) => element["lga"] == 'Kaltungo').toList();
-
-    final ind_kwami =
-        ind.docs.where((element) => element["lga"] == 'Kwami').toList();
-
-    final ind_naf =
-        ind.docs.where((element) => element["lga"] == 'Nafada').toList();
-
-    final ind_shongom =
-        ind.docs.where((element) => element["lga"] == 'Shongom').toList();
-
-    final ind_yam =
-        ind.docs.where((element) => element["lga"] == 'Yamaltu').toList();
-
-    total_akko = aca_akko.length +
-        ch_akko.length +
-        isl_akko.length +
-        mas_akko.length +
-        po_akko.length +
-        re_akko.length +
-        ind_akko.length;
-
-    total_balanga = aca_balanga.length +
-        ch_balanga.length +
-        isl_balanga.length +
-        mas_balanga.length +
-        po_balanga.length +
-        re_balanga.length +
-        ind_balanga.length;
-
-    total_billiri = aca_br.length +
-        ch_br.length +
-        isl_br.length +
-        mas_br.length +
-        po_br.length +
-        re_br.length +
-        ind_br.length;
-
-    total_dukku = aca_dukku.length +
-        ch_dukku.length +
-        isl_dukku.length +
-        mas_dukku.length +
-        po_dukku.length +
-        re_dukku.length +
-        ind_dukku.length;
-
-    total_funakaye = aca_fun.length +
-        ch_fun.length +
-        isl_fun.length +
-        mas_fun.length +
-        po_fun.length +
-        re_fun.length +
-        ind_fun.length;
-
-    total_gombe = aca_gom.length +
-        ch_gom.length +
-        isl_gom.length +
-        mas_gom.length +
-        po_gom.length +
-        re_gom.length +
-        ind_gom.length;
-
-    total_kaltungo = aca_kt.length +
-        ch_kt.length +
-        isl_kt.length +
-        mas_kt.length +
-        po_kt.length +
-        re_kt.length +
-        ind_kt.length;
-
-    total_kwami = aca_kwami.length +
-        ch_kwami.length +
-        isl_kwami.length +
-        mas_kwami.length +
-        po_kwami.length +
-        re_kwami.length +
-        ind_kwami.length;
-
-    total_nafada = aca_naf.length +
-        ch_naf.length +
-        isl_naf.length +
-        mas_naf.length +
-        po_naf.length +
-        re_naf.length +
-        ind_naf.length;
-
-    total_shongom = aca_shongom.length +
-        ch_shongom.length +
-        isl_shongom.length +
-        mas_shongom.length +
-        po_shongom.length +
-        re_shongom.length +
-        ind_shongom.length;
-
-    total_yamaltu = aca_yam.length +
-        ch_yam.length +
-        isl_yam.length +
-        mas_yam.length +
-        po_yam.length +
-        re_yam.length +
-        ind_yam.length;
-
-    setState(() {
-      _isLoading = false;
-    });
+    try {
+      // Fetch all collections in parallel
+      final futures = [
+        FirebaseFirestore.instance.collection('Political Group').get(),
+        FirebaseFirestore.instance.collection('Residence').get(),
+        FirebaseFirestore.instance.collection('Islamiya').get(),
+        FirebaseFirestore.instance.collection('Masjid').get(),
+        FirebaseFirestore.instance.collection('Church').get(),
+        FirebaseFirestore.instance.collection('Academia').get(),
+        FirebaseFirestore.instance.collection('Individual').get(),
+      ];
+
+      final results = await Future.wait(futures);
+
+      // Assign results to respective variables
+      final snap2_pol = results[0].docs.toList();
+      final snap2_resi = results[1].docs.toList();
+      final snap2_isla = results[2].docs.toList();
+      final snap2_masj = results[3].docs.toList();
+      final snap2_chur = results[4].docs.toList();
+      final snap2_acad = results[5].docs.toList();
+      final snap2_indi = results[6].docs.toList();
+
+      // Count the number of documents in each collection
+      setState(() {
+        pol = snap2_pol.length;
+        resid = snap2_resi.length;
+        isla = snap2_isla.length;
+        masj = snap2_masj.length;
+        acad = snap2_acad.length;
+        chur = snap2_chur.length;
+        individ = snap2_indi.length;
+      });
+
+      // Call the function to count documents by LGA
+      await fetchAndCountDocuments(results);
+
+      setState(() {
+        _isLoading = false;
+      });
+    } catch (e) {
+      // Handle any errors here
+      setState(() {
+        _isLoading = false;
+      });
+      print("Error fetching data: $e");
+    }
+  }
+
+  Future<void> fetchAndCountDocuments(List<QuerySnapshot> results) async {
+    // Map to hold the counts for each LGA
+    final Map<String, int> lgaCounts = {
+      'Akko': 0,
+      'Balanga': 0,
+      'Billiri': 0,
+      'Dukku': 0,
+      'Funakaye': 0,
+      'Gombe': 0,
+      'Kaltungo': 0,
+      'Kwami': 0,
+      'Nafada': 0,
+      'Shongom': 0,
+      'Yamaltu': 0,
+    };
+
+    // Iterate over each collection's documents
+    for (var result in results) {
+      for (var doc in result.docs) {
+        final lga = doc['lga'];
+        if (lgaCounts.containsKey(lga)) {
+          lgaCounts[lga] = lgaCounts[lga]! + 1;
+        }
+      }
+    }
+
+    // Extract total counts for each LGA
+    total_akko = lgaCounts['Akko']!;
+    total_balanga = lgaCounts['Balanga']!;
+    total_billiri = lgaCounts['Billiri']!;
+    total_dukku = lgaCounts['Dukku']!;
+    total_funakaye = lgaCounts['Funakaye']!;
+    total_gombe = lgaCounts['Gombe']!;
+    total_kaltungo = lgaCounts['Kaltungo']!;
+    total_kwami = lgaCounts['Kwami']!;
+    total_nafada = lgaCounts['Nafada']!;
+    total_shongom = lgaCounts['Shongom']!;
+    total_yamaltu = lgaCounts['Yamaltu']!;
   }
 
   @override
@@ -459,7 +154,7 @@ class _HomeState extends State<Home> {
       body: SafeArea(
         child: _isLoading
             ? Center(
-                child: CircularProgressIndicator(),
+                child: CupertinoActivityIndicator(),
               )
             : Column(
                 children: [

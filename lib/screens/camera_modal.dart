@@ -1,11 +1,7 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
-import '../resources/styles.dart';
 import '../utils/utils.dart';
-import 'islamiya/add_islamiya.dart';
 
 class CameraModal extends StatefulWidget {
   const CameraModal({super.key});
@@ -30,13 +26,6 @@ class _CameraModalState extends State<CameraModal> {
       _image = imgc;
     });
   }
-
-  // void selectImage() async {
-  //   Uint8List img = await pickImage(ImageSource.gallery);
-  //   setState(() {
-  //     _image = img;
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {

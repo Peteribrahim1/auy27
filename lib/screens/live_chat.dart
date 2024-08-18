@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -42,15 +43,7 @@ class _LiveChatState extends State<LiveChat> {
             ),
           ),
         ),
-        // leading: InkWell(
-        //   onTap: () {
-        //     Navigator.pop(context);
-        //   },
-        //   child: const Icon(
-        //     Icons.arrow_back,
-        //     color: Color.fromRGBO(47, 79, 79, 1),
-        //   ),
-        // ),
+        automaticallyImplyLeading: false,
       ),
       body: IndexedStack(
         index: position,
@@ -66,7 +59,7 @@ class _LiveChatState extends State<LiveChat> {
           Container(
             color: Colors.white,
             child: const Center(
-              child: CircularProgressIndicator(),
+              child: CupertinoActivityIndicator(),
             ),
           ),
         ],

@@ -1,11 +1,10 @@
-import 'dart:ffi';
-
+import 'package:auy27/screens/academia/edit_academia.dart';
 import 'package:auy27/screens/mark_point_map_page.dart';
 import 'package:auy27/screens/view_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../resources/color_constants.dart';
 import '../../resources/custom_text.dart';
@@ -63,18 +62,38 @@ class _AcademiaDetailsState extends State<AcademiaDetails> {
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
-                      child: CachedNetworkImage(
-                        imageUrl: widget.receive['photoUrl'],
-                        height: 200,
-                        width: double.infinity,
-                        key: UniqueKey(),
-                        fit: BoxFit.cover,
-                        maxHeightDiskCache: 200,
-                        placeholder: (context, url) =>
-                            CircularProgressIndicator(
-                          color: Color.fromRGBO(47, 79, 79, 1),
-                        ),
-                      ),
+                      child: widget.receive['photoUrl'] != null &&
+                              widget.receive['photoUrl'].isNotEmpty
+                          ? CachedNetworkImage(
+                              imageUrl: widget.receive['photoUrl'],
+                              height: 200,
+                              width: double.infinity,
+                              key: UniqueKey(),
+                              fit: BoxFit.cover,
+                              maxHeightDiskCache: 200,
+                              placeholder: (context, url) =>
+                                  CupertinoActivityIndicator(
+                                color: Color.fromRGBO(47, 79, 79, 1),
+                              ),
+                              errorWidget: (context, url, error) => Center(
+                                child: Text(
+                                  'Some error occurred',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Center(
+                              child: Text(
+                                'No Image uploaded',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
                     ),
                   ),
                   SizedBox(height: 20),
@@ -226,6 +245,22 @@ class _AcademiaDetailsState extends State<AcademiaDetails> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CustomText(
+                        text: 'LGA',
+                        textColor: black,
+                        fontWeight: mediumFont,
+                      ),
+                      CustomText(
+                        text: widget.receive['lga'],
+                        textColor: const Color.fromRGBO(47, 79, 79, 1),
+                        fontWeight: mediumFont,
+                      ),
+                    ],
+                  ),
+                  const Divider(color: Colors.grey),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomText(
                         text: 'Ward',
                         textColor: black,
                         fontWeight: mediumFont,
@@ -242,12 +277,12 @@ class _AcademiaDetailsState extends State<AcademiaDetails> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CustomText(
-                        text: 'Polling Unit',
+                        text: 'PU',
                         textColor: black,
                         fontWeight: mediumFont,
                       ),
                       CustomText(
-                        text: widget.receive['polling_unit'],
+                        text: widget.receive['polls'],
                         textColor: const Color.fromRGBO(47, 79, 79, 1),
                         fontWeight: mediumFont,
                       ),
@@ -257,22 +292,28 @@ class _AcademiaDetailsState extends State<AcademiaDetails> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CustomText(
-                        text: 'LGA',
-                        textColor: black,
-                        fontWeight: mediumFont,
+                      Column(
+                        children: [
+                          InkWell(
+                            onTap: () async {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => EditAcademia(
+                                    fire_id: widget.ref,
+                                    data: widget.receive,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Icon(
+                              Icons.update,
+                              color: Color.fromRGBO(47, 79, 79, 1),
+                              size: 40,
+                            ),
+                          ),
+                          Text('Edit'),
+                        ],
                       ),
-                      CustomText(
-                        text: widget.receive['lga'],
-                        textColor: const Color.fromRGBO(47, 79, 79, 1),
-                        fontWeight: mediumFont,
-                      ),
-                    ],
-                  ),
-                  const Divider(color: Colors.grey),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
                       Column(
                         children: [
                           InkWell(

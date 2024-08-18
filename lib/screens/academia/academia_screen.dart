@@ -1,15 +1,12 @@
 import 'package:auy27/screens/academia/add_academia.dart';
-import 'package:auy27/screens/church/add_church.dart';
 import 'package:auy27/screens/tabs_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../../resources/color_constants.dart';
 import '../../resources/custom_text.dart';
 import '../../resources/font_constants.dart';
-import '../categoy_screens.dart';
 import 'academia_details.dart';
 
 class AcademiaScreen extends StatefulWidget {
@@ -23,6 +20,15 @@ class AcademiaScreen extends StatefulWidget {
 
 class _AcademiaScreenState extends State<AcademiaScreen> {
   final TextEditingController searchController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   List<QueryDocumentSnapshot<Map<String, dynamic>>> _myList = [];
   List<QueryDocumentSnapshot<Map<String, dynamic>>> _groupDisplay = [];
 
@@ -74,7 +80,7 @@ class _AcademiaScreenState extends State<AcademiaScreen> {
       body: SafeArea(
         child: _isLoading
             ? Center(
-                child: CircularProgressIndicator(),
+                child: CupertinoActivityIndicator(),
               )
             : SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -88,7 +94,6 @@ class _AcademiaScreenState extends State<AcademiaScreen> {
                         children: [
                           InkWell(
                               onTap: () {
-                                //  Navigator.pop(context);
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) => TabsScreen(number: 1),
@@ -183,19 +188,18 @@ class _AcademiaScreenState extends State<AcademiaScreen> {
                                           return Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: InkWell(
-                                              onTap: () {
-                                                Navigator.push(
+                                              onTap: () async {
+                                                await Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          AcademiaDetails(
-                                                            ref: data
-                                                                .reference.id,
-                                                            receive: data,
-                                                            id: data['id'],
-                                                            category:
-                                                                widget.category,
-                                                          )),
+                                                    builder: (context) =>
+                                                        AcademiaDetails(
+                                                      ref: data.reference.id,
+                                                      receive: data,
+                                                      id: data['id'],
+                                                      category: widget.category,
+                                                    ),
+                                                  ),
                                                 );
                                               },
                                               child: Container(
@@ -205,22 +209,10 @@ class _AcademiaScreenState extends State<AcademiaScreen> {
                                                   color: const Color.fromRGBO(
                                                       249, 249, 249, 1),
                                                 ),
-                                                child: Column(
-                                                  children: [
-                                                    ListTile(
-                                                      title: Text(
-                                                        data['name'],
-                                                      ),
-                                                      subtitle: Text(
-                                                        data['qualification'],
-                                                      ),
-                                                      trailing: Text(
-                                                        'Rank: ${data['rank']}',
-                                                      ),
-                                                    ),
-                                                    const Divider(
-                                                        color: Colors.grey),
-                                                  ],
+                                                child: ListTile(
+                                                  title: Text(
+                                                    data['name'],
+                                                  ),
                                                 ),
                                               ),
                                             ),

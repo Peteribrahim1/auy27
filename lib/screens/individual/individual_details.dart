@@ -1,8 +1,10 @@
+import 'package:auy27/screens/individual/edit_individual.dart';
 import 'package:auy27/screens/individual/individual_screen.dart';
 import 'package:auy27/screens/mark_point_map_page.dart';
 import 'package:auy27/screens/view_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../resources/color_constants.dart';
 import '../../resources/custom_text.dart';
@@ -10,13 +12,13 @@ import '../../resources/font_constants.dart';
 import '../../resources/styles.dart';
 
 class IndividualDetails extends StatefulWidget {
-  IndividualDetails(
-      {super.key,
-      required this.ref,
-      required this.receive,
-      required this.id,
-      required this.category});
-
+  IndividualDetails({
+    super.key,
+    required this.ref,
+    required this.receive,
+    required this.id,
+    required this.category,
+  });
   final String ref;
   final String id;
   final String category;
@@ -68,18 +70,38 @@ class _IndividualDetailsState extends State<IndividualDetails> {
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
-                      child: CachedNetworkImage(
-                        imageUrl: widget.receive['photoUrl'],
-                        height: 200,
-                        width: double.infinity,
-                        key: UniqueKey(),
-                        fit: BoxFit.cover,
-                        maxHeightDiskCache: 200,
-                        placeholder: (context, url) =>
-                            CircularProgressIndicator(
-                          color: Color.fromRGBO(47, 79, 79, 1),
-                        ),
-                      ),
+                      child: widget.receive['photoUrl'] != null &&
+                              widget.receive['photoUrl'].isNotEmpty
+                          ? CachedNetworkImage(
+                              imageUrl: widget.receive['photoUrl'],
+                              height: 200,
+                              width: double.infinity,
+                              key: UniqueKey(),
+                              fit: BoxFit.cover,
+                              maxHeightDiskCache: 200,
+                              placeholder: (context, url) =>
+                                  CupertinoActivityIndicator(
+                                color: Color.fromRGBO(47, 79, 79, 1),
+                              ),
+                              errorWidget: (context, url, error) => Center(
+                                child: Text(
+                                  'Some error occurred',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Center(
+                              child: Text(
+                                'No Image uploaded',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
                     ),
                   ),
                   SizedBox(height: 20),
@@ -228,8 +250,46 @@ class _IndividualDetailsState extends State<IndividualDetails> {
                   ),
                   const Divider(color: Colors.grey),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      CustomText(
+                        text: 'PU',
+                        textColor: black,
+                        fontWeight: mediumFont,
+                      ),
+                      CustomText(
+                        text: widget.receive['polls'],
+                        textColor: const Color.fromRGBO(47, 79, 79, 1),
+                        fontWeight: mediumFont,
+                      ),
+                    ],
+                  ),
+                  const Divider(color: Colors.grey),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        children: [
+                          InkWell(
+                            onTap: () async {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => EditIndividual(
+                                    fire_id: widget.ref,
+                                    data: widget.receive,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Icon(
+                              Icons.update,
+                              color: Color.fromRGBO(47, 79, 79, 1),
+                              size: 40,
+                            ),
+                          ),
+                          Text('Edit'),
+                        ],
+                      ),
                       Column(
                         children: [
                           InkWell(
@@ -244,7 +304,7 @@ class _IndividualDetailsState extends State<IndividualDetails> {
                               setState(() {
                                 _isLoading = false;
                               });
-                              // Navigator.pop(context);
+                              //Navigator.pop(context);
                               Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
                                   builder: (context) =>

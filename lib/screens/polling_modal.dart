@@ -1,4 +1,3 @@
-import 'package:auy27/screens/residence/add_residence.dart';
 import 'package:flutter/material.dart';
 
 import '../models/polling_model.dart';

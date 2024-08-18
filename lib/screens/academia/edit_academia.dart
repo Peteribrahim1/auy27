@@ -1,23 +1,27 @@
 import 'dart:typed_data';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
+
 import '../../resources/auth_methods.dart';
 import '../../resources/styles.dart';
 import '../../utils/utils.dart';
 import '../polling_modal.dart';
 import 'academia_screen.dart';
 
-class AddAcademia extends StatefulWidget {
-  AddAcademia({super.key});
+class EditAcademia extends StatefulWidget {
+  EditAcademia({super.key, required this.data, required this.fire_id});
   String? poll;
+  final QueryDocumentSnapshot<Map<String, dynamic>> data;
+  final String fire_id;
 
   @override
-  State<AddAcademia> createState() => _AddAcademiaState();
+  State<EditAcademia> createState() => _EditAcademiaState();
 }
 
-class _AddAcademiaState extends State<AddAcademia> {
+class _EditAcademiaState extends State<EditAcademia> {
   Uint8List? _image;
 
   void _selectImageFromGallery() async {
@@ -40,9 +44,9 @@ class _AddAcademiaState extends State<AddAcademia> {
   List<dynamic> Ward = [];
 
   String? lgaId;
+  String? selectedLga;
   String? wardId;
   String? selectedWard;
-  String? selectedLga;
   String? insId;
   String? selectedIns;
 
@@ -85,7 +89,7 @@ class _AddAcademiaState extends State<AddAcademia> {
     this.Lga.add({"id": 8, "name": "Kwami"});
     this.Lga.add({"id": 9, "name": "Nafada"});
     this.Lga.add({"id": 10, "name": "Shongom"});
-    this.Lga.add({"id": 11, "name": "Yamaltu-Deba"});
+    this.Lga.add({"id": 11, "name": "Yamaltu"});
 
     this.WardMasters = [
       {"ID": 1, "Name": "AKKO", "ParentId": 1},
@@ -203,18 +207,29 @@ class _AddAcademiaState extends State<AddAcademia> {
       {"ID": 10, "Name": "NONO / KUNWAL / W. BIRDEKA", "ParentId": 11},
       {"ID": 11, "Name": "ZAMBUK / KWALI", "ParentId": 11},
     ];
+    _nameController.text = widget.data['name'];
+    _phoneController.text = widget.data['phone'];
+    _ninController.text = widget.data['nin'];
+    _bvnController.text = widget.data['bvn'];
+    _voterController.text = widget.data['voter'];
+    _addressController.text = widget.data['address'];
+    _rankController.text = widget.data['rank'];
+    selectedIns = widget.data['institution'];
+    _qualificationController.text = widget.data['qualification'];
+    selectedLga = widget.data['lga'];
+    selectedWard = widget.data['ward'];
+    widget.poll = widget.data['polls'];
+    setState(() {});
   }
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _membersController = TextEditingController();
-  final TextEditingController _institutionController = TextEditingController();
-  final TextEditingController _rankController = TextEditingController();
-  final TextEditingController _wardController = TextEditingController();
   final TextEditingController _ninController = TextEditingController();
   final TextEditingController _bvnController = TextEditingController();
   final TextEditingController _voterController = TextEditingController();
+  final TextEditingController _statusController = TextEditingController();
+  final TextEditingController _rankController = TextEditingController();
   final TextEditingController _qualificationController =
       TextEditingController();
 
@@ -223,14 +238,10 @@ class _AddAcademiaState extends State<AddAcademia> {
     _nameController.dispose();
     _phoneController.dispose();
     _addressController.dispose();
-    _membersController.dispose();
-    _institutionController.dispose();
-    _rankController.dispose();
-    _wardController.dispose();
-    _qualificationController.dispose();
     _ninController.dispose();
     _bvnController.dispose();
     _voterController.dispose();
+    _statusController.dispose();
     super.dispose();
   }
 
@@ -241,7 +252,7 @@ class _AddAcademiaState extends State<AddAcademia> {
       _isLoading = true;
     });
 
-    String res = await AuthMethods().saveAcademia(
+    String res = await AuthMethods().editAcademia(
       name: _nameController.text,
       phone: _phoneController.text,
       address: _addressController.text,
@@ -255,6 +266,7 @@ class _AddAcademiaState extends State<AddAcademia> {
       bvn: _bvnController.text,
       voter: _voterController.text,
       polls: widget.poll.toString(),
+      firebaseid: widget.fire_id,
     );
 
     setState(() {
@@ -263,11 +275,10 @@ class _AddAcademiaState extends State<AddAcademia> {
       _ninController.text = '';
       _bvnController.text = '';
       _voterController.text = '';
-      // _pollingController.text = '';
       _qualificationController.text = '';
       _phoneController.text = '';
       _addressController.text = '';
-      _membersController.text = '';
+      //   _membersController.text = '';
       selectedLga = null;
       selectedWard = null;
     });
@@ -300,7 +311,7 @@ class _AddAcademiaState extends State<AddAcademia> {
           color: Colors.white, //change your color here
         ),
         title: const Text(
-          'Add Academia',
+          'Edit Academia',
           style: Styles.appBarTextStyle,
         ),
         centerTitle: true,
@@ -709,13 +720,10 @@ class _AddAcademiaState extends State<AddAcademia> {
                     if (_nameController.text.isNotEmpty
                         // _phoneController.text.isNotEmpty &&
                         // _addressController.text.isNotEmpty &&
-                        // _qualificationController.text.isNotEmpty &&
-                        // _pollingController.text.isNotEmpty &&
-                        //_rankController.text.isNotEmpty &&
+                        // _statusController.text.isNotEmpty &&
                         //  _image != null
                         // selectedLga.toString() != null &&
-                        // selectedWard.toString() != null &&
-                        // selectedIns.toString() != null
+                        // selectedWard.toString() != null
                         ) {
                       _saveData();
                     } else {
@@ -744,7 +752,7 @@ class _AddAcademiaState extends State<AddAcademia> {
                           ),
                         )
                       : const Text(
-                          'Submit',
+                          'Update',
                           style: Styles.buttonTextStyle,
                         ),
                 ),

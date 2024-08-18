@@ -1,20 +1,11 @@
 import 'dart:async';
-
-import 'package:auy27/screens/general_list.dart';
 import 'package:auy27/screens/save_current_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:label_marker/label_marker.dart';
-
 import 'package:location/location.dart';
-
-import '../resources/auth_methods.dart';
-import '../resources/styles.dart';
-import '../utillities/consts.dart';
 
 class GeneralMap extends StatefulWidget {
   const GeneralMap({super.key});
@@ -46,14 +37,7 @@ class _GeneralMapState extends State<GeneralMap> {
     getCurrentLocation();
     print("current loc $_currentP");
     getLocationUpdates();
-    //     .then(
-    //   (_) => {
-    //     getPolylinePoints().then((coordinates) => {
-    //           generatePolyLineFromPoints(coordinates),
-    //         }),
-    //   },
-    // );
-    // _pApplePark = LatLng(latitude, longitude);
+
     setState(() {});
   }
 
@@ -73,15 +57,6 @@ class _GeneralMapState extends State<GeneralMap> {
         await FirebaseFirestore.instance.collection('General Map').get();
     myList = snap.docs;
     for (int i = 0; i < myList.length; i++) {
-      //    print('myy laaaaaaatitude ${myList[i]['latitude']}');
-
-      // Marker secondMarker = Marker(
-      //   markerId: MarkerId("_destinationLocation$i"),
-      //   icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-      //  position: LatLng(myList[i]['latitude'], myList[i]['longitude']),
-      // );
-      //
-      // markers[secondMarker.markerId] = secondMarker;
       mark.addLabelMarker(
         LabelMarker(
           label: myList[i]['name'],
@@ -158,30 +133,15 @@ class _GeneralMapState extends State<GeneralMap> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'General Map',
-          style: Styles.appBarTextStyle,
-        ),
-        centerTitle: true,
-        backgroundColor: const Color.fromRGBO(47, 79, 79, 1),
-        // leading: InkWell(
-        //   onTap: () {
-        //     Navigator.of(context).push(
-        //       MaterialPageRoute(
-        //         builder: (context) => GeneralList(),
-        //       ),
-        //     );
-        //   },
-        //   child: Padding(
-        //     padding: const EdgeInsets.all(8.0),
-        //     child: Text(
-        //       'View List',
-        //       style: TextStyle(color: Colors.white),
-        //     ),
-        //   ),
-        // ),
-      ),
+      // appBar: AppBar(
+      //   title: const Text(
+      //     'General Map',
+      //     style: Styles.appBarTextStyle,
+      //   ),
+      //   automaticallyImplyLeading: false,
+      //   centerTitle: true,
+      //   backgroundColor: const Color.fromRGBO(47, 79, 79, 1),
+      // ),
       body: _currentP == null
           ? const Center(
               child: Text("Loading..."),
@@ -207,67 +167,14 @@ class _GeneralMapState extends State<GeneralMap> {
                 CameraUpdate.newCameraPosition(
                     CameraPosition(zoom: 50, target: _pGooglePlex));
                 print('lets check camera position');
-                //  zoom = cameraPosition.zoom;
+
                 setState(() {});
-                // print(cameraPosition.zoom);
               },
               markers: mark,
-              // Set<Marker>.of(markers.values),
-              // {
-              //   Marker(
-              //     onTap: () {
-              //       showDialog(
-              //           barrierDismissible: true,
-              //           context: context,
-              //           builder: (BuildContext context) => SaveCurrentDialog(
-              //                 latitude: _currentP!.latitude,
-              //                 longitude: _currentP!.longitude,
-              //               ));
-              //     },
-              //     markerId: const MarkerId("_currentLocation"),
-              //     icon: BitmapDescriptor.defaultMarkerWithHue(
-              //         BitmapDescriptor.hueGreen),
-              //     position: _currentP!,
-              //   ),
-              //   Marker(
-              //     onTap: () {
-              //       showDialog(
-              //           barrierDismissible: true,
-              //           context: context,
-              //           builder: (BuildContext context) => SaveCurrentDialog(
-              //                 latitude: _currentP!.latitude,
-              //                 longitude: _currentP!.longitude,
-              //               ));
-              //     },
-              //     markerId: const MarkerId("_currentLocation"),
-              //     icon: BitmapDescriptor.defaultMarkerWithHue(
-              //         BitmapDescriptor.hueGreen),
-              //     position: _currentP!,
-              //   ),
-              //   const Marker(
-              //       markerId: MarkerId("_sourceLocation"),
-              //       icon: BitmapDescriptor.defaultMarker,
-              //       position: _pGooglePlex),
-              //   const Marker(
-              //       markerId: MarkerId("_destionationLocation"),
-              //       icon: BitmapDescriptor.defaultMarker,
-              //       position: _pApplePark)
-              // },
               polylines: Set<Polyline>.of(polylines.values),
             ),
     );
   }
-
-  // Future<void> _cameraToPosition(LatLng pos) async {
-  //   final GoogleMapController controller = await _mapController.future;
-  //   CameraPosition _newCameraPosition = CameraPosition(
-  //     target: pos,
-  //     zoom: 13,
-  //   );
-  //   await controller.animateCamera(
-  //     CameraUpdate.newCameraPosition(_newCameraPosition),
-  //   );
-  // }
 
   Future<void> getLocationUpdates() async {
     bool _serviceEnabled;
@@ -295,12 +202,9 @@ class _GeneralMapState extends State<GeneralMap> {
         setState(() {
           _currentP =
               LatLng(currentLocation.latitude!, currentLocation.longitude!);
-          //   _cameraToPosition(_currentP!);
-          print("my current location is $_currentP");
-          //  print(_currentP?.longitude);
-        });
 
-        // dummyAddMarker();
+          print("my current location is $_currentP");
+        });
       }
     });
     print("your current location is $_currentP");

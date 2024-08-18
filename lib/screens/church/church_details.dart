@@ -1,13 +1,11 @@
-import 'dart:ffi';
-
 import 'package:auy27/screens/church/church_screen.dart';
+import 'package:auy27/screens/church/edit_church.dart';
 import 'package:auy27/screens/mark_point_map_page.dart';
 import 'package:auy27/screens/view_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../../resources/color_constants.dart';
 import '../../resources/custom_text.dart';
 import '../../resources/font_constants.dart';
@@ -64,18 +62,38 @@ class _ChurchDetailsState extends State<ChurchDetails> {
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
-                      child: CachedNetworkImage(
-                        imageUrl: widget.receive['photoUrl'],
-                        height: 200,
-                        width: double.infinity,
-                        key: UniqueKey(),
-                        fit: BoxFit.cover,
-                        maxHeightDiskCache: 200,
-                        placeholder: (context, url) =>
-                            CircularProgressIndicator(
-                          color: Color.fromRGBO(47, 79, 79, 1),
-                        ),
-                      ),
+                      child: widget.receive['photoUrl'] != null &&
+                              widget.receive['photoUrl'].isNotEmpty
+                          ? CachedNetworkImage(
+                              imageUrl: widget.receive['photoUrl'],
+                              height: 200,
+                              width: double.infinity,
+                              key: UniqueKey(),
+                              fit: BoxFit.cover,
+                              maxHeightDiskCache: 200,
+                              placeholder: (context, url) =>
+                                  CupertinoActivityIndicator(
+                                color: Color.fromRGBO(47, 79, 79, 1),
+                              ),
+                              errorWidget: (context, url, error) => Center(
+                                child: Text(
+                                  'Some error occurred',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Center(
+                              child: Text(
+                                'No Image uploaded',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
                     ),
                   ),
                   SizedBox(height: 20),
@@ -99,7 +117,7 @@ class _ChurchDetailsState extends State<ChurchDetails> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CustomText(
-                        text: 'Name of Representatives',
+                        text: 'Name of Rep',
                         textColor: black,
                         fontWeight: mediumFont,
                       ),
@@ -240,8 +258,63 @@ class _ChurchDetailsState extends State<ChurchDetails> {
                   ),
                   const Divider(color: Colors.grey),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      CustomText(
+                        text: 'Ward',
+                        textColor: black,
+                        fontWeight: mediumFont,
+                      ),
+                      CustomText(
+                        text: widget.receive['ward'],
+                        textColor: const Color.fromRGBO(47, 79, 79, 1),
+                        fontWeight: mediumFont,
+                      ),
+                    ],
+                  ),
+                  const Divider(color: Colors.grey),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomText(
+                        text: 'PU',
+                        textColor: black,
+                        fontWeight: mediumFont,
+                      ),
+                      CustomText(
+                        text: widget.receive['polls'],
+                        textColor: const Color.fromRGBO(47, 79, 79, 1),
+                        fontWeight: mediumFont,
+                      ),
+                    ],
+                  ),
+                  const Divider(color: Colors.grey),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        children: [
+                          InkWell(
+                            onTap: () async {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => EditChurch(
+                                    data: widget.receive,
+                                    fire_id: widget.ref,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Icon(
+                              Icons.update,
+                              color: Color.fromRGBO(47, 79, 79, 1),
+                              size: 40,
+                            ),
+                          ),
+                          Text('Edit'),
+                        ],
+                      ),
                       Column(
                         children: [
                           InkWell(

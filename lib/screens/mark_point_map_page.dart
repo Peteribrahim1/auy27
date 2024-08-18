@@ -1,18 +1,10 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:label_marker/label_marker.dart';
-
 import 'package:location/location.dart';
-
 import '../resources/auth_methods.dart';
 import '../resources/styles.dart';
-import '../utillities/consts.dart';
 import '../utils/utils.dart';
 
 class MarkPointMapPage extends StatefulWidget {
@@ -52,16 +44,7 @@ class _MarkPointMapPageState extends State<MarkPointMapPage> {
   @override
   void initState() {
     super.initState();
-    //print("current loc $_currentP");
     getLocationUpdates();
-    //     .then(
-    //   (_) => {
-    //     getPolylinePoints().then((coordinates) => {
-    //           generatePolyLineFromPoints(coordinates),
-    //         }),
-    //   },
-    // );
-    // _pApplePark = LatLng(latitude, longitude);
     setState(() {});
   }
 
@@ -83,8 +66,8 @@ class _MarkPointMapPageState extends State<MarkPointMapPage> {
       reference: widget.ref,
       category: widget.category,
     );
-  //  setState(() {});
-    print('save to general');
+    //  setState(() {});
+
 /////
     await AuthMethods().saveGeneralCoordinates(
       name: widget.name ?? 'setname',
@@ -145,15 +128,6 @@ class _MarkPointMapPageState extends State<MarkPointMapPage> {
                   //   snippet: "location",
                   // ),
                 ),
-
-                // const Marker(
-                //     markerId: MarkerId("_sourceLocation"),
-                //     icon: BitmapDescriptor.defaultMarker,
-                //     position: _pGooglePlex),
-                // const Marker(
-                //     markerId: MarkerId("_destionationLocation"),
-                //     icon: BitmapDescriptor.defaultMarker,
-                //     position: _pApplePark)
               },
               polylines: Set<Polyline>.of(polylines.values),
             ),
@@ -173,17 +147,6 @@ class _MarkPointMapPageState extends State<MarkPointMapPage> {
       ),
     );
   }
-
-  // Future<void> _cameraToPosition(LatLng pos) async {
-  //   final GoogleMapController controller = await _mapController.future;
-  //   CameraPosition _newCameraPosition = CameraPosition(
-  //     target: pos,
-  //     zoom: 13,
-  //   );
-  //   await controller.animateCamera(
-  //     CameraUpdate.newCameraPosition(_newCameraPosition),
-  //   );
-  // }
 
   Future<void> getLocationUpdates() async {
     bool _serviceEnabled;
@@ -211,12 +174,11 @@ class _MarkPointMapPageState extends State<MarkPointMapPage> {
         setState(() {
           _currentP =
               LatLng(currentLocation.latitude!, currentLocation.longitude!);
-          // _cameraToPosition(_currentP!);
+
           print("my current location is $_currentP");
           print(_currentP?.latitude);
         });
       }
     });
-    //  print("your current location is $_currentP");
   }
 }

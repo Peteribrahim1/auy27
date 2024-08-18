@@ -74,36 +74,37 @@ class AuthMethods {
   //save political group
   Future<String> savePoliticalGroup(
       {required String name,
-      required String phone,
-      required String address,
-      required String members,
-      required String lga,
-      required String ward,
+      String? phone,
+      String? address,
+      String? members,
+      String? lga,
+      String? ward,
       //  required String polling_unit,
-      required String party,
-      required String status,
-      required String polls,
+      String? party,
+      String? status,
+      String? polls,
       String? nin,
       String? bvn,
       String? voter,
-      required Uint8List file}) async {
+      Uint8List? file}) async {
     String res = 'Please enter all the fields';
     String? uid = FirebaseAuth.instance.currentUser?.uid;
     try {
-      if (name.isNotEmpty &&
-          phone.isNotEmpty &&
-          address.isNotEmpty &&
-          members.isNotEmpty &&
+      if (name.isNotEmpty
+          // phone.isNotEmpty &&
+          // address.isNotEmpty &&
+          // members.isNotEmpty &&
           //  polling_unit.isNotEmpty &&
-          status.isNotEmpty &&
-          polls.isNotEmpty &&
-          party.isNotEmpty &&
+          // status.isNotEmpty &&
+          // polls.isNotEmpty &&
+          // party.isNotEmpty &&
           // nin.isNotEmpty &&
           // bvn.isNotEmpty &&
           // voter.isNotEmpty &&
-          file != null &&
-          lga != null &&
-          ward != null) {
+          //file != null
+          // lga != null &&
+          // ward != null
+          ) {
         String photoUrl = await StorageMethods()
             .uploadImageToStorage('political_group_images', file, false);
         //add to database
@@ -137,33 +138,102 @@ class AuthMethods {
     return res;
   }
 
+  //edit political group
+  Future<String> editPoliticalGroup({
+    required String firebaseid,
+    required String name,
+    String? phone,
+    String? address,
+    String? members,
+    String? lga,
+    String? ward,
+    String? party,
+    String? status,
+    String? polls,
+    String? nin,
+    String? bvn,
+    String? voter,
+    Uint8List? file,
+  }) async {
+    String res = 'Please enter all the fields';
+    String? uid = FirebaseAuth.instance.currentUser?.uid;
+    try {
+      if (name.isNotEmpty
+          // phone.isNotEmpty &&
+          // address.isNotEmpty &&
+          // members.isNotEmpty &&
+          //  polling_unit.isNotEmpty &&
+          // status.isNotEmpty &&
+          // polls.isNotEmpty &&
+          // party.isNotEmpty &&
+          // nin.isNotEmpty &&
+          // bvn.isNotEmpty &&
+          // voter.isNotEmpty &&
+          //  file != null
+          // lga != null &&
+          // ward != null
+          ) {
+        String photoUrl = await StorageMethods()
+            .uploadImageToStorage('political_group_images', file, false);
+        //add to database
+        await _firestore.collection('Political Group').doc(firebaseid).update({
+          'name': name,
+          'phone': phone,
+          'address': address,
+          'members': members,
+          'lga': lga,
+          'ward': ward,
+          'party': party,
+          'status': status,
+          'polls': polls,
+          'nin': nin,
+          'bvn': bvn,
+          'voter': voter,
+          'id': DateTime.now().microsecondsSinceEpoch.toString(),
+          'uid': uid,
+          'photoUrl': photoUrl,
+        });
+        res = 'success';
+      } else {
+        res = 'Please enter all the fields';
+      }
+    } on FirebaseAuthException catch (err) {
+      print(err.code);
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
+
   //save residence
-  Future<String> saveResidence(
-      {required String name,
-      required String phone,
-      required String address,
-      required String lga,
-      String? nin,
-      String? bvn,
-      String? voter,
-      required String party,
-      //   required String polling,
-      required String status,
-      required String polls,
-      required Uint8List file}) async {
+  Future<String> saveResidence({
+    required String name,
+    String? phone,
+    String? address,
+    String? lga,
+    String? ward,
+    String? nin,
+    String? bvn,
+    String? voter,
+    String? party,
+    String? status,
+    String? polls,
+    Uint8List? file,
+  }) async {
     // print(file == null);
     String res = 'Please enter all the fields';
     String? uid = FirebaseAuth.instance.currentUser?.uid;
     try {
-      if (name.isNotEmpty &&
-          phone.isNotEmpty &&
-          address.isNotEmpty &&
-          party.isNotEmpty &&
+      if (name.isNotEmpty
+          // phone.isNotEmpty &&
+          // address.isNotEmpty &&
+          // party.isNotEmpty &&
           //  polling.isNotEmpty &&
-          status.isNotEmpty &&
-          polls.isNotEmpty &&
-          file != null &&
-          lga != null) {
+          // status.isNotEmpty &&
+          // polls.isNotEmpty &&
+          // file != null
+          //    lga != null
+          ) {
         String photoUrl = await StorageMethods()
             .uploadImageToStorage('residence_images', file, false);
         print(photoUrl);
@@ -176,10 +246,71 @@ class AuthMethods {
           'bvn': bvn,
           'voter': voter,
           'party': party,
-          //  'polling': polling,
           'status': status,
           'polls': polls,
           'lga': lga,
+          'ward': ward,
+          'latitude': '',
+          'id': DateTime.now().microsecondsSinceEpoch.toString(),
+          'uid': uid,
+          'photoUrl': photoUrl,
+        });
+        res = 'success';
+      }
+    } on FirebaseAuthException catch (err) {
+      print(err.code);
+    } catch (err) {
+      res = err.toString();
+      print(err);
+    }
+    return res;
+  }
+
+  //edit residence
+  Future<String> editResidence({
+    required String firebaseid,
+    required String name,
+    String? phone,
+    String? address,
+    String? lga,
+    String? ward,
+    String? nin,
+    String? bvn,
+    String? voter,
+    String? party,
+    String? status,
+    String? polls,
+    Uint8List? file,
+  }) async {
+    // print(file == null);
+    String res = 'Please enter all the fields';
+    String? uid = FirebaseAuth.instance.currentUser?.uid;
+    try {
+      if (name.isNotEmpty
+          // phone.isNotEmpty &&
+          // address.isNotEmpty &&
+          // party.isNotEmpty &&
+          //  polling.isNotEmpty &&
+          // status.isNotEmpty &&
+          // polls.isNotEmpty &&
+          // file != null
+          //    lga != null
+          ) {
+        String photoUrl = await StorageMethods()
+            .uploadImageToStorage('residence_images', file, false);
+        //add to database
+        await _firestore.collection('Residence').doc(firebaseid).update({
+          'name': name,
+          'phone': phone,
+          'address': address,
+          'nin': nin,
+          'bvn': bvn,
+          'voter': voter,
+          'party': party,
+          'status': status,
+          'polls': polls,
+          'lga': lga,
+          'ward': ward,
           'latitude': '',
           'id': DateTime.now().microsecondsSinceEpoch.toString(),
           'uid': uid,
@@ -199,31 +330,33 @@ class AuthMethods {
   //save islamiya
   Future<String> saveIslamiya({
     required String name,
-    required String nameRep,
-    required String phone,
-    required String address,
-    required String members,
-    required String denomination,
-    required String lga,
-    required String polls,
+    String? nameRep,
+    String? phone,
+    String? address,
+    String? members,
+    String? denomination,
+    String? lga,
+    String? ward,
+    String? polls,
     String? nin,
     String? bvn,
     String? voter,
-    required Uint8List file,
+    Uint8List? file,
     File? file2,
   }) async {
     String res = 'Please enter all the fields';
     String? uid = FirebaseAuth.instance.currentUser?.uid;
     try {
-      if (name.isNotEmpty &&
-          nameRep.isNotEmpty &&
-          phone.isNotEmpty &&
-          address.isNotEmpty &&
-          members.isNotEmpty &&
-          denomination.isNotEmpty &&
-          polls.isNotEmpty &&
-          file != null &&
-          lga != null) {
+      if (name.isNotEmpty
+          // nameRep.isNotEmpty &&
+          // phone.isNotEmpty &&
+          // address.isNotEmpty &&
+          // members.isNotEmpty &&
+          // denomination.isNotEmpty &&
+          // polls.isNotEmpty &&
+          //  file != null
+          //    lga != null
+          ) {
         String photoUrl = await StorageMethods()
             .uploadImageToStorage('islamiya_images', file, false);
         //add to database
@@ -239,6 +372,69 @@ class AuthMethods {
           'bvn': bvn,
           'voter': voter,
           'lga': lga,
+          'ward': ward,
+          'id': DateTime.now().microsecondsSinceEpoch.toString(),
+          'uid': uid,
+          'photoUrl': photoUrl,
+        });
+        res = 'success';
+      }
+    } on FirebaseAuthException catch (err) {
+      print(err.code);
+    } catch (err) {
+      res = err.toString();
+      print(err);
+    }
+    return res;
+  }
+
+  //edit islamiya
+  Future<String> editIslamiya({
+    required String firebaseid,
+    required String name,
+    String? nameRep,
+    String? phone,
+    String? address,
+    String? members,
+    String? denomination,
+    String? lga,
+    String? ward,
+    String? polls,
+    String? nin,
+    String? bvn,
+    String? voter,
+    Uint8List? file,
+    File? file2,
+  }) async {
+    String res = 'Please enter all the fields';
+    String? uid = FirebaseAuth.instance.currentUser?.uid;
+    try {
+      if (name.isNotEmpty
+          // nameRep.isNotEmpty &&
+          // phone.isNotEmpty &&
+          // address.isNotEmpty &&
+          // members.isNotEmpty &&
+          // denomination.isNotEmpty &&
+          // polls.isNotEmpty &&
+          //  file != null
+          //    lga != null
+          ) {
+        String photoUrl = await StorageMethods()
+            .uploadImageToStorage('islamiya_images', file, false);
+        //add to database
+        await _firestore.collection('Islamiya').doc(firebaseid).update({
+          'name': name,
+          'name_rep': nameRep,
+          'phone': phone,
+          'address': address,
+          'members': members,
+          'denomination': denomination,
+          'polls': polls,
+          'nin': nin,
+          'bvn': bvn,
+          'voter': voter,
+          'lga': lga,
+          'ward': ward,
           'id': DateTime.now().microsecondsSinceEpoch.toString(),
           'uid': uid,
           'photoUrl': photoUrl,
@@ -257,28 +453,29 @@ class AuthMethods {
   //save individual
   Future<String> saveIndividual({
     required String name,
-    required String phone,
-    required String address,
-    required String status,
-    required String lga,
-    required String ward,
-    required String polls,
+    String? phone,
+    String? address,
+    String? status,
+    String? lga,
+    String? ward,
+    String? polls,
     String? nin,
     String? bvn,
     String? voter,
-    required Uint8List file,
+    Uint8List? file,
   }) async {
     String res = 'Please enter all the fields';
     String? uid = FirebaseAuth.instance.currentUser?.uid;
     try {
-      if (name.isNotEmpty &&
-          phone.isNotEmpty &&
-          address.isNotEmpty &&
-          status.isNotEmpty &&
-          polls.isNotEmpty &&
-          file != null &&
-          lga != null &&
-          ward != null) {
+      if (name.isNotEmpty
+          // phone.isNotEmpty &&
+          // address.isNotEmpty &&
+          // status.isNotEmpty &&
+          // polls.isNotEmpty &&
+          // file != null &&
+          // lga != null &&
+          // ward != null
+          ) {
         String photoUrl = await StorageMethods()
             .uploadImageToStorage('individual_images', file, false);
         //add to database
@@ -308,32 +505,91 @@ class AuthMethods {
     return res;
   }
 
-  //save masjid
-  Future<String> saveMasjid(
-      {required String name,
-      required String nameRep,
-      required String phone,
-      required String address,
-      required String members,
-      required String denomination,
-      required String lga,
-      required String polls,
-      String? nin,
-      String? bvn,
-      String? voter,
-      required Uint8List file}) async {
+  //edit individual
+  Future<String> editIndividual({
+    required String firebaseid,
+    required String name,
+    String? phone,
+    String? address,
+    String? status,
+    String? lga,
+    String? ward,
+    String? polls,
+    String? nin,
+    String? bvn,
+    String? voter,
+    Uint8List? file,
+  }) async {
     String res = 'Please enter all the fields';
     String? uid = FirebaseAuth.instance.currentUser?.uid;
     try {
-      if (name.isNotEmpty &&
-          nameRep.isNotEmpty &&
-          phone.isNotEmpty &&
-          address.isNotEmpty &&
-          members.isNotEmpty &&
-          denomination.isNotEmpty &&
-          polls.isNotEmpty &&
-          file != null &&
-          lga != null) {
+      if (name.isNotEmpty
+          // phone.isNotEmpty &&
+          // address.isNotEmpty &&
+          // status.isNotEmpty &&
+          // polls.isNotEmpty &&
+          // file != null &&
+          // lga != null &&
+          // ward != null
+          ) {
+        String photoUrl = await StorageMethods()
+            .uploadImageToStorage('individual_images', file, false);
+        //add to database
+        await _firestore.collection('Individual').doc(firebaseid).update({
+          'name': name,
+          'phone': phone,
+          'address': address,
+          'status': status,
+          'polls': polls,
+          'nin': nin,
+          'bvn': bvn,
+          'voter': voter,
+          'lga': lga,
+          'ward': ward,
+          'id': DateTime.now().microsecondsSinceEpoch.toString(),
+          'uid': uid,
+          'photoUrl': photoUrl,
+        });
+        res = 'success';
+      }
+    } on FirebaseAuthException catch (err) {
+      print(err.code);
+    } catch (err) {
+      res = err.toString();
+      print(err);
+    }
+    return res;
+  }
+
+  //save masjid
+  Future<String> saveMasjid({
+    required String name,
+    String? nameRep,
+    String? phone,
+    String? address,
+    String? members,
+    String? denomination,
+    String? lga,
+    String? ward,
+    String? polls,
+    String? nin,
+    String? bvn,
+    String? voter,
+    Uint8List? file,
+  }) async {
+    String res = 'Please enter all the fields';
+    String? uid = FirebaseAuth.instance.currentUser?.uid;
+    try {
+      if (name.isNotEmpty
+          // nameRep.isNotEmpty &&
+          // phone.isNotEmpty &&
+          // address.isNotEmpty &&
+          // members.isNotEmpty &&
+          // denomination.isNotEmpty &&
+          // polls.isNotEmpty &&
+          // file != null
+          //    lga != null
+          ) {
         String photoUrl = await StorageMethods()
             .uploadImageToStorage('Masjid_images', file, false);
         //add to database
@@ -349,6 +605,68 @@ class AuthMethods {
           'bvn': bvn,
           'voter': voter,
           'lga': lga,
+          'ward': ward,
+          'id': DateTime.now().microsecondsSinceEpoch.toString(),
+          'uid': uid,
+          'photoUrl': photoUrl,
+        });
+        res = 'success';
+      }
+    } on FirebaseAuthException catch (err) {
+      print(err.code);
+    } catch (err) {
+      res = err.toString();
+      print(err);
+    }
+    return res;
+  }
+
+  //edit masjid
+  Future<String> editMasjid({
+    required String firebaseid,
+    required String name,
+    String? nameRep,
+    String? phone,
+    String? address,
+    String? members,
+    String? denomination,
+    String? lga,
+    String? ward,
+    String? polls,
+    String? nin,
+    String? bvn,
+    String? voter,
+    Uint8List? file,
+  }) async {
+    String res = 'Please enter all the fields';
+    String? uid = FirebaseAuth.instance.currentUser?.uid;
+    try {
+      if (name.isNotEmpty
+          // nameRep.isNotEmpty &&
+          // phone.isNotEmpty &&
+          // address.isNotEmpty &&
+          // members.isNotEmpty &&
+          // denomination.isNotEmpty &&
+          // polls.isNotEmpty &&
+          //  file != null
+          //    lga != null
+          ) {
+        String photoUrl = await StorageMethods()
+            .uploadImageToStorage('Masjid_images', file, false);
+        //add to database
+        await _firestore.collection('Masjid').doc(firebaseid).update({
+          'name': name,
+          'name_rep': nameRep,
+          'phone': phone,
+          'address': address,
+          'members': members,
+          'denomination': denomination,
+          'polls': polls,
+          'nin': nin,
+          'bvn': bvn,
+          'voter': voter,
+          'lga': lga,
+          'ward': ward,
           'id': DateTime.now().microsecondsSinceEpoch.toString(),
           'uid': uid,
           'photoUrl': photoUrl,
@@ -365,31 +683,34 @@ class AuthMethods {
   }
 
   //save church
-  Future<String> saveChurch(
-      {required String name,
-      required String nameRep,
-      required String phone,
-      required String address,
-      required String members,
-      required String denomination,
-      required String lga,
-      required String polls,
-      String? nin,
-      String? bvn,
-      String? voter,
-      required Uint8List file}) async {
+  Future<String> saveChurch({
+    required String name,
+    String? nameRep,
+    String? phone,
+    String? address,
+    String? members,
+    String? denomination,
+    String? lga,
+    String? ward,
+    String? polls,
+    String? nin,
+    String? bvn,
+    String? voter,
+    Uint8List? file,
+  }) async {
     String res = 'Please enter all the fields';
     String? uid = FirebaseAuth.instance.currentUser?.uid;
     try {
-      if (name.isNotEmpty &&
-          nameRep.isNotEmpty &&
-          phone.isNotEmpty &&
-          address.isNotEmpty &&
-          members.isNotEmpty &&
-          denomination.isNotEmpty &&
-          polls.isNotEmpty &&
-          file != null &&
-          lga != null) {
+      if (name.isNotEmpty
+          // nameRep.isNotEmpty &&
+          // phone.isNotEmpty &&
+          // address.isNotEmpty &&
+          // members.isNotEmpty &&
+          // denomination.isNotEmpty &&
+          // polls.isNotEmpty &&
+          //  file != null
+          //    lga != null
+          ) {
         String photoUrl = await StorageMethods()
             .uploadImageToStorage('Church_images', file, false);
         //add to database
@@ -402,6 +723,68 @@ class AuthMethods {
           'denomination': denomination,
           'polls': polls,
           'lga': lga,
+          'ward': ward,
+          'nin': nin,
+          'bvn': bvn,
+          'voter': voter,
+          'id': DateTime.now().microsecondsSinceEpoch.toString(),
+          'uid': uid,
+          'photoUrl': photoUrl,
+        });
+        res = 'success';
+      }
+    } on FirebaseAuthException catch (err) {
+      print(err.code);
+    } catch (err) {
+      res = err.toString();
+      print(err);
+    }
+    return res;
+  }
+
+  //edit church
+  Future<String> editChurch({
+    required String firebaseid,
+    required String name,
+    String? nameRep,
+    String? phone,
+    String? address,
+    String? members,
+    String? denomination,
+    String? lga,
+    String? ward,
+    String? polls,
+    String? nin,
+    String? bvn,
+    String? voter,
+    Uint8List? file,
+  }) async {
+    String res = 'Please enter all the fields';
+    String? uid = FirebaseAuth.instance.currentUser?.uid;
+    try {
+      if (name.isNotEmpty
+          // nameRep.isNotEmpty &&
+          // phone.isNotEmpty &&
+          // address.isNotEmpty &&
+          // members.isNotEmpty &&
+          // denomination.isNotEmpty &&
+          // polls.isNotEmpty &&
+          //  file != null
+          //    lga != null
+          ) {
+        String photoUrl = await StorageMethods()
+            .uploadImageToStorage('Church_images', file, false);
+        //add to database
+        await _firestore.collection('Church').doc(firebaseid).update({
+          'name': name,
+          'name_rep': nameRep,
+          'phone': phone,
+          'address': address,
+          'members': members,
+          'denomination': denomination,
+          'polls': polls,
+          'lga': lga,
+          'ward': ward,
           'nin': nin,
           'bvn': bvn,
           'voter': voter,
@@ -426,30 +809,31 @@ class AuthMethods {
       String? nin,
       String? bvn,
       String? voter,
-      required String institution,
-      required String phone,
-      required String address,
-      required String rank,
-      required String ward,
-      required String polls,
+      String? institution,
+      String? phone,
+      String? address,
+      String? rank,
+      String? ward,
+      String? polls,
       // required String polling_unit,
-      required String qualification,
-      required String lga,
-      required Uint8List file}) async {
+      String? qualification,
+      String? lga,
+      Uint8List? file}) async {
     String res = 'Please enter all the fields';
     String? uid = FirebaseAuth.instance.currentUser?.uid;
     try {
-      if (name.isNotEmpty &&
-          phone.isNotEmpty &&
-          address.isNotEmpty &&
-          rank.isNotEmpty &&
-          polls.isNotEmpty &&
+      if (name.isNotEmpty
+          // phone.isNotEmpty &&
+          // address.isNotEmpty &&
+          // rank.isNotEmpty &&
+          // polls.isNotEmpty &&
           //  polling_unit.isNotEmpty &&
-          qualification.isNotEmpty &&
-          file != null &&
-          institution != null &&
-          ward != null &&
-          lga != null) {
+          //qualification.isNotEmpty &&
+          // file != null
+          // institution != null &&
+          // ward != null &&
+          // lga != null
+          ) {
         String photoUrl = await StorageMethods()
             .uploadImageToStorage('Academia_images', file, false);
         //add to database
@@ -465,6 +849,69 @@ class AuthMethods {
           'ward': ward,
           'polls': polls,
           //  'polling_unit': polling_unit,
+          'qualification': qualification,
+          'lga': lga,
+          'id': DateTime.now().microsecondsSinceEpoch.toString(),
+          'uid': uid,
+          'photoUrl': photoUrl,
+        });
+        res = 'success';
+      }
+    } on FirebaseAuthException catch (err) {
+      print(err.code);
+    } catch (err) {
+      res = err.toString();
+      print(err);
+    }
+    return res;
+  }
+
+  //edit academia
+  Future<String> editAcademia({
+    required String firebaseid,
+    required String name,
+    String? nin,
+    String? bvn,
+    String? voter,
+    String? institution,
+    String? phone,
+    String? address,
+    String? rank,
+    String? ward,
+    String? polls,
+    String? qualification,
+    String? lga,
+    Uint8List? file,
+  }) async {
+    String res = 'Please enter all the fields';
+    String? uid = FirebaseAuth.instance.currentUser?.uid;
+    try {
+      if (name.isNotEmpty
+          // phone.isNotEmpty &&
+          // address.isNotEmpty &&
+          // rank.isNotEmpty &&
+          // polls.isNotEmpty &&
+          //  polling_unit.isNotEmpty &&
+          //qualification.isNotEmpty &&
+          // file != null
+          // institution != null &&
+          // ward != null &&
+          // lga != null
+          ) {
+        String photoUrl = await StorageMethods()
+            .uploadImageToStorage('Academia_images', file, false);
+        //add to database
+        await _firestore.collection('Academia').doc(firebaseid).update({
+          'name': name,
+          'nin': nin,
+          'bvn': bvn,
+          'voter': voter,
+          'institution': institution,
+          'phone': phone,
+          'address': address,
+          'rank': rank,
+          'ward': ward,
+          'polls': polls,
           'qualification': qualification,
           'lga': lga,
           'id': DateTime.now().microsecondsSinceEpoch.toString(),

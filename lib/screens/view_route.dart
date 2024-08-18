@@ -1,19 +1,14 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:label_marker/label_marker.dart';
-
 import 'package:location/location.dart';
 
-import '../resources/auth_methods.dart';
 import '../resources/styles.dart';
 import '../utillities/consts.dart';
-import '../utils/utils.dart';
 
 class ViewRoute extends StatefulWidget {
   const ViewRoute({super.key, required this.category, required this.id});
@@ -35,10 +30,6 @@ class _ViewRouteState extends State<ViewRoute> {
   final Completer<GoogleMapController> _mapController =
       Completer<GoogleMapController>();
 
-  // static const LatLng _pGooglePlex = LatLng(37.4223, -122.0848);
-  // static const LatLng _pApplePark = LatLng(37.3346, -122.0090);
-
-  // static const LatLng _pGooglePlex = LatLng(10.274604715, 11.1225046625);
   LatLng _pApplePark = LatLng(10.3063, 11.1426);
   LatLng? _currentP = null;
 
@@ -48,8 +39,6 @@ class _ViewRouteState extends State<ViewRoute> {
   void initState() {
     super.initState();
     getCurrentLocation();
-    // fetchLatLong();
-    // print("current loc $_currentP");
   }
 
   Future<void> getCurrentLocation() async {
@@ -96,22 +85,7 @@ class _ViewRouteState extends State<ViewRoute> {
       );
       setState(() {});
     }
-    // print(snap.docs[0]['name']);;
-    //
-    // final snap2 = snap.docs
-    //     .where((element) =>
-    //         element["uid"] == FirebaseAuth.instance.currentUser?.uid)
-    //     .toList();
-    // // print('snap2 ${snap2.length}');
-    // myList = snap2;
-    // // final item = myList.firstWhere((location) => location['address'] == "dfbh");
-    // // debugPrint("The latitude is: ${item['latitude']}");
-    // final data = myList[1];
-    // latitude = data['latitude'];
-    // longitude = data['longitude'];
-    // print('my assigned latitude is $latitude');
-    // _pApplePark = LatLng(latitude!, longitude!);
-    // print('yyyyyyy${_pApplePark.latitude}');
+
     setState(() {
       _isLoading = false;
     });
@@ -148,38 +122,10 @@ class _ViewRouteState extends State<ViewRoute> {
                 zoom: 14.5,
               ),
               markers: mark,
-              // markers: {
-              //   Marker(
-              //     markerId: const MarkerId("_currentLocation"),
-              //     icon: BitmapDescriptor.defaultMarkerWithHue(
-              //         BitmapDescriptor.hueGreen),
-              //     position: _currentP!,
-              //   ),
-              //   // Marker(
-              //   //     markerId: MarkerId("_sourceLocation"),
-              //   //     icon: BitmapDescriptor.defaultMarker,
-              //   //     position: _pGooglePlex),
-              //   Marker(
-              //       markerId: MarkerId("_destionationLocation"),
-              //       icon: BitmapDescriptor.defaultMarkerWithHue(
-              //           BitmapDescriptor.hueBlue),
-              //       position: _pApplePark)
-              // },
               polylines: Set<Polyline>.of(polylines.values),
             ),
     );
   }
-
-  // Future<void> _cameraToPosition(LatLng pos) async {
-  //   final GoogleMapController controller = await _mapController.future;
-  //   CameraPosition _newCameraPosition = CameraPosition(
-  //     target: pos,
-  //     zoom: 13,
-  //   );
-  //   await controller.animateCamera(
-  //     CameraUpdate.newCameraPosition(_newCameraPosition),
-  //   );
-  // }
 
   Future<void> getLocationUpdates() async {
     bool _serviceEnabled;
@@ -247,22 +193,3 @@ class _ViewRouteState extends State<ViewRoute> {
     });
   }
 }
-
-// Future<List<LatLng>> getPolylinePoints() async {
-//   List<LatLng> polylineCoordinates = [];
-//   PolylinePoints polylinePoints = PolylinePoints();
-//   PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-//     GOOGLE_MAPS_API_KEY,
-//     PointLatLng(_pGooglePlex.latitude, _pGooglePlex.longitude),
-//     PointLatLng(_pApplePark.latitude, _pApplePark.longitude),
-//     travelMode: TravelMode.driving,
-//   );
-//   if (result.points.isNotEmpty) {
-//     result.points.forEach((PointLatLng point) {
-//       polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-//     });
-//   } else {
-//     print(result.errorMessage);
-//   }
-//   return polylineCoordinates;
-// }

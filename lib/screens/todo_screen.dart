@@ -81,6 +81,7 @@ class _TodoScreenState extends State<TodoScreen> {
           'ToDo List',
           style: TextStyle(color: Color.fromRGBO(47, 79, 79, 1)),
         ),
+        automaticallyImplyLeading: false,
         elevation: 0,
       ),
       floatingActionButton: SizedBox(
