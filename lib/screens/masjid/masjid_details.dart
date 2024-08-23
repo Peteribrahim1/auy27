@@ -87,7 +87,7 @@ class _MasjidDetailsState extends State<MasjidDetails> {
                               widget.receive['photoUrl'].isNotEmpty
                           ? CachedNetworkImage(
                               imageUrl: widget.receive['photoUrl'],
-                              height: 200,
+                              height: 300,
                               width: double.infinity,
                               key: UniqueKey(),
                               fit: BoxFit.cover,

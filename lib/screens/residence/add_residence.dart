@@ -3,12 +3,14 @@ import 'dart:typed_data';
 import 'package:auy27/screens/polling_modal.dart';
 import 'package:auy27/screens/residence/residence_screen.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import '../../resources/auth_methods.dart';
 import '../../resources/styles.dart';
 import '../../utils/utils.dart';
+import 'package:image/image.dart' as img;
 
 class AddResidence extends StatefulWidget {
   AddResidence({super.key, this.poll});
@@ -18,20 +20,70 @@ class AddResidence extends StatefulWidget {
 }
 
 class _AddResidenceState extends State<AddResidence> {
+  bool _camLoading = false;
+
   Uint8List? _image;
 
   void _selectImageFromGallery() async {
     Uint8List img = await pickImage(ImageSource.gallery);
+
     setState(() {
-      _image = img;
+      _camLoading = true;
+    });
+    // Compress the image in the background
+    Uint8List? compressedImage = await compute(_compressImage, img);
+
+    setState(() {
+      _image = compressedImage;
+      _camLoading = false;
     });
   }
 
   void _selectImageFromCamera() async {
     Uint8List imgc = await pickImage(ImageSource.camera);
+
     setState(() {
-      _image = imgc;
+      _camLoading = true;
     });
+    // Compress the image in the background
+    Uint8List? compressedImage = await compute(_compressImage, imgc);
+
+    setState(() {
+      _image = compressedImage;
+      _camLoading = false;
+    });
+  }
+
+  // Downscale and compress the image to be under 100KB
+  static Future<Uint8List?> _compressImage(Uint8List image) async {
+    img.Image? decodedImage = img.decodeImage(image);
+    if (decodedImage == null) return null;
+
+    // Downscale the image before compression
+    int maxWidth = 1080;
+    if (decodedImage.width > maxWidth) {
+      decodedImage = img.copyResize(decodedImage, width: maxWidth);
+    }
+
+    int quality = 50; // Start with a lower quality
+    Uint8List? compressedImage;
+    do {
+      compressedImage = Uint8List.fromList(
+        img.encodeJpg(decodedImage, quality: quality),
+      );
+      quality -= 5; // Reduce quality in larger steps to make it faster
+    } while (compressedImage.length > 100 * 1024 && quality > 0);
+
+    return compressedImage;
+  }
+
+  Future<Uint8List> pickImage(ImageSource source) async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: source);
+    if (image != null) {
+      return await image.readAsBytes();
+    }
+    throw 'No image selected';
   }
 
   List<dynamic> Lga = [];
@@ -321,12 +373,15 @@ class _AddResidenceState extends State<AddResidence> {
                           ),
                         ),
                       )
-                    : Container(),
+                    : Container(
+                        child: _camLoading
+                            ? LinearProgressIndicator()
+                            : Container(),
+                      ),
               ),
             ),
             SizedBox(height: 15),
             TextField(
-              maxLength: 25,
               controller: _nameController,
               decoration: InputDecoration(
                 filled: true,
@@ -337,7 +392,7 @@ class _AddResidenceState extends State<AddResidence> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'name*',
+                hintText: 'NAME*',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -361,7 +416,7 @@ class _AddResidenceState extends State<AddResidence> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'phone',
+                hintText: 'PHONE',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -375,7 +430,6 @@ class _AddResidenceState extends State<AddResidence> {
             ),
             const SizedBox(height: 15),
             TextField(
-              // maxLength: 11,
               controller: _ninController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
@@ -386,7 +440,7 @@ class _AddResidenceState extends State<AddResidence> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'nin',
+                hintText: 'NIN',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -411,7 +465,7 @@ class _AddResidenceState extends State<AddResidence> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'bvn',
+                hintText: 'BVN',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -438,7 +492,7 @@ class _AddResidenceState extends State<AddResidence> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'voter card number',
+                hintText: 'VOTER CARD NUMBER',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -465,7 +519,7 @@ class _AddResidenceState extends State<AddResidence> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'party',
+                hintText: 'PARTY',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -492,7 +546,7 @@ class _AddResidenceState extends State<AddResidence> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'status',
+                hintText: 'STATUS',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -515,7 +569,7 @@ class _AddResidenceState extends State<AddResidence> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'address',
+                hintText: 'ADDRESS',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -530,7 +584,7 @@ class _AddResidenceState extends State<AddResidence> {
             const SizedBox(height: 15),
             FormHelper.dropDownWidget(
               context,
-              'select lga',
+              'SELECT LGA',
               this.lgaId,
               this.Lga,
               contentPadding: 16,
@@ -562,7 +616,7 @@ class _AddResidenceState extends State<AddResidence> {
               },
               (onValidateVal) {
                 if (onValidateVal == null) {
-                  return 'Please select faculty';
+                  return 'Please select lga';
                 }
                 return null;
               },
@@ -572,7 +626,7 @@ class _AddResidenceState extends State<AddResidence> {
             const SizedBox(height: 15),
             FormHelper.dropDownWidget(
               context,
-              'select ward',
+              'SELECT WARD',
               this.wardId,
               this.Ward,
               contentPadding: 16,
@@ -581,7 +635,7 @@ class _AddResidenceState extends State<AddResidence> {
               (onChangedVal) {
                 var id = this.wardId = onChangedVal;
 
-                print('selected department $onChangedVal');
+                print('selected ward $onChangedVal');
                 setState(() {});
 
                 for (var element in this.Ward) {
@@ -623,7 +677,7 @@ class _AddResidenceState extends State<AddResidence> {
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: Text(widget.poll == null
-                        ? 'polling unit'
+                        ? 'POLLING UNIT'
                         : widget.poll.toString()),
                   ),
                 ),

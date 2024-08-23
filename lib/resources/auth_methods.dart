@@ -236,7 +236,7 @@ class AuthMethods {
           ) {
         String photoUrl = await StorageMethods()
             .uploadImageToStorage('residence_images', file, false);
-        print(photoUrl);
+     //   print(photoUrl);
         //add to database
         await _firestore.collection('Residence').add({
           'name': name,

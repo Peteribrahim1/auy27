@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
@@ -10,6 +11,7 @@ import '../../resources/styles.dart';
 import '../../utils/utils.dart';
 import '../polling_modal.dart';
 import 'masjid_screen.dart';
+import 'package:image/image.dart' as img;
 
 class AddMasjid extends StatefulWidget {
   AddMasjid({super.key});
@@ -20,28 +22,71 @@ class AddMasjid extends StatefulWidget {
 }
 
 class _AddMasjidState extends State<AddMasjid> {
+  bool _camLoading = false;
+
   Uint8List? _image;
 
   void _selectImageFromGallery() async {
     Uint8List img = await pickImage(ImageSource.gallery);
+
     setState(() {
-      _image = img;
+      _camLoading = true;
+    });
+    // Compress the image in the background
+    Uint8List? compressedImage = await compute(_compressImage, img);
+
+    setState(() {
+      _image = compressedImage;
+      _camLoading = false;
     });
   }
 
   void _selectImageFromCamera() async {
     Uint8List imgc = await pickImage(ImageSource.camera);
+
     setState(() {
-      _image = imgc;
+      _camLoading = true;
+    });
+    // Compress the image in the background
+    Uint8List? compressedImage = await compute(_compressImage, imgc);
+
+    setState(() {
+      _image = compressedImage;
+      _camLoading = false;
     });
   }
 
-  // void selectImage() async {
-  //   Uint8List img = await pickImage(ImageSource.gallery);
-  //   setState(() {
-  //     _image = img;
-  //   });
-  // }
+  // Downscale and compress the image to be under 100KB
+  static Future<Uint8List?> _compressImage(Uint8List image) async {
+    img.Image? decodedImage = img.decodeImage(image);
+    if (decodedImage == null) return null;
+
+    // Downscale the image before compression
+    int maxWidth = 1080;
+    if (decodedImage.width > maxWidth) {
+      decodedImage = img.copyResize(decodedImage, width: maxWidth);
+    }
+
+    int quality = 50; // Start with a lower quality
+    Uint8List? compressedImage;
+    do {
+      compressedImage = Uint8List.fromList(
+        img.encodeJpg(decodedImage, quality: quality),
+      );
+      quality -= 5; // Reduce quality in larger steps to make it faster
+    } while (compressedImage.length > 100 * 1024 && quality > 0);
+
+    return compressedImage;
+  }
+
+  Future<Uint8List> pickImage(ImageSource source) async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: source);
+    if (image != null) {
+      return await image.readAsBytes();
+    }
+    throw 'No image selected';
+  }
 
   List<dynamic> Lga = [];
   List<dynamic> WardMasters = [];
@@ -335,39 +380,15 @@ class _AddMasjidState extends State<AddMasjid> {
                           ),
                         ),
                       )
-                    : Container(),
+                    : Container(
+                        child: _camLoading
+                            ? LinearProgressIndicator()
+                            : Container(),
+                      ),
               ),
             ),
-            // Center(
-            //   child: _image != null
-            //       ? Container(
-            //           width: 200,
-            //           height: 200,
-            //           decoration: BoxDecoration(
-            //             borderRadius: BorderRadius.circular(12),
-            //             image: DecorationImage(
-            //               image: MemoryImage(
-            //                   _image!), // Replace 'background.jpg' with your image asset path
-            //               fit: BoxFit.cover,
-            //             ),
-            //           ))
-            //       : InkWell(
-            //           onTap: () {
-            //             showModalBottomSheet(
-            //               context: context,
-            //               builder: (context) => const CameraModal(),
-            //             );
-            //           },
-            //           child: Icon(
-            //             Icons.add_a_photo,
-            //             size: 50,
-            //             color: const Color.fromRGBO(47, 79, 79, 1),
-            //           ),
-            //         ),
-            // ),
             SizedBox(height: 15),
             TextField(
-              maxLength: 25,
               controller: _nameController,
               decoration: InputDecoration(
                 filled: true,
@@ -378,7 +399,7 @@ class _AddMasjidState extends State<AddMasjid> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'name of masjid*',
+                hintText: 'NAME OF MASJID*',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -392,7 +413,6 @@ class _AddMasjidState extends State<AddMasjid> {
             ),
             const SizedBox(height: 20),
             TextField(
-              maxLength: 25,
               controller: _nameOfRepController,
               decoration: InputDecoration(
                 filled: true,
@@ -403,7 +423,7 @@ class _AddMasjidState extends State<AddMasjid> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'name of representative',
+                hintText: 'NAME OF REPRESENTATIVE',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -427,7 +447,7 @@ class _AddMasjidState extends State<AddMasjid> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'phone',
+                hintText: 'PHONE',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -451,7 +471,7 @@ class _AddMasjidState extends State<AddMasjid> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'nin',
+                hintText: 'NIN',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -475,7 +495,7 @@ class _AddMasjidState extends State<AddMasjid> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'bvn',
+                hintText: 'BVN',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -499,7 +519,7 @@ class _AddMasjidState extends State<AddMasjid> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'voter card number',
+                hintText: 'VOTER CARD NUMBER',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -522,7 +542,7 @@ class _AddMasjidState extends State<AddMasjid> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'address',
+                hintText: 'ADDRESS',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -546,7 +566,7 @@ class _AddMasjidState extends State<AddMasjid> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'sect',
+                hintText: 'SECT',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -570,7 +590,7 @@ class _AddMasjidState extends State<AddMasjid> {
                   color: Color.fromRGBO(47, 79, 79, 1),
                 ),
                 contentPadding: const EdgeInsets.all(18),
-                hintText: 'number of members',
+                hintText: 'NUMBER OF MEMBERS',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -585,7 +605,7 @@ class _AddMasjidState extends State<AddMasjid> {
             const SizedBox(height: 15),
             FormHelper.dropDownWidget(
               context,
-              'select lga',
+              'SELECT LGA',
               this.lgaId,
               this.Lga,
               contentPadding: 16,
@@ -617,7 +637,7 @@ class _AddMasjidState extends State<AddMasjid> {
               },
               (onValidateVal) {
                 if (onValidateVal == null) {
-                  return 'Please select faculty';
+                  return 'Please select lga';
                 }
                 return null;
               },
@@ -627,7 +647,7 @@ class _AddMasjidState extends State<AddMasjid> {
             const SizedBox(height: 15),
             FormHelper.dropDownWidget(
               context,
-              'select ward',
+              'SELECT WARD',
               this.wardId,
               this.Ward,
               contentPadding: 16,
@@ -636,7 +656,7 @@ class _AddMasjidState extends State<AddMasjid> {
               (onChangedVal) {
                 var id = this.wardId = onChangedVal;
 
-                print('selected department $onChangedVal');
+                print('selected ward $onChangedVal');
                 setState(() {});
 
                 for (var element in this.Ward) {
@@ -678,7 +698,7 @@ class _AddMasjidState extends State<AddMasjid> {
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: Text(widget.poll == null
-                        ? 'polling unit'
+                        ? 'POLLING UNIT'
                         : widget.poll.toString()),
                   ),
                 ),

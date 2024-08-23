@@ -74,7 +74,7 @@ class _IndividualDetailsState extends State<IndividualDetails> {
                               widget.receive['photoUrl'].isNotEmpty
                           ? CachedNetworkImage(
                               imageUrl: widget.receive['photoUrl'],
-                              height: 200,
+                              height: 300,
                               width: double.infinity,
                               key: UniqueKey(),
                               fit: BoxFit.cover,
